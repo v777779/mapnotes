@@ -2,6 +2,7 @@ package ru.vpcb.test.map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,10 @@ import ru.vpcb.test.map.login.LoginActivity;
 import ru.vpcb.test.map.model.Note;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static Handler sHandler;
     private TextView mTextMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        if(sHandler == null)sHandler = new Handler();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-    private final Object lock = new Object();
-
     private void init() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         String notesPath = "notes";
@@ -101,38 +104,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-
                 Sync<List<Note>> sync = new Sync<>();
-                sync.setReady(false);
-
-
+                sync.lock();
                 database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        try {
-//                            sync.getLock().lock();
-                        synchronized (lock) {
-                            if (dataSnapshot.exists()) {
-                                List<Note> noteResults = new ArrayList<>();
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    Note note = child.getValue(Note.class);
-                                    replaceAuthorName.join(note);
-                                    noteResults.add(note);
-                                }
-                                Result<List<Note>> result = new Result.Success<>(noteResults);
-                                sync.setResult(result);
-                            } else {
-                                Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                                sync.setResult(result);
+
+                        if (dataSnapshot.exists()) {
+                            List<Note> noteResults = new ArrayList<>();
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                Note note = child.getValue(Note.class);
+                                replaceAuthorName.join(note);
+                                noteResults.add(note);
                             }
-                            sync.setReady(true);
-                            lock.notifyAll();
+                            Result<List<Note>> result = new Result.Success<>(noteResults);
+                            sync.setResult(result);
+                        } else {
+                            Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                            sync.setResult(result);
                         }
-//                        } finally {
-//                            sync.setReady(true);
-//                            sync.getCondition().signalAll();
-//                            sync.getLock().unlock();
-//                        }
+                        sync.unlock();
                     }
 
                     @Override
@@ -142,29 +133,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-//                try {
-//                    sync.getLock().lock();
-//                    while (!sync.isReady()) {
-//                        sync.getCondition().await();
-//                    }
-//                } catch (InterruptedException e) {
-//                    //
-//                } finally {
-//                    sync.getLock().unlock();
-//                }
-
-                synchronized (lock){
-                    while(!sync.isReady()){
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
+                sync.waiting();
                 Result<List<Note>> result = sync.getResult();
-             }
+                sHandler.post(() -> Toast.makeText(MainActivity.this,"note: "+
+                                ((Result.Success<List<Note>>)result).getData().get(0).getUser(),
+                        Toast.LENGTH_SHORT).show());
+                int k = 1;
+            }
         }).start();
 
 
@@ -172,22 +147,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static class Sync<T> {
-        private final ReentrantLock lock;
-        private final Condition condition;
+        private final Object lock;
         private boolean isReady;
         private Result<T> mResult;
 
         public Sync() {
-            this.lock = new ReentrantLock();
-            this.condition = lock.newCondition();
+            this.lock = new Object();
         }
 
-        public ReentrantLock getLock() {
-            return lock;
+        public void unlock() {
+            synchronized (lock) {
+                setReady(true);
+                lock.notifyAll();
+            }
         }
 
-        public Condition getCondition() {
-            return condition;
+        public void lock() {
+            setReady(false);
+        }
+
+
+        public void waiting() {
+            synchronized (lock) {
+                while (!isReady()) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
 
         public void setResult(Result<T> result) {
