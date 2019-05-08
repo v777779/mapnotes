@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import ru.vpcb.test.map.data.IJob;
@@ -80,11 +81,12 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    private final Object lock = new Object();
+
     private void init() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
         String notesPath = "notes";
 
-        Sync<List<Note>> sync = new Sync<>();
 
         IJob<Note> replaceAuthorName = new IJob<Note>() {
             @Override
@@ -95,84 +97,112 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
-        database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    List<Note> noteResults = new ArrayList<>();
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        Note note = child.getValue(Note.class);
-                        replaceAuthorName.join(note);
-                        noteResults.add(note);
+            public void run() {
+
+
+                Sync<List<Note>> sync = new Sync<>();
+                sync.setReady(false);
+
+
+                database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        try {
+//                            sync.getLock().lock();
+                        synchronized (lock) {
+                            if (dataSnapshot.exists()) {
+                                List<Note> noteResults = new ArrayList<>();
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    Note note = child.getValue(Note.class);
+                                    replaceAuthorName.join(note);
+                                    noteResults.add(note);
+                                }
+                                Result<List<Note>> result = new Result.Success<>(noteResults);
+                                sync.setResult(result);
+                            } else {
+                                Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                                sync.setResult(result);
+                            }
+                            sync.setReady(true);
+                            lock.notifyAll();
+                        }
+//                        } finally {
+//                            sync.setReady(true);
+//                            sync.getCondition().signalAll();
+//                            sync.getLock().unlock();
+//                        }
                     }
-                    Result<List<Note>> result = new Result.Success<>(noteResults);
-                    sync.setResult(result);
-                } else {
-                    Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                    sync.setResult(result);
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+
+                    }
+                });
+
+//                try {
+//                    sync.getLock().lock();
+//                    while (!sync.isReady()) {
+//                        sync.getCondition().await();
+//                    }
+//                } catch (InterruptedException e) {
+//                    //
+//                } finally {
+//                    sync.getLock().unlock();
+//                }
+
+                synchronized (lock){
+                    while(!sync.isReady()){
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-
-            }
-        });
+                Result<List<Note>> result = sync.getResult();
+             }
+        }).start();
 
 
         int k = 1;
     }
 
     private static class Sync<T> {
-        private final ReentrantLock lock = new ReentrantLock();
+        private final ReentrantLock lock;
+        private final Condition condition;
         private boolean isReady;
         private Result<T> mResult;
 
+        public Sync() {
+            this.lock = new ReentrantLock();
+            this.condition = lock.newCondition();
+        }
 
-        ReentrantLock getLock() {
+        public ReentrantLock getLock() {
             return lock;
         }
 
-
-        void lock() {
-            setReady(false);
+        public Condition getCondition() {
+            return condition;
         }
 
-        void unlock() {
-            setReady(true);
-            lock.notifyAll();
+        public void setResult(Result<T> result) {
+            mResult = result;
         }
 
-        void waiting() {
-            while (!isReady()) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        public Result<T> getResult() {
+            return mResult;
         }
 
-        void setResult(Result<T> result) {
-            synchronized (lock) {
-                mResult = result;
-            }
-        }
-
-        Result<T> getResult() {
-            synchronized (lock) {
-                return mResult;
-            }
-        }
-
-        synchronized void setReady(boolean isReady) {
+        public void setReady(boolean isReady) {
             this.isReady = isReady;
         }
 
-        synchronized boolean isReady() {
+        public boolean isReady() {
             return this.isReady;
         }
     }
