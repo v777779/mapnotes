@@ -82,8 +82,45 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String notesPath = "notes";
+
+        Sync<List<Note>> sync = new Sync<>();
+
+        IJob<Note> replaceAuthorName = new IJob<Note>() {
+            @Override
+            public void join(Note note) {
+
+                if (note == null) return;
+                note.setUser(note.getUser());
+            }
+        };
 
 
+        database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    List<Note> noteResults = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Note note = child.getValue(Note.class);
+                        replaceAuthorName.join(note);
+                        noteResults.add(note);
+                    }
+                    Result<List<Note>> result = new Result.Success<>(noteResults);
+                    sync.setResult(result);
+                } else {
+                    Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                    sync.setResult(result);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+
+            }
+        });
 
 
         int k = 1;

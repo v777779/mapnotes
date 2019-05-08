@@ -5,17 +5,15 @@ import android.os.Parcelable;
 
 public class Note implements Parcelable {
 
+
     private double mLatitude;
     private double mLongitude;
     private String mText;
     private String mUser;
 
-    public Note(double latitude, double longitude, String text, String user) {
-        this.mLatitude = latitude;
-        this.mLongitude = longitude;
-        this.mText = text;
-        this.mUser = user;
+    public Note() {
     }
+
 
 // parcelable
 
