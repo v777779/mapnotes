@@ -1,4 +1,11 @@
 package ru.vpcb.test.map;
 
-public class AppExecutors {
+import ru.vpcb.test.map.data.Result;
+
+public class AppExecutors implements IExecutors {
+
+    @Override
+    public <T> void resume(Result<T> result) {
+
+    }
 }

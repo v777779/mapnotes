@@ -13,8 +13,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -56,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                init();
+                test();
+//                init();
 //                database();
 //                firestore();
             }
@@ -92,6 +97,18 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    private void test() {
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        String notesPath = "notes";
+
+        DatabaseReference reference = database.getReference(notesPath);
+        reference.child("0").child("user").setValue("status_user "+
+                UUID.nameUUIDFromBytes(String.valueOf(System.currentTimeMillis()).getBytes()));
+        int k = 1;
+
+    }
 
     private void init() {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -203,17 +220,17 @@ public class MainActivity extends AppCompatActivity {
 
 // firestore
 
-    private void firestore(){
+    private void firestore() {
         FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
         CollectionReference reference = fireStore.collection("mapnotes");
         reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(e == null) {
+                if (e == null) {
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     String s = list.get(0).getData().toString();
                     Toast.makeText(MainActivity.this, "note: " + s, Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     String s = e.toString();
                     Toast.makeText(MainActivity.this, "note: " + s, Toast.LENGTH_SHORT).show();
                 }
