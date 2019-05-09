@@ -10,10 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-import ru.vpcb.test.map.AppExecutors;
+import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.IJob;
 import ru.vpcb.test.map.data.Result;

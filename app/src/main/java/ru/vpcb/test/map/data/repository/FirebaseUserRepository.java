@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ru.vpcb.test.map.AppExecutors;
+import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
