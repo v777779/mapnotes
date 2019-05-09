@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,13 +28,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nullable;
 
 import ru.vpcb.test.map.data.IJob;
 import ru.vpcb.test.map.data.Result;
+import ru.vpcb.test.map.home.HomeActivity;
 import ru.vpcb.test.map.login.LoginActivity;
 import ru.vpcb.test.map.model.Note;
 
@@ -91,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_notifications:
                     mTextMessage.setText(R.string.title_maps);
-                    startActivity(new Intent(MainActivity.this, MapsActivity.class));
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
                     return true;
             }
             return false;
