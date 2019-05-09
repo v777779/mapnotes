@@ -7,10 +7,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import ru.vpcb.test.map.AppExecutors;
+import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
 import ru.vpcb.test.map.model.AuthUser;
@@ -37,37 +41,51 @@ public class FirebaseUserRepository implements UserRepository {
     @Override
     public Result<AuthUser> signIn(String email, String password) {
 // TODO suspend call
+        final Sync<AuthUser> sync = new Sync<>();
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
                     appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
-
+                    Result<AuthUser> result = new Result.Success<>(new AuthUser(uid));
+                    sync.setResult(result);
                 } else {
                     appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
+                    Result<AuthUser> result = new Result.Error<>(new UserNotAuthenticatedException());
+                    sync.setResult(result);
                 }
+                sync.unlock();
             }
         });
-        return null;
+
+        sync.waiting();
+        return sync.getResult();
     }
 
 
     @Override
     public Result<AuthUser> signUp(String email, String password) {
+        final Sync<AuthUser> sync = new Sync<>();
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
                     appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
+                    Result<AuthUser> result = new Result.Success<>(new AuthUser(uid));
+                    sync.setResult(result);
 
                 } else {
                     appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
+                    Result<AuthUser> result = new Result.Error<>(new UserNotAuthenticatedException());
+                    sync.setResult(result);
                 }
+                sync.unlock();
             }
         });
-        return null;
+        sync.waiting();
+        return sync.getResult();
     }
 
     @Override
@@ -94,11 +112,65 @@ public class FirebaseUserRepository implements UserRepository {
 
     @Override
     public Result<String> getHumanReadableName(String userId) {
-        return null;
+        final Sync<String> sync = new Sync<>();
+        database.getReference(usersPath).child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                    String s = "";
+                    if (!(snapshot == null || snapshot.getValue() == null)) {
+                        s = snapshot.getValue().toString();
+                    }
+
+                    appExecutors.resume(new Result.Success<>(s));
+                    Result<String> result = new Result.Success<>(s);
+                    sync.setResult(result);
+                }
+                sync.unlock();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Result<String> result = new Result.Error<>(databaseError.toException());
+                sync.setResult(result);
+                sync.unlock();
+            }
+        });
+        sync.waiting();
+        return sync.getResult();
     }
 
     @Override
     public Result<String> getUserIdFromHumanReadableName(String userName) {
-        return null;
+        final Sync<String> sync = new Sync<>();
+        database.getReference(usersPath)
+                .orderByChild(nameKey)
+                .equalTo(userName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                            String s = "";
+                            if (!(snapshot == null || snapshot.getKey() == null)) {
+                                s = snapshot.getKey();
+                            }
+                            appExecutors.resume(new Result.Success<>(s));
+                            Result<String> result = new Result.Success<>(s);
+                            sync.setResult(result);
+                        }
+                        sync.unlock();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Result<String> result = new Result.Error<>(databaseError.toException());
+                        sync.setResult(result);
+                        sync.unlock();
+                    }
+                });
+        sync.waiting();
+        return sync.getResult();
     }
 }

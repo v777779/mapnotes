@@ -14,6 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import ru.vpcb.test.map.AppExecutors;
+import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.IJob;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.model.Note;
@@ -48,38 +49,34 @@ public class FirebaseNotesRepository implements NotesRepository {
     @Override
     public Result<List<Note>> getNotes(IJob<Note> replaceAuthorName) {
         final Sync<List<Note>> sync = new Sync<>();
-        sync.lock();
-        synchronized (sync.lock) {
-            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        List<Note> noteResults = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Note note = child.getValue(Note.class);
-                            replaceAuthorName.join(note);
-                            noteResults.add(note);
-                        }
-                        Result<List<Note>> result = new Result.Success<>(noteResults);
-                        sync.setResult(result);
-                    } else {
-                        Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                        sync.setResult(result);
+        database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    List<Note> noteResults = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Note note = child.getValue(Note.class);
+                        replaceAuthorName.join(note);
+                        noteResults.add(note);
                     }
-                    sync.unlock();
+                    Result<List<Note>> result = new Result.Success<>(noteResults);
+                    sync.setResult(result);
+                } else {
+                    Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                    sync.setResult(result);
                 }
+                sync.unlock();
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                    sync.unlock();
-                }
-            });
-        }
-        // enter
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                sync.setResult(result);
+                sync.unlock();
+            }
+        });
+
         sync.waiting();
-        // continue
-
         return sync.getResult();
     }
 
@@ -87,134 +84,73 @@ public class FirebaseNotesRepository implements NotesRepository {
     @Override
     public Result<List<Note>> getNotesByNoteText(String text, IJob<Note> replaceAuthorName) {
         final Sync<List<Note>> sync = new Sync<>();
-        sync.lock();
-        synchronized (sync.lock) {
-            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        List<Note> noteResults = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Note note = child.getValue(Note.class);
-                            replaceAuthorName.join(note);
-                            noteResults.add(note);
-                        }
-                        Result<List<Note>> result = new Result.Success<>(noteResults);
-                        sync.setResult(result);
-                    } else {
-                        Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                        sync.setResult(result);
+        database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    List<Note> noteResults = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Note note = child.getValue(Note.class);
+                        replaceAuthorName.join(note);
+                        noteResults.add(note);
                     }
-                    sync.unlock();
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                    Result<List<Note>> result = new Result.Success<>(noteResults);
                     sync.setResult(result);
-                    sync.unlock();
+                } else {
+                    Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                    sync.setResult(result);
                 }
-            });
-        }
-        // enter
-        sync.waiting();
-        // continue
+                sync.unlock();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                sync.setResult(result);
+                sync.unlock();
+            }
+        });
+
+        sync.waiting();
         return sync.getResult();
     }
-
 
     @Override
     public Result<List<Note>> getNotesByUser(String userId, String humanReadableName) {
 
         final Sync<List<Note>> sync = new Sync<>();
-        sync.lock();
-
-        synchronized (sync.lock) {
-            database.getReference(notesPath)
-                    .orderByChild(userKey)
-                    .equalTo(userId)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                List<Note> noteResults = new ArrayList<>();
-                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                    Note note = child.getValue(Note.class);
-                                    if (note != null) note.setUser(humanReadableName);
-                                    noteResults.add(note);
-                                }
-                                Result<List<Note>> result = new Result.Success<>(noteResults);
-                                sync.setResult(result);
-                            } else {
-                                Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                                sync.setResult(result);
+        database.getReference(notesPath)
+                .orderByChild(userKey)
+                .equalTo(userId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            List<Note> noteResults = new ArrayList<>();
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                Note note = child.getValue(Note.class);
+                                if (note != null) note.setUser(humanReadableName);
+                                noteResults.add(note);
                             }
-                            sync.unlock();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                            Result<List<Note>> result = new Result.Success<>(noteResults);
                             sync.setResult(result);
-                            sync.unlock();
+                        } else {
+                            Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                            sync.setResult(result);
                         }
-                    });
-        }
-        // enter
+                        sync.unlock();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                        sync.setResult(result);
+                        sync.unlock();
+                    }
+                });
+
         sync.waiting();
-        // continue
-
         return sync.getResult();
-    }
-
-
-
-
-    private static class Sync<T> {
-        private final Lock lock = new ReentrantLock();
-        private boolean isReady;
-        private Result<T> mResult;
-
-        private void lock() {
-            setReady(false);
-            lock.lock();
-        }
-
-        private void unlock() {
-            setReady(true);
-            lock.notifyAll();
-        }
-
-        private void waiting() {
-            while (!isReady()) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void setResult(Result<T> result) {
-            synchronized (lock) {
-                mResult = result;
-            }
-        }
-
-        private Result<T> getResult() {
-            synchronized (lock) {
-                return mResult;
-            }
-        }
-
-        private synchronized void setReady(boolean isReady) {
-            this.isReady = isReady;
-        }
-
-        private synchronized boolean isReady() {
-            return this.isReady;
-        }
     }
 
 

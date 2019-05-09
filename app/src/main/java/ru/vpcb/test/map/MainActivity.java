@@ -128,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 Sync<List<Note>> sync = new Sync<>();
-                sync.lock();
                 database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -242,55 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
 // classes
 
-    private static class Sync<T> {
-        private final Object lock;
-        private boolean isReady;
-        private Result<T> mResult;
 
-        public Sync() {
-            this.lock = new Object();
-        }
-
-        public void unlock() {
-            synchronized (lock) {
-                setReady(true);
-                lock.notifyAll();
-            }
-        }
-
-        public void lock() {
-            setReady(false);
-        }
-
-
-        public void waiting() {
-            synchronized (lock) {
-                while (!isReady()) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        public void setResult(Result<T> result) {
-            mResult = result;
-        }
-
-        public Result<T> getResult() {
-            return mResult;
-        }
-
-        public void setReady(boolean isReady) {
-            this.isReady = isReady;
-        }
-
-        public boolean isReady() {
-            return this.isReady;
-        }
-    }
 
 
 }
