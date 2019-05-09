@@ -36,7 +36,7 @@
         <item>@string/search_users_category</item>
     </string-array>
 
-    <!-- Permissions -->
+    <!-- PermissionExt -->
     <string name="permission_explanation">We need location permission because we would like to save notes based on your location</string>
     <string name="permission_grant_text">Grant</string>
 
