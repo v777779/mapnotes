@@ -53,17 +53,14 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
             public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
 // TODO launch continue
-                    userRepository.setExecutors(appExecutors);
                     userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
                     view.navigateToMapScreen();
-
                 } else if (result instanceof Result.Error) {
                     view.displaySignUpError();
 
                 }
             }
         };
-
         userRepository.setExecutors(appExecutors);
         Result<AuthUser> result = userRepository.signUp(email, password);
 
