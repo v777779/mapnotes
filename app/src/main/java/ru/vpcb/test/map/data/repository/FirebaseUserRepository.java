@@ -1,6 +1,7 @@
 package ru.vpcb.test.map.data.repository;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +25,7 @@ public class FirebaseUserRepository implements UserRepository {
     private AppExecutors appExecutors;
     private String usersPath;
     private String nameKey;
+    private String emailKey;
     private FirebaseAuth auth;
     private FirebaseDatabase database;
 
@@ -34,58 +36,45 @@ public class FirebaseUserRepository implements UserRepository {
         this.appExecutors = appExecutors;
         this.usersPath = "users";
         this.nameKey = "name";
+        this.emailKey = "email";
         this.auth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance();
     }
 
     @Override
     public Result<AuthUser> signIn(String email, String password) {
-// TODO suspend call
-        final Sync<AuthUser> sync = new Sync<>();
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
                     appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
-                    Result<AuthUser> result = new Result.Success<>(new AuthUser(uid));
-                    sync.setResult(result);
                 } else {
                     appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
-                    Result<AuthUser> result = new Result.Error<>(new UserNotAuthenticatedException());
-                    sync.setResult(result);
                 }
-                sync.unlock();
+
             }
         });
 
-        sync.waiting();
-        return sync.getResult();
+        return null;
     }
 
 
     @Override
     public Result<AuthUser> signUp(String email, String password) {
-        final Sync<AuthUser> sync = new Sync<>();
+
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
                     appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
-                    Result<AuthUser> result = new Result.Success<>(new AuthUser(uid));
-                    sync.setResult(result);
-
                 } else {
                     appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
-                    Result<AuthUser> result = new Result.Error<>(new UserNotAuthenticatedException());
-                    sync.setResult(result);
                 }
-                sync.unlock();
             }
         });
-        sync.waiting();
-        return sync.getResult();
+        return null;
     }
 
     @Override
@@ -107,7 +96,6 @@ public class FirebaseUserRepository implements UserRepository {
     public void changeUserName(AuthUser user, String name) {
         DatabaseReference usersRef = database.getReference(usersPath);
         usersRef.child(user.getUid()).child(nameKey).setValue(name);
-
     }
 
     @Override
@@ -173,4 +161,29 @@ public class FirebaseUserRepository implements UserRepository {
         sync.waiting();
         return sync.getResult();
     }
+
+
+    // TODO inject
+    @Override
+    public void setExecutors(AppExecutors appExecutors) {
+        this.appExecutors = appExecutors;
+    }
+
+
+// Alternative
+
+//    @Override
+//    public void changeUserName(AuthUser user, String name) {
+//        DatabaseReference usersRef = database.getReference(usersPath);
+//        usersRef.child(user.getUid()).child(nameKey).setValue(name, new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+//                if (databaseError == null)
+//                    appExecutors.resume(new Result.Success<>(null));
+//                else
+//                    appExecutors.resume(new Result.Error<>(databaseError.toException()));
+//            }
+//        });
+//
+//    }
 }

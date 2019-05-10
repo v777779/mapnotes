@@ -16,23 +16,23 @@ import ru.vpcb.test.map.home.HomeActivity;
 
 public class SignInActivity extends AppCompatActivity implements SignInView {
 
-    private View mSignInRoot;
-    private EditText mEditEmail;
-    private EditText mEditPass;
-
-
+    // TODO by inject
     private SignInPresenter presenter;
 
-    // TODO by inject
-    private AppExecutors appExecutors = new AppExecutors();
+    private AppExecutors appExecutors;
     private UserRepository userRepository = new FirebaseUserRepository(appExecutors);
+
+    // new
+    private View signInRoot;
+    private EditText mEditEmail;
+    private EditText mEditPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        mSignInRoot = findViewById(android.R.id.content);
+        signInRoot = findViewById(android.R.id.content);
         mEditEmail = findViewById(R.id.email);
         mEditPass = findViewById(R.id.password);
         Button signIn = findViewById(R.id.signIn);
@@ -63,6 +63,7 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     }
 
 // sing in view support
+
     @Override
     public void navigateToMapScreen() {
         NavigationExt.clearAndNavigateTo(this, HomeActivity.class);
@@ -70,17 +71,17 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
     @Override
     public void displayEmailError() {
-        Snackbar.make(mSignInRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(signInRoot, R.string.error_email_should_be_valid, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void displayPasswordError() {
-        Snackbar.make(mSignInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(signInRoot, R.string.error_password_should_not_be_empty, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void displaySignInError() {
-        Snackbar snackbar = Snackbar.make(mSignInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_INDEFINITE);
+        Snackbar snackbar = Snackbar.make(signInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_INDEFINITE);
         snackbar.setAction(R.string.ok_button, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

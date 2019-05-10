@@ -49,11 +49,11 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
             view.displayPasswordError();
             return;
         }
+
 // TODO launch
-        new Thread(new Runnable() {
+        appExecutors = new AppExecutors() {
             @Override
-            public void run() {
-                Result<AuthUser> result = userRepository.signIn(email, password);
+            public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
                     view.navigateToMapScreen();
                 } else if (result instanceof Result.Error) {
@@ -61,7 +61,11 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
 
                 }
             }
-        }).start();
+        };
+        userRepository.setExecutors(appExecutors);
+        Result<AuthUser> result = userRepository.signIn(email, password);
+
+
 
     }
 

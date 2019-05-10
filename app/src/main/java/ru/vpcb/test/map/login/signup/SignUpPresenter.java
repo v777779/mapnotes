@@ -43,20 +43,77 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 
         } else if (password.isEmpty()) {
             view.displayPasswordError();
-        }else if (name.isEmpty()) {
+        } else if (name.isEmpty()) {
             view.displayEmptyUserNameError();
         }
 
 // TODO launch
-        Result<AuthUser> result = userRepository.signUp( email, password);
-        if (result instanceof Result.Success) {
-// TODO launch
-            userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(),name);
-            view.navigateToMapScreen();
+        appExecutors = new AppExecutors() {
+            @Override
+            public <T> void resume(Result<T> result) {
+                if (result instanceof Result.Success) {
+// TODO launch continue
+                    userRepository.setExecutors(appExecutors);
+                    userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
+                    view.navigateToMapScreen();
 
-        } else if (result instanceof Result.Error) {
-            view.displaySignUpError();
+                } else if (result instanceof Result.Error) {
+                    view.displaySignUpError();
 
-        }
+                }
+            }
+        };
+
+        userRepository.setExecutors(appExecutors);
+        Result<AuthUser> result = userRepository.signUp(email, password);
+
     }
+
+
+// Alternative
+
+//    public void signUp(String name, String email, String password) {
+//        if (view == null) return;
+//        if (email.isEmpty() || !ValidationExt.isValidEmail(email)) {
+//            view.displayEmailError();
+//
+//        } else if (password.isEmpty()) {
+//            view.displayPasswordError();
+//        } else if (name.isEmpty()) {
+//            view.displayEmptyUserNameError();
+//        }
+//
+//// TODO_ launch
+//        appExecutors = new AppExecutors() {
+//            @Override
+//            public <T> void resume(Result<T> result) {
+//                if (result instanceof Result.Success) {
+//// TODO_ launch
+//                    appExecutors = new AppExecutors() {
+//                        @Override
+//                        public <T> void resume(Result<T> result) {
+//                            if (result instanceof Result.Success) {
+//                                view.navigateToMapScreen();
+//                            }
+//                            if (result instanceof Result.Error) {
+//                                view.displaySignUpError();
+//                            }
+//                        }
+//                    };
+//                    userRepository.setExecutors(appExecutors);
+//                    userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
+//
+//
+//                } else if (result instanceof Result.Error) {
+//                    view.displaySignUpError();
+//
+//                }
+//            }
+//        };
+//
+//        userRepository.setExecutors(appExecutors);
+//        Result<AuthUser> result = userRepository.signUp(email, password);
+//
+//    }
 }
+
