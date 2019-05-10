@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 sync.waiting();
                 Result<List<Note>> result = sync.getResult();
                 sHandler.post(() -> Toast.makeText(MainActivity.this, "note: " +
-                                ((Result.Success<List<Note>>) result).getData().get(0).getUser(),
+                                result.getData().get(0).getUser(),
                         Toast.LENGTH_SHORT).show());
                 int k = 1;
             }
@@ -193,12 +193,12 @@ public class MainActivity extends AppCompatActivity {
                         noteResults.add(note);
                     }
                     Result<List<Note>> result = new Result.Success<>(noteResults);
-                    String s = ((Result.Success<List<Note>>) result).getData().get(0).getUser();
+                    String s =  result.getData().get(0).getUser();
                     Toast.makeText(MainActivity.this, "note: " + s, Toast.LENGTH_SHORT).show();
 
                 } else {
                     Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                    String s = ((Result.Error<List<Note>>) result).getException().toString();
+                    String s = result.getException().toString();
                     Toast.makeText(MainActivity.this, "note: " + s, Toast.LENGTH_SHORT).show();
 
                 }
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                String s = ((Result.Error<List<Note>>) result).getException().toString();
+                String s = result.getException().toString();
                 Toast.makeText(MainActivity.this, "note: " + s, Toast.LENGTH_SHORT).show();
             }
         });
