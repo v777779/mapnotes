@@ -1,8 +1,7 @@
 package ru.vpcb.test.map.home;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,11 +14,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.map.GeneralMapFragment;
-import ru.vpcb.test.map.map.GoogleMapFragment;
 
-public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback{
-    public static final String DISPLAY_LOCATION = "display_location";
-    public static final String EXTRA_NOTE = "note";
+public class HomeActivity2 extends AppCompatActivity implements OnMapReadyCallback{
+    private static final String DISPLAY_LOCATION = "display_location";
+    private static final String EXTRA_NOTE = "note";
 
     private GoogleMap mMap;
 

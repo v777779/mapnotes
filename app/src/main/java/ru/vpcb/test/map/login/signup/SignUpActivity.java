@@ -61,8 +61,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
     @Override
     protected void onStop() {
-        super.onStop();
         presenter.onDetach();
+        super.onStop();
     }
 
 //  sign up view support

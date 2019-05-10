@@ -58,8 +58,9 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
     @Override
     protected void onStop() {
-        super.onStop();
         presenter.onDetach();
+        super.onStop();
+
     }
 
 // sing in view support

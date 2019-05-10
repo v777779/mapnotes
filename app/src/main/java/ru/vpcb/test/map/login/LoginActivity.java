@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     protected void onStop() {
-        super.onStop();
         presenter.onDetach();
+        super.onStop();
     }
 
 // login view support
