@@ -97,7 +97,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         locationProvider.addUpdatableLocationListener(new LocationListener() {
             @Override
             public void invoke(Location location) {
-                presenter.handleLocationUpdate(isInteractionMode, location);
+                presenter.handleLocationUpdate(isInteractionMode(), location);
             }
         });
         getMapAsync(this);
@@ -109,10 +109,18 @@ public class GoogleMapFragment extends SupportMapFragment implements
         locationProvider.stopLocationUpdates();
         presenter.onDetach();
         super.onStop();
-
     }
 
 // support view
+
+    @Override
+    public void animateCamera(@NonNull Location currentLocation) {
+        if (map == null) return;
+        map.animateCamera(CameraUpdateFactory.newLatLng(
+                new LatLng(currentLocation.getLatitude(),
+                        currentLocation.getLongitude()))
+        );
+    }
 
     @Override
     public void displayNoteOnMap(Note note) {
@@ -131,7 +139,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         map = googleMap;
         updateInitLocation(map);
         Activity activity = getActivity();
-        if(activity == null)return;
+        if (activity == null) return;
         if (!locationProvider.isLocationAvailable()) {
             AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setMessage(R.string.use_location_message)
@@ -151,39 +159,27 @@ public class GoogleMapFragment extends SupportMapFragment implements
             dialog.show();
 
         }
-        if (PermissionExt.checkLocationPermission(activity)){
+        if (PermissionExt.checkLocationPermission(activity)) {
             map.setMyLocationEnabled(true);
             map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
-                    isInteractionMode = false;
+                    setInteractionMode(false);
                     return true;
                 }
             });
 
             map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                 @Override
-                public void onCameraMoveStarted(int i) {
-
+                public void onCameraMoveStarted(int reason) {
+                    if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                        setInteractionMode(true);
+                    }
                 }
-            }) {
-                reason ->
-                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-                    isInteractionMode = true
-                }
-            }
+            });
         }
     }
 
-    @Override
-    public void animateCamera(@NonNull Location currentLocation) {
-        map ?.animateCamera(CameraUpdateFactory.newLatLng(
-                currentLocation ?.let {
-            LatLng(it.latitude, it.longitude)
-        }
-        ))
-
-    }
 
 // methods
 
@@ -206,8 +202,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return isInteractionMode;
     }
 
-    public void setInteractionMode(boolean interactionMode) {
-        isInteractionMode = interactionMode;
+    public void setInteractionMode(boolean mode) {
+        isInteractionMode = mode;
         presenter.handleInteractionMode(isInteractionMode);
     }
 

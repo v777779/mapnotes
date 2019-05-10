@@ -17,11 +17,9 @@ import ru.vpcb.test.map.login.signin.SignInPresenter;
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
     // TODO by inject
-    private SignUpMvpPresenter presenter;
-
     private AppExecutors appExecutors;
-    private FirebaseUserRepository userRepository = new FirebaseUserRepository(appExecutors);
-
+    private SignUpMvpPresenter presenter;
+    private FirebaseUserRepository userRepository;
 
     // new
     private View signUpRoot;
@@ -29,9 +27,16 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
     private EditText mEditEmail;
     private EditText mEditPass;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+// TODO by inject
+        userRepository = new FirebaseUserRepository(appExecutors);
+        presenter = new SignUpPresenter(appExecutors, userRepository);
+
         setContentView(R.layout.activity_sign_up);
         signUpRoot = findViewById(android.R.id.content);
         mEditName = findViewById(R.id.name);
@@ -49,7 +54,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
             }
         });
 
-        presenter = new SignUpPresenter(appExecutors, userRepository);
+
 
     }
 

@@ -20,7 +20,7 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     private SignInPresenter presenter;
 
     private AppExecutors appExecutors;
-    private UserRepository userRepository = new FirebaseUserRepository(appExecutors);
+    private UserRepository userRepository;
 
     // new
     private View signInRoot;
@@ -31,6 +31,10 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+// TODO by inject
+        userRepository = new FirebaseUserRepository(appExecutors);
+        presenter = new SignInPresenter(appExecutors, userRepository);
 
         signInRoot = findViewById(android.R.id.content);
         mEditEmail = findViewById(R.id.email);
@@ -46,7 +50,6 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
             }
         });
 
-        presenter = new SignInPresenter(appExecutors, userRepository);
     }
 
 
