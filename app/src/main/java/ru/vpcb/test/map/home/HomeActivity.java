@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ru.vpcb.test.map.R;
 
 public class HomeActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final String DISPLAY_LOCATION = "display_location";
+    private static final String EXTRA_NOTE = "note";
 
     private GoogleMap mMap;
 

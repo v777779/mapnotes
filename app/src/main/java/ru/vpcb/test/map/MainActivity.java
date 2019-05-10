@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                test();
+                startActivity(new Intent(getBaseContext(),HomeActivity.class));
+//                test();
 //                init();
 //                database();
 //                firestore();
