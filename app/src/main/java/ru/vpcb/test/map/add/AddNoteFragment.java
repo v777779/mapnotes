@@ -58,6 +58,9 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
         notesRepository = new FirebaseNotesRepository(appExecutors);
         locationProvider = new AddressLocationProvider(mActivity);
         locationFormatter = new FullAddressFormatter(new Geocoder(mActivity));
+
+        presenter = new AddNotePresenter(appExecutors,userRepository,notesRepository,
+                locationProvider,locationFormatter);
     }
 
 
