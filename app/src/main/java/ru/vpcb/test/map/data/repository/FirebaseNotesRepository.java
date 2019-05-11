@@ -13,7 +13,7 @@ import java.util.List;
 
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.Sync;
-import ru.vpcb.test.map.data.IJob;
+import ru.vpcb.test.map.executors.IJob;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.model.Note;
 

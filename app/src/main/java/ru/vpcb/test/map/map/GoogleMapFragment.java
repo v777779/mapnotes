@@ -6,14 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,7 +24,7 @@ import java.util.List;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.data.provider.AddressLocationProvider;
-import ru.vpcb.test.map.data.provider.LocationListener;
+import ru.vpcb.test.map.executors.IListener;
 import ru.vpcb.test.map.data.provider.LocationProvider;
 import ru.vpcb.test.map.ext.PermissionExt;
 import ru.vpcb.test.map.home.HomeActivity;
@@ -94,7 +90,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 //        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this);
         locationProvider.startLocationUpdates();
-        locationProvider.addUpdatableLocationListener(new LocationListener() {
+        locationProvider.addUpdatableLocationListener(new IListener() {
             @Override
             public void invoke(Location location) {
                 presenter.handleLocationUpdate(isInteractionMode(), location);

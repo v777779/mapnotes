@@ -31,8 +31,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import ru.vpcb.test.map.data.IJob;
 import ru.vpcb.test.map.data.Result;
+import ru.vpcb.test.map.executors.IJob;
 import ru.vpcb.test.map.home.HomeActivity;
 import ru.vpcb.test.map.login.LoginActivity;
 import ru.vpcb.test.map.model.Note;
