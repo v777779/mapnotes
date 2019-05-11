@@ -41,16 +41,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/login_title" />
         <activity
             android:name=".home.HomeActivity"
-            android:label="@string/title_activity_maps">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
     </application>
 
