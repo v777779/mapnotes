@@ -22,18 +22,14 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         appExecutors = null;
         authRepository = new FirebaseUserRepository(appExecutors);
 
-
         if (isAuthenticated()) {
             NavigationExt.navigateTo(this, HomeActivity.class);
-
         } else {
             NavigationExt.navigateTo(this, LoginActivity.class);
         }
-
         finish();
 
     }
