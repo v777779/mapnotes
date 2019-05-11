@@ -16,7 +16,7 @@ import ru.vpcb.test.map.model.Note;
 public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         implements SearchNotesMvpPresenter {
 
-    private AppExecutors<List<Note>> appExecutors;
+    private AppExecutors appExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
 
@@ -24,7 +24,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private int notesSearchCategory;
     private int usersSearchCategory;
 
-    public SearchNotesPresenter(AppExecutors<List<Note>> appExecutors, UserRepository userRepository,
+    public SearchNotesPresenter(AppExecutors appExecutors, UserRepository userRepository,
                                 NotesRepository notesRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
@@ -52,15 +52,15 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) return;
         view.clearSearchResults();
 // TODO launch
-        appExecutors = new AppExecutors<List<Note>>() {
+        appExecutors = new AppExecutors() {
             @Override
-            public void resume(Result<List<Note>> result) {
+            public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Error) {
                     view.displayLoadingNotesError();
                 }
                 if (result instanceof Result.Success) {
-                    for (Note note : result.getData()) {
-                        view.displayNote(note);
+                    for (Object note : (List)result.getData()) {
+                        view.displayNote((Note)note);
                     }
                 }
 
@@ -72,7 +72,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                 replaceNoteAuthorIdToNameJob(note, defaultUserName);
             }
         };
-        notesRepository.setExecutors(appExecutors);
+
+        notesRepository.<List<Note>>setExecutors(appExecutors);
         Result<List<Note>> notes = notesRepository.getNotes(notesPreProcessor);
     }
 
@@ -88,15 +89,15 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
         if (categoryPosition == this.notesSearchCategory) {
 // TODO launch
-            appExecutors = new AppExecutors<List<Note>>() {
+            appExecutors = new AppExecutors() {
                 @Override
-                public void resume(Result<List<Note>> result) {
+                public <T>void resume(Result<T> result) {
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
-                        for (Note note : result.getData()) {
-                            view.displayNote(note);
+                        for (Object note : (List)result.getData()) {
+                            view.displayNote((Note)note);
                         }
                     }
                 }
@@ -113,28 +114,28 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
         } else if (categoryPosition == usersSearchCategory) {
 // TODO launch
-            AppExecutors<List<Note>> noteExecutors = new AppExecutors<List<Note>>() {
+            AppExecutors noteExecutors = new AppExecutors() {
                 @Override
-                public void resume(Result<List<Note>> result) {
+                public <T>void resume(Result<T> result) {
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
-                        for (Note note : result.getData()) {
-                            view.displayNote(note);
+                        for (Object note : (List)result.getData()) {
+                            view.displayNote((Note)note);
                         }
                     }
                 }
             };
 
-            AppExecutors<AuthUser> userExecutors = new AppExecutors<AuthUser>() {
+            AppExecutors userExecutors = new AppExecutors() {
                 @Override
-                public void resume(Result<AuthUser> result) {
+                public <T>void resume(Result<T> result) {
                     if (result instanceof Result.Success) {
 // TODO launch
                         notesRepository.setExecutors(noteExecutors);
                         Result<List<Note>> notes = notesRepository.getNotesByUser(
-                                result.getData().getUid(), text);
+                                ((AuthUser)result.getData()).getUid(), text);
                     }
                     if (result instanceof Result.Error) {
                         view.displayUnknownUserError();
@@ -148,18 +149,17 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             throw new IllegalArgumentException("Incorrect ID of category");
 
         }
-
     }
 
 //methods
 
     private void replaceNoteAuthorIdToNameJob(Note note, String defaultUserName) {
 // TODO launch
-        AppExecutors<String> userExecutors = new AppExecutors<String>() {
+        AppExecutors userExecutors = new AppExecutors() {
             @Override
-            public void resume(Result<String> result) {
+            public <T>void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
-                    note.setUser(result.getData());
+                    note.setUser((String)result.getData());
                 } else {
                     note.setUser(defaultUserName);
                 }

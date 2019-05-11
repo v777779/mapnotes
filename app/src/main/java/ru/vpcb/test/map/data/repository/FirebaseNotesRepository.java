@@ -19,7 +19,7 @@ import ru.vpcb.test.map.model.Note;
 
 public class FirebaseNotesRepository implements NotesRepository {
 
-    private AppExecutors mAppExecutors;
+    private AppExecutors appExecutors;
     private FirebaseDatabase database;
 
     private String notesPath;
@@ -27,8 +27,8 @@ public class FirebaseNotesRepository implements NotesRepository {
     private String userKey;
 
 
-    public FirebaseNotesRepository(AppExecutors mAppExecutors) {
-        this.mAppExecutors = mAppExecutors;
+    public FirebaseNotesRepository(AppExecutors appExecutors) {
+        this.appExecutors = appExecutors;
         this.notesPath = "notes";
         this.textKey = "text";
         this.userKey = "user";
@@ -46,7 +46,7 @@ public class FirebaseNotesRepository implements NotesRepository {
 
     @Override
     public Result<List<Note>> getNotes(IJob<Note> replaceAuthorName) {
-        final Sync<List<Note>> sync = new Sync<>();
+
         database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -58,30 +58,28 @@ public class FirebaseNotesRepository implements NotesRepository {
                         noteResults.add(note);
                     }
                     Result<List<Note>> result = new Result.Success<>(noteResults);
-                    sync.setResult(result);
+                    appExecutors.resume(result);
+
                 } else {
                     Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                    sync.setResult(result);
+                    appExecutors.resume(result);
                 }
-                sync.unlock();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                sync.setResult(result);
-                sync.unlock();
+                appExecutors.resume(result);
             }
         });
 
-        sync.waiting();
-        return sync.getResult();
+        return null;
     }
 
 
     @Override
     public Result<List<Note>> getNotesByNoteText(String text, IJob<Note> replaceAuthorName) {
-        final Sync<List<Note>> sync = new Sync<>();
+
         database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -93,30 +91,29 @@ public class FirebaseNotesRepository implements NotesRepository {
                         noteResults.add(note);
                     }
                     Result<List<Note>> result = new Result.Success<>(noteResults);
-                    sync.setResult(result);
+                    appExecutors.resume(result);
+
                 } else {
                     Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                    sync.setResult(result);
+                   appExecutors.resume(result);
+
                 }
-                sync.unlock();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                sync.setResult(result);
-                sync.unlock();
+                appExecutors.resume(result);
             }
         });
 
-        sync.waiting();
-        return sync.getResult();
+
+        return null;
     }
 
     @Override
     public Result<List<Note>> getNotesByUser(String userId, String humanReadableName) {
 
-        final Sync<List<Note>> sync = new Sync<>();
         database.getReference(notesPath)
                 .orderByChild(userKey)
                 .equalTo(userId)
@@ -131,24 +128,29 @@ public class FirebaseNotesRepository implements NotesRepository {
                                 noteResults.add(note);
                             }
                             Result<List<Note>> result = new Result.Success<>(noteResults);
-                            sync.setResult(result);
+                            appExecutors.resume(result);
+
                         } else {
                             Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                            sync.setResult(result);
+                            appExecutors.resume(result);
+
                         }
-                        sync.unlock();
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                        sync.setResult(result);
-                        sync.unlock();
+                        appExecutors.resume(result);
+
                     }
                 });
 
-        sync.waiting();
-        return sync.getResult();
+        return null;
+    }
+
+    @Override
+    public void setExecutors(AppExecutors appExecutors) {
+        this.appExecutors = appExecutors;
     }
 
 

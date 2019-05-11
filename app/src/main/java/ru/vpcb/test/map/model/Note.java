@@ -10,10 +10,16 @@ public class Note implements Parcelable {
     private double mLongitude;
     private String mText;
     private String mUser;
+// TODO check
+//    public Note() {  // for database reading
+//    }
 
-    public Note() {
+    public Note(double latitude, double longitude, String text, String user) {
+        this.mLatitude = latitude;
+        this.mLongitude = longitude;
+        this.mText = text;
+        this.mUser = user;
     }
-
 
 // parcelable
 

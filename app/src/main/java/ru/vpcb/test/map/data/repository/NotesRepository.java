@@ -15,5 +15,5 @@ public interface NotesRepository {
 
     Result<List<Note>> getNotesByUser(String userId, String humanReadableName);
 
-    void setExecutors(AppExecutors<List<Note>> appExecutors);
+    void setExecutors(AppExecutors appExecutors);
 }

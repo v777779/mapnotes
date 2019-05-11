@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
+
 import ru.vpcb.test.map.base.MvpPresenter;
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
@@ -13,6 +15,7 @@ import ru.vpcb.test.map.ext.ValidationExt;
 import ru.vpcb.test.map.login.signin.SignInMvpPresenter;
 import ru.vpcb.test.map.login.signin.SignInView;
 import ru.vpcb.test.map.model.AuthUser;
+import ru.vpcb.test.map.model.Note;
 
 public class SignInPresenter extends ScopedPresenter<SignInView> implements SignInMvpPresenter {
 
@@ -51,9 +54,9 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         }
 
 // TODO launch
-        appExecutors = new AppExecutors<AuthUser>() {
+        appExecutors = new AppExecutors() {
             @Override
-            public void resume(Result<AuthUser> result) {
+            public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
                     view.navigateToMapScreen();
                 } else if (result instanceof Result.Error) {

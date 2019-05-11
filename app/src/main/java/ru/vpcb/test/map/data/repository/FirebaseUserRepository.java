@@ -23,20 +23,18 @@ import ru.vpcb.test.map.model.AuthUser;
 public class FirebaseUserRepository implements UserRepository {
 
     private AppExecutors appExecutors;
+
     private String usersPath;
     private String nameKey;
-    private String emailKey;
     private FirebaseAuth auth;
     private FirebaseDatabase database;
 
-    // new
-
+// new
 
     public FirebaseUserRepository(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         this.usersPath = "users";
         this.nameKey = "name";
-        this.emailKey = "email";
         this.auth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance();
     }
@@ -48,6 +46,7 @@ public class FirebaseUserRepository implements UserRepository {
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
+
                     appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
                 } else {
                     appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
@@ -100,7 +99,7 @@ public class FirebaseUserRepository implements UserRepository {
 
     @Override
     public Result<String> getHumanReadableName(String userId) {
-        final Sync<String> sync = new Sync<>();
+
         database.getReference(usersPath).child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -110,23 +109,19 @@ public class FirebaseUserRepository implements UserRepository {
                     if (!(snapshot == null || snapshot.getValue() == null)) {
                         s = snapshot.getValue().toString();
                     }
-
-                    appExecutors.resume(new Result.Success<>(s));
                     Result<String> result = new Result.Success<>(s);
-                    sync.setResult(result);
+                    appExecutors.resume(result);
                 }
-                sync.unlock();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Result<String> result = new Result.Error<>(databaseError.toException());
-                sync.setResult(result);
-                sync.unlock();
+                appExecutors.resume(result);
             }
         });
-        sync.waiting();
-        return sync.getResult();
+
+        return null;
     }
 
     @Override

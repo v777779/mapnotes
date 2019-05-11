@@ -48,12 +48,12 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
         }
 
 // TODO launch
-        appExecutors = new AppExecutors<AuthUser>() {
+        appExecutors = new AppExecutors() {
             @Override
-            public void resume(Result<AuthUser> result) {
+            public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
 // TODO launch continue
-                    userRepository.changeUserName((AuthUser)result.getData(), name);
+                    userRepository.changeUserName((AuthUser) result.getData(), name);
                     view.navigateToMapScreen();
                 } else if (result instanceof Result.Error) {
                     view.displaySignUpError();
