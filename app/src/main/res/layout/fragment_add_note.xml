@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/vertical_guideline_begin_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/vertical_guideline_begin_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/horizontal_guideline_begin_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/horizontal_guideline_end_space" />
+
+    <EditText
+        android:id="@+id/note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:maxLines="2"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:hint="@string/add_note_hint"
+        tools:ignore="Autofill"
+        app:layout_constraintEnd_toStartOf="@+id/add"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_guideline_begin" />
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_note_button_text"
+        android:enabled="false"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
+
+    <TextView
+        android:id="@+id/currentLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="2R Edward Ave, Kensington NSW 2033, Australia"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_guideline_end"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
+        app:layout_constraintTop_toBottomOf="@+id/note" />
+
+</android.support.constraint.ConstraintLayout>

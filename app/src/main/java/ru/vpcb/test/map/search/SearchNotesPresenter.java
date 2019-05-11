@@ -73,7 +73,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             }
         };
 
-        notesRepository.<List<Note>>setExecutors(appExecutors);
+        notesRepository.setExecutors(appExecutors);
         Result<List<Note>> notes = notesRepository.getNotes(notesPreProcessor);
     }
 
