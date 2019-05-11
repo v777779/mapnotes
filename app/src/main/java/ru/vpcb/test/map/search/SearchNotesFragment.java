@@ -42,7 +42,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView {
 
 // TODO by inject
 
-    private AppExecutors<List<Note>> appExecutors;
+    private AppExecutors appExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
     private SearchNotesMvpPresenter presenter;
@@ -52,7 +52,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView {
     private NotesAdapter adapter;
 
     private View mRootView;
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
 
 
     @Override
