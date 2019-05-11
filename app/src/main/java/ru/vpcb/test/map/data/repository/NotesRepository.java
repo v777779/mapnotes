@@ -2,6 +2,7 @@ package ru.vpcb.test.map.data.repository;
 
 import java.util.List;
 
+import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.executors.IJob;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.model.Note;
@@ -14,4 +15,5 @@ public interface NotesRepository {
 
     Result<List<Note>> getNotesByUser(String userId, String humanReadableName);
 
+    void setExecutors(AppExecutors<List<Note>> appExecutors);
 }

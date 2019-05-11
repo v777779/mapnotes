@@ -90,7 +90,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 //        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this);
         locationProvider.startLocationUpdates();
-        locationProvider.addUpdatableLocationListener(new IListener() {
+        locationProvider.addUpdatableLocationListener(new IListener<Location>() {
             @Override
             public void invoke(Location location) {
                 presenter.handleLocationUpdate(isInteractionMode(), location);

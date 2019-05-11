@@ -75,9 +75,9 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
 
 
 // TODO launch  UI Context
-        appExecutors = new AppExecutors() {
+        appExecutors = new AppExecutors<AuthUser>() {
             @Override
-            public <T> void resume(Result<T> result) {
+            public void resume(Result<AuthUser> result) {
                 if (result instanceof Result.Error) {
                     view.navigateToLoginScreen();
                 }

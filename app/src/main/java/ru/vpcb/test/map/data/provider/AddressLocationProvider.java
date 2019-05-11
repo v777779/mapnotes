@@ -21,8 +21,8 @@ public class AddressLocationProvider implements LocationProvider {
     private Context context;
     private long requestInterval;
 
-    private IListener updatableListener;
-    private IListener singleListener;
+    private IListener<Location> updatableListener;
+    private IListener<Location> singleListener;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
@@ -67,12 +67,12 @@ public class AddressLocationProvider implements LocationProvider {
     }
 
     @Override
-    public void addUpdatableLocationListener(IListener listener) {
+    public void addUpdatableLocationListener(IListener<Location> listener) {
         this.updatableListener = listener;
     }
 
     @Override
-    public void addSingleLocationListener(IListener listener) {
+    public void addSingleLocationListener(IListener<Location> listener) {
         this.singleListener = listener;
     }
 

@@ -1,4 +1,173 @@
 package ru.vpcb.test.map.search;
 
-public class SearchNotesPresenter {
+import android.support.annotation.NonNull;
+
+import java.util.List;
+
+import ru.vpcb.test.map.base.ScopedPresenter;
+import ru.vpcb.test.map.data.Result;
+import ru.vpcb.test.map.data.repository.NotesRepository;
+import ru.vpcb.test.map.data.repository.UserRepository;
+import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IJob;
+import ru.vpcb.test.map.model.AuthUser;
+import ru.vpcb.test.map.model.Note;
+
+public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
+        implements SearchNotesMvpPresenter {
+
+    private AppExecutors<List<Note>> appExecutors;
+    private UserRepository userRepository;
+    private NotesRepository notesRepository;
+
+    private SearchNotesView view;
+    private int notesSearchCategory;
+    private int usersSearchCategory;
+
+    public SearchNotesPresenter(AppExecutors<List<Note>> appExecutors, UserRepository userRepository,
+                                NotesRepository notesRepository) {
+        this.appExecutors = appExecutors;
+        this.userRepository = userRepository;
+        this.notesRepository = notesRepository;
+        this.view = null;
+        this.notesSearchCategory = 0;
+        this.usersSearchCategory = 1;
+    }
+
+
+    @Override
+    public void onAttach(@NonNull SearchNotesView view) {
+        super.onAttach(view);
+        this.view = view;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.view = null;
+    }
+
+    @Override
+    public void getNotes(String defaultUserName) {
+        if (view == null) return;
+        view.clearSearchResults();
+// TODO launch
+        appExecutors = new AppExecutors<List<Note>>() {
+            @Override
+            public void resume(Result<List<Note>> result) {
+                if (result instanceof Result.Error) {
+                    view.displayLoadingNotesError();
+                }
+                if (result instanceof Result.Success) {
+                    for (Note note : result.getData()) {
+                        view.displayNote(note);
+                    }
+                }
+
+            }
+        };
+        IJob<Note> notesPreProcessor = new IJob<Note>() {
+            @Override
+            public void join(Note note) {
+                replaceNoteAuthorIdToNameJob(note, defaultUserName);
+            }
+        };
+        notesRepository.setExecutors(appExecutors);
+        Result<List<Note>> notes = notesRepository.getNotes(notesPreProcessor);
+    }
+
+    @Override
+    public void searchNotes(String text, int categoryPosition, String defaultUserName) {
+        if (view == null) return;
+
+        view.clearSearchResults();
+        if (text.isEmpty()) {
+            getNotes(defaultUserName);
+            return;
+        }
+
+        if (categoryPosition == this.notesSearchCategory) {
+// TODO launch
+            appExecutors = new AppExecutors<List<Note>>() {
+                @Override
+                public void resume(Result<List<Note>> result) {
+                    if (result instanceof Result.Error) {
+                        view.displayLoadingNotesError();
+                    }
+                    if (result instanceof Result.Success) {
+                        for (Note note : result.getData()) {
+                            view.displayNote(note);
+                        }
+                    }
+                }
+            };
+
+            IJob<Note> notePreProcessor = new IJob<Note>() {
+                @Override
+                public void join(Note note) {
+                    replaceNoteAuthorIdToNameJob(note, defaultUserName);
+                }
+            };
+            notesRepository.setExecutors(appExecutors);
+            Result<List<Note>> notes = notesRepository.getNotesByNoteText(text, notePreProcessor);
+
+        } else if (categoryPosition == usersSearchCategory) {
+// TODO launch
+            AppExecutors<List<Note>> noteExecutors = new AppExecutors<List<Note>>() {
+                @Override
+                public void resume(Result<List<Note>> result) {
+                    if (result instanceof Result.Error) {
+                        view.displayLoadingNotesError();
+                    }
+                    if (result instanceof Result.Success) {
+                        for (Note note : result.getData()) {
+                            view.displayNote(note);
+                        }
+                    }
+                }
+            };
+
+            AppExecutors<AuthUser> userExecutors = new AppExecutors<AuthUser>() {
+                @Override
+                public void resume(Result<AuthUser> result) {
+                    if (result instanceof Result.Success) {
+// TODO launch
+                        notesRepository.setExecutors(noteExecutors);
+                        Result<List<Note>> notes = notesRepository.getNotesByUser(
+                                result.getData().getUid(), text);
+
+                    } else {
+                        view.displayUnknownUserError();
+                    }
+                }
+            };
+// TODO launch
+            userRepository.setExecutors(userExecutors);
+            Result<String> userId = userRepository.getUserIdFromHumanReadableName(text);
+        } else {
+            throw new IllegalArgumentException("Incorrect ID of category");
+
+        }
+
+    }
+
+//methods
+
+    private void replaceNoteAuthorIdToNameJob(Note note, String defaultUserName) {
+// TODO launch
+        AppExecutors<String> userExecutors = new AppExecutors<String>() {
+            @Override
+            public void resume(Result<String> result) {
+                if (result instanceof Result.Success) {
+                    note.setUser(result.getData());
+                } else {
+                    note.setUser(defaultUserName);
+                }
+            }
+        };
+// TODO launch
+        userRepository.setExecutors(userExecutors);
+        Result<String> userName = userRepository.getHumanReadableName(note.getUser());
+
+    }
 }

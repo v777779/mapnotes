@@ -51,9 +51,9 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         }
 
 // TODO launch
-        appExecutors = new AppExecutors() {
+        appExecutors = new AppExecutors<AuthUser>() {
             @Override
-            public <T> void resume(Result<T> result) {
+            public void resume(Result<AuthUser> result) {
                 if (result instanceof Result.Success) {
                     view.navigateToMapScreen();
                 } else if (result instanceof Result.Error) {
@@ -64,7 +64,6 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         };
         userRepository.setExecutors(appExecutors);
         Result<AuthUser> result = userRepository.signIn(email, password);
-
 
 
     }
