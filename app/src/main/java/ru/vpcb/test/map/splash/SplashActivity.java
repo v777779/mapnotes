@@ -28,12 +28,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
         if (isAuthenticated()) {
-            NavigationExt.clearAndNavigateTo(this, HomeActivity.class);
+            NavigationExt.navigateTo(this, HomeActivity.class);
 
         } else {
-            NavigationExt.clearAndNavigateTo(this, LoginActivity.class);
+            NavigationExt.navigateTo(this, LoginActivity.class);
         }
 
+        finish();
 
     }
 
