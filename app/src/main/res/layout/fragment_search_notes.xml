@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/vertical_guideline_end_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/vertical_guideline_begin_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/horizontal_guideline_begin_space" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/horizontal_guideline_end_space" />
+
+    <EditText
+        android:id="@+id/searchText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/search_hint"
+        android:inputType="textPersonName"
+        tools:ignore ="Autofill"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingBottom="@dimen/search_padding_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guideline_begin"
+        app:layout_constraintTop_toBottomOf="@+id/searchText" />
+
+    <Spinner
+        android:id="@+id/searchOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/searchText"
+        app:layout_constraintEnd_toStartOf="@+id/searchButton"
+        app:layout_constraintStart_toEndOf="@+id/searchText"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_button_text"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_end"
+        app:layout_constraintTop_toTopOf="@+id/horizontal_guideline_begin" />
+
+</android.support.constraint.ConstraintLayout>

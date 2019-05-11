@@ -135,8 +135,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                         notesRepository.setExecutors(noteExecutors);
                         Result<List<Note>> notes = notesRepository.getNotesByUser(
                                 result.getData().getUid(), text);
-
-                    } else {
+                    }
+                    if (result instanceof Result.Error) {
                         view.displayUnknownUserError();
                     }
                 }

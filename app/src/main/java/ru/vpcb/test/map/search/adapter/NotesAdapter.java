@@ -48,12 +48,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
 // methods
 
-    void addNote(Note note) {
+   public void addNote(Note note) {
         this.notes.add(note);
         notifyDataSetChanged();
     }
 
-    void clear() {
+    public void clear() {
         this.notes.clear();
         notifyDataSetChanged();
     }
