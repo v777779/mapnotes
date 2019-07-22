@@ -79,7 +79,7 @@
 
     <!--google_maps_api_key-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyBY77HP3n7XGm4YPG_LiFGg_gr-0LXv1Mk
+        AIzaSyDUt9xaI6lRx6Bgj91FS5hWbLoUzQzgubo
     </string>
 
 </resources>

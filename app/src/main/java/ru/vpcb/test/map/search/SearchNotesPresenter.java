@@ -102,7 +102,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     }
                 }
             };
-
+// TODO sync problem
             IJob<Note> notePreProcessor = new IJob<Note>() {
                 @Override
                 public void join(Note note) {
