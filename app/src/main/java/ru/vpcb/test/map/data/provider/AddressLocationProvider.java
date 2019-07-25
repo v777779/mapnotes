@@ -3,7 +3,7 @@ package ru.vpcb.test.map.data.provider;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.LocationManager;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;

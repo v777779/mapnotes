@@ -1,7 +1,6 @@
 package ru.vpcb.test.map.data.repository;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -14,10 +13,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
+import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.model.AuthUser;
 
 public class FirebaseUserRepository implements UserRepository {

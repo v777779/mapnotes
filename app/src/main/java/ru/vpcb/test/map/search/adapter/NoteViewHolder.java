@@ -1,9 +1,10 @@
 package ru.vpcb.test.map.search.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.data.formatter.LatLonFormatter;

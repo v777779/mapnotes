@@ -1,6 +1,6 @@
 package ru.vpcb.test.map.data.repository;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,10 +11,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.vpcb.test.map.executors.AppExecutors;
-import ru.vpcb.test.map.Sync;
-import ru.vpcb.test.map.executors.IJob;
 import ru.vpcb.test.map.data.Result;
+import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IJob;
 import ru.vpcb.test.map.model.Note;
 
 public class FirebaseNotesRepository implements NotesRepository {

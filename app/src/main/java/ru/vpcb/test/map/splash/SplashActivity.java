@@ -1,9 +1,8 @@
 package ru.vpcb.test.map.splash;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;

@@ -1,18 +1,19 @@
 package ru.vpcb.test.map.login.signup;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
 import ru.vpcb.test.map.home.HomeActivity;
-import ru.vpcb.test.map.login.signin.SignInPresenter;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpView {
 

@@ -1,6 +1,6 @@
 package ru.vpcb.test.map.login;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class LoginPresenter implements LoginMvpPresenter{
     private LoginView view;

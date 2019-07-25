@@ -1,6 +1,6 @@
 package ru.vpcb.test.map.map;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.vpcb.test.map.base.MvpView;
 import ru.vpcb.test.map.model.Location;

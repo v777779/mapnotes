@@ -1,6 +1,6 @@
 package ru.vpcb.test.map.search;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

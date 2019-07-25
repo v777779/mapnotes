@@ -1,14 +1,12 @@
 package ru.vpcb.test.map.login.signup;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.ext.ValidationExt;
-import ru.vpcb.test.map.login.signin.SignInMvpPresenter;
-import ru.vpcb.test.map.login.signin.SignInView;
 import ru.vpcb.test.map.model.AuthUser;
 
 public class SignUpPresenter extends ScopedPresenter<SignUpView> implements SignUpMvpPresenter {

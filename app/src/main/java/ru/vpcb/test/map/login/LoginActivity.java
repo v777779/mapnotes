@@ -1,9 +1,9 @@
 package ru.vpcb.test.map.login;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.ext.NavigationExt;

@@ -1,7 +1,7 @@
 package ru.vpcb.test.map.home;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.base.ScopedPresenter;

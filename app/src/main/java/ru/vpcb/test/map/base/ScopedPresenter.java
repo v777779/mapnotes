@@ -1,6 +1,6 @@
 package ru.vpcb.test.map.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class ScopedPresenter<V extends MvpView> implements MvpPresenter<V> {
 
