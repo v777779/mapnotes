@@ -28,7 +28,7 @@ import ru.vpcb.test.map.data.provider.AddressLocationProvider;
 import ru.vpcb.test.map.data.provider.LocationProvider;
 import ru.vpcb.test.map.executors.IListener;
 import ru.vpcb.test.map.ext.PermissionExt;
-import ru.vpcb.test.map.home.HomeActivity;
+import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.model.Location;
 import ru.vpcb.test.map.model.Note;
 

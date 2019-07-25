@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.login;
+package ru.vpcb.test.map.activity.login;
 
 import androidx.annotation.NonNull;
 

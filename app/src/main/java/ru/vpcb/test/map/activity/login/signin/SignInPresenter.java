@@ -1,21 +1,13 @@
-package ru.vpcb.test.map.login.signin;
+package ru.vpcb.test.map.activity.login.signin;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.List;
-
-import ru.vpcb.test.map.base.MvpPresenter;
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.ext.ValidationExt;
-import ru.vpcb.test.map.login.signin.SignInMvpPresenter;
-import ru.vpcb.test.map.login.signin.SignInView;
 import ru.vpcb.test.map.model.AuthUser;
-import ru.vpcb.test.map.model.Note;
 
 public class SignInPresenter extends ScopedPresenter<SignInView> implements SignInMvpPresenter {
 
@@ -65,7 +57,7 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
                 }
             }
         };
-        userRepository.setExecutors(appExecutors);
+        userRepository.setAppExecutors(appExecutors);
         Result<AuthUser> result = userRepository.signIn(email, password);
 
 

@@ -1,27 +1,31 @@
-package ru.vpcb.test.map.login.signin;
+package ru.vpcb.test.map.activity.login.signin;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.snackbar.Snackbar;
 
+import javax.inject.Inject;
+
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.home.HomeActivity;
+import ru.vpcb.test.map.activity.home.HomeActivity;
 
-public class SignInActivity extends AppCompatActivity implements SignInView {
+public class SignInActivity extends BaseActivity implements SignInView {
 
     // TODO by inject
-    private SignInPresenter presenter;
+    @Inject
+    IAppExecutors appExecutors;
 
-    private AppExecutors appExecutors;
+    private SignInPresenter presenter;
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
 
     // new
@@ -36,7 +40,7 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
 // TODO by inject
         userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new SignInPresenter(appExecutors, userRepository);
+        presenter = new SignInPresenter(oldAppExecutors, userRepository);
 
         signInRoot = findViewById(android.R.id.content);
         mEditEmail = findViewById(R.id.email);
@@ -51,6 +55,11 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
                 presenter.signIn(email, pass);
             }
         });
+
+    }
+
+    @Override
+    protected void setupComponent() {
 
     }
 

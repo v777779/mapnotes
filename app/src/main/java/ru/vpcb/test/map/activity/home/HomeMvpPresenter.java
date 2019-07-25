@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.home;
+package ru.vpcb.test.map.activity.home;
 
 import ru.vpcb.test.map.base.MvpPresenter;
 

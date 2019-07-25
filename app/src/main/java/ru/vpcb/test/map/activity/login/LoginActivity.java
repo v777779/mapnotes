@@ -1,16 +1,14 @@
-package ru.vpcb.test.map.login;
+package ru.vpcb.test.map.activity.login;
 
 import android.os.Bundle;
 import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.login.signin.SignInActivity;
-import ru.vpcb.test.map.login.signup.SignUpActivity;
+import ru.vpcb.test.map.activity.login.signin.SignInActivity;
+import ru.vpcb.test.map.activity.login.signup.SignUpActivity;
 
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginView {
     private LoginMvpPresenter presenter;
 
     @Override
@@ -34,6 +32,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
             }
         });
+    }
+
+    @Override
+    protected void setupComponent() {
+
     }
 
     @Override

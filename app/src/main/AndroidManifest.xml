@@ -31,10 +31,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".login.signup.SignUpActivity" />
-        <activity android:name=".login.signin.SignInActivity" />
+        <activity android:name=".activity.login.signup.SignUpActivity" />
+        <activity android:name=".activity.login.signin.SignInActivity" />
         <activity
-            android:name=".splash.SplashActivity"
+            android:name=".activity.splash.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.SplashScreen">
             <intent-filter>
@@ -47,10 +47,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".activity.login.LoginActivity"
             android:label="@string/login_title" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".activity.home.HomeActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar">
 

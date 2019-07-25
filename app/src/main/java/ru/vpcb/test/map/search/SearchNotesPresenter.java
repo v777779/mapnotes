@@ -143,7 +143,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                 }
             };
 // TODO launch
-            userRepository.setExecutors(userExecutors);
+            userRepository.setAppExecutors(userExecutors);
             Result<String> userId = userRepository.getUserIdFromHumanReadableName(text);
         } else {
             throw new IllegalArgumentException("Incorrect ID of category");
@@ -166,7 +166,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             }
         };
 // TODO launch
-        userRepository.setExecutors(userExecutors);
+        userRepository.setAppExecutors(userExecutors);
         Result<String> userName = userRepository.getHumanReadableName(note.getUser());
 
     }

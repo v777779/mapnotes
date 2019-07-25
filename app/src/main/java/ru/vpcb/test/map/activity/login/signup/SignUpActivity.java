@@ -1,24 +1,29 @@
-package ru.vpcb.test.map.login.signup;
+package ru.vpcb.test.map.activity.login.signup;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.snackbar.Snackbar;
 
+import javax.inject.Inject;
+
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.activity.BaseActivity;
+import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.home.HomeActivity;
 
-public class SignUpActivity extends AppCompatActivity implements SignUpView {
+public class SignUpActivity extends BaseActivity implements SignUpView {
 
     // TODO by inject
-    private AppExecutors appExecutors;
+    @Inject
+    IAppExecutors appExecutors;
+
+    private AppExecutors oldAppExecutors;
     private SignUpMvpPresenter presenter;
     private FirebaseUserRepository userRepository;
 
@@ -36,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
 
 // TODO by inject
         userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new SignUpPresenter(appExecutors, userRepository);
+        presenter = new SignUpPresenter(oldAppExecutors, userRepository);
 
         setContentView(R.layout.activity_sign_up);
         signUpRoot = findViewById(android.R.id.content);
@@ -56,6 +61,11 @@ public class SignUpActivity extends AppCompatActivity implements SignUpView {
         });
 
 
+
+    }
+
+    @Override
+    protected void setupComponent() {
 
     }
 

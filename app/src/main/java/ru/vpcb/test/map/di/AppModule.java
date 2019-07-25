@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
+import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutor;
 import ru.vpcb.test.map.executors.IAppExecutors;
 
@@ -16,5 +18,10 @@ public class AppModule {
         return new AppExecutor();
     }
 
+    @Provides
+    @Singleton
+    UserRepository provideFirebaseUserRepository(IAppExecutors appExecutors){
+        return new FirebaseUserRepository(appExecutors);
+    }
 
 }

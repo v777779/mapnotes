@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import javax.inject.Inject;
+
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.data.formatter.CoordinateFormatter;
 import ru.vpcb.test.map.data.formatter.LatLonFormatter;
@@ -30,18 +32,21 @@ import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.data.repository.NotesRepository;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.executors.IListener;
 import ru.vpcb.test.map.model.Note;
 import ru.vpcb.test.map.search.adapter.NotesAdapter;
 
-import static ru.vpcb.test.map.home.HomeActivity.DISPLAY_LOCATION;
-import static ru.vpcb.test.map.home.HomeActivity.EXTRA_NOTE;
+import static ru.vpcb.test.map.activity.home.HomeActivity.DISPLAY_LOCATION;
+import static ru.vpcb.test.map.activity.home.HomeActivity.EXTRA_NOTE;
 
 public class SearchNotesFragment extends Fragment implements SearchNotesView {
 
-// TODO by inject
+    // TODO by inject
+    @Inject
+    IAppExecutors appExecutors;
 
-    private AppExecutors appExecutors;
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
     private SearchNotesMvpPresenter presenter;
@@ -58,10 +63,10 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        appExecutors = null;
+        oldAppExecutors = null;
         userRepository = new FirebaseUserRepository(appExecutors);
-        notesRepository = new FirebaseNotesRepository(appExecutors);
-        presenter = new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
+        notesRepository = new FirebaseNotesRepository(oldAppExecutors);
+        presenter = new SearchNotesPresenter(oldAppExecutors, userRepository, notesRepository);
 
         defaultUserName = context.getString(R.string.unknown_user);
         coordinateFormatter = new CoordinateFormatter();

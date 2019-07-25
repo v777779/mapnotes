@@ -1,6 +1,7 @@
-package ru.vpcb.test.map.home;
+package ru.vpcb.test.map.activity.home;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import ru.vpcb.test.map.R;
@@ -83,7 +84,7 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
                 }
             }
         };
-        userRepository.setExecutors(appExecutors);
+        userRepository.setAppExecutors(appExecutors);
         Result<AuthUser> currentUser = userRepository.getCurrentUser();
 
     }

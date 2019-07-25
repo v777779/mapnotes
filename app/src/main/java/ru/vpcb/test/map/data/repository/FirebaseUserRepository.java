@@ -17,11 +17,13 @@ import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.model.AuthUser;
 
 public class FirebaseUserRepository implements UserRepository {
 
-    private AppExecutors appExecutors;
+    private IAppExecutors appExecutors;
+    private AppExecutors oldAppExecutors;
 
     private String usersPath;
     private String nameKey;
@@ -30,12 +32,15 @@ public class FirebaseUserRepository implements UserRepository {
 
 // new
 
-    public FirebaseUserRepository(AppExecutors appExecutors) {
+    public FirebaseUserRepository(IAppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         this.usersPath = "users";
         this.nameKey = "name";
         this.auth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance();
+
+// _old
+        this.oldAppExecutors = null;
     }
 
     @Override
@@ -46,9 +51,9 @@ public class FirebaseUserRepository implements UserRepository {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
 
-                    appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
+                    oldAppExecutors.resume(new Result.Success<>(new AuthUser(uid)));
                 } else {
-                    appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
+                    oldAppExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
                 }
 
             }
@@ -66,9 +71,9 @@ public class FirebaseUserRepository implements UserRepository {
             public void onComplete(@NonNull Task<AuthResult> authResultTask) {
                 if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                     String uid = authResultTask.getResult().getUser().getUid();
-                    appExecutors.resume(new Result.Success<>(new AuthUser(uid)));
+                    oldAppExecutors.resume(new Result.Success<>(new AuthUser(uid)));
                 } else {
-                    appExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
+                    oldAppExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
                 }
             }
         });
@@ -109,14 +114,14 @@ public class FirebaseUserRepository implements UserRepository {
                         s = snapshot.getValue().toString();
                     }
                     Result<String> result = new Result.Success<>(s);
-                    appExecutors.resume(result);
+                    oldAppExecutors.resume(result);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Result<String> result = new Result.Error<>(databaseError.toException());
-                appExecutors.resume(result);
+                oldAppExecutors.resume(result);
             }
         });
 
@@ -138,7 +143,7 @@ public class FirebaseUserRepository implements UserRepository {
                             if (!(snapshot == null || snapshot.getKey() == null)) {
                                 s = snapshot.getKey();
                             }
-                            appExecutors.resume(new Result.Success<>(s));
+                            oldAppExecutors.resume(new Result.Success<>(s));
                             Result<String> result = new Result.Success<>(s);
                             sync.setResult(result);
                         }
@@ -159,8 +164,8 @@ public class FirebaseUserRepository implements UserRepository {
 
     // TODO inject
     @Override
-    public void setExecutors(AppExecutors appExecutors) {
-        this.appExecutors = appExecutors;
+    public void setAppExecutors(AppExecutors appExecutors) {
+        this.oldAppExecutors = appExecutors;
     }
 
 
@@ -173,9 +178,9 @@ public class FirebaseUserRepository implements UserRepository {
 //            @Override
 //            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 //                if (databaseError == null)
-//                    appExecutors.resume(new Result.Success<>(null));
+//                    oldAppExecutors.resume(new Result.Success<>(null));
 //                else
-//                    appExecutors.resume(new Result.Error<>(databaseError.toException()));
+//                    oldAppExecutors.resume(new Result.Error<>(databaseError.toException()));
 //            }
 //        });
 //

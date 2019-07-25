@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.login;
+package ru.vpcb.test.map.activity.login;
 
 import ru.vpcb.test.map.base.MvpView;
 

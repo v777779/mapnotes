@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.login.signin;
+package ru.vpcb.test.map.activity.login.signin;
 
 import ru.vpcb.test.map.base.MvpPresenter;
 

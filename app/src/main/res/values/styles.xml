@@ -21,4 +21,7 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
+    <style name="TextToolbarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/text_20sp</item>
+    </style>
 </resources>

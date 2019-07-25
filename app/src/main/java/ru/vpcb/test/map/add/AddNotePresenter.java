@@ -59,7 +59,7 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
             }
         };
 // TODO launch
-        userRepository.setExecutors(userExecutors);
+        userRepository.setAppExecutors(userExecutors);
         Result<AuthUser> userResult = userRepository.getCurrentUser();
     }
 

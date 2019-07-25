@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.login.signup;
+package ru.vpcb.test.map.activity.login.signup;
 
 import androidx.annotation.NonNull;
 
@@ -59,7 +59,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
                 }
             }
         };
-        userRepository.setExecutors(appExecutors);
+        userRepository.setAppExecutors(appExecutors);
         Result<AuthUser> result = userRepository.signUp(email, password);
 
     }
@@ -95,7 +95,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 //                            }
 //                        }
 //                    };
-//                    userRepository.setExecutors(appExecutors);
+//                    userRepository.setAppExecutors(appExecutors);
 //                    userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
 //
 //
@@ -106,7 +106,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 //            }
 //        };
 //
-//        userRepository.setExecutors(appExecutors);
+//        userRepository.setAppExecutors(appExecutors);
 //        Result<AuthUser> result = userRepository.signUp(email, password);
 //
 //    }

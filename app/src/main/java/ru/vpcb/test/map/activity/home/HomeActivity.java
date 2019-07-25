@@ -1,4 +1,4 @@
-package ru.vpcb.test.map.home;
+package ru.vpcb.test.map.activity.home;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -21,25 +20,32 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
+import javax.inject.Inject;
+
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.activity.BaseActivity;
+import ru.vpcb.test.map.activity.login.LoginActivity;
 import ru.vpcb.test.map.add.AddNoteFragment;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
 import ru.vpcb.test.map.ext.PermissionExt;
-import ru.vpcb.test.map.login.LoginActivity;
 import ru.vpcb.test.map.map.GeneralMapFragment;
 import ru.vpcb.test.map.map.MapFragment;
 import ru.vpcb.test.map.nopermissions.NoLocationPermissionFragment;
 import ru.vpcb.test.map.search.SearchNotesFragment;
 
-public class HomeActivity extends AppCompatActivity implements HomeView {
+public class HomeActivity extends BaseActivity implements HomeView {
     public static final String DISPLAY_LOCATION = "display_location";
     public static final String EXTRA_NOTE = "note";
 
     // TODO by inject
-    private AppExecutors appExecutors;
+    @Inject
+    IAppExecutors appExecutors;
+
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private HomeMvpPresenter presenter;
     private MapFragment mapFragment;
@@ -61,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
 // TODO by inject
         userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new HomePresenter(appExecutors, userRepository);
+        presenter = new HomePresenter(oldAppExecutors, userRepository);
         mapFragment = new GeneralMapFragment();
 
         layout = findViewById(android.R.id.content);
@@ -99,6 +105,11 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
                 return presenter.handleNavigationItemClick(item.getItemId());
             }
         };
+
+    }
+
+    @Override
+    protected void setupComponent() {
 
     }
 

@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import javax.inject.Inject;
+
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.data.formatter.FullAddressFormatter;
 import ru.vpcb.test.map.data.formatter.LocationFormatter;
@@ -29,12 +31,16 @@ import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.data.repository.NotesRepository;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 
 public class AddNoteFragment extends Fragment implements AddNoteView {
-    // TODO by inject
-    private AddNoteMvpPresenter presenter;
 
-    private AppExecutors appExecutors;
+    // TODO by inject
+    @Inject
+    IAppExecutors appExecutors;
+
+    private AddNoteMvpPresenter presenter;
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
     private LocationProvider locationProvider;
@@ -51,13 +57,13 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
         mActivity = (AppCompatActivity) context;
 
 // TODO by inject
-        appExecutors = null;
+        oldAppExecutors = null;
         userRepository = new FirebaseUserRepository(appExecutors);
-        notesRepository = new FirebaseNotesRepository(appExecutors);
+        notesRepository = new FirebaseNotesRepository(oldAppExecutors);
         locationProvider = new AddressLocationProvider(mActivity);
         locationFormatter = new FullAddressFormatter(new Geocoder(mActivity));
 
-        presenter = new AddNotePresenter(appExecutors,userRepository,notesRepository,
+        presenter = new AddNotePresenter(oldAppExecutors,userRepository,notesRepository,
                 locationProvider,locationFormatter);
     }
 

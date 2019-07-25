@@ -20,5 +20,5 @@ public interface UserRepository {
 
     Result<String>  getUserIdFromHumanReadableName(String userName);
 
-    void setExecutors(AppExecutors appExecutors);
+    void setAppExecutors(AppExecutors appExecutors);
 }
