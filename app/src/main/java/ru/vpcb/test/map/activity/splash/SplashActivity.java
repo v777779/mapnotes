@@ -1,7 +1,6 @@
 package ru.vpcb.test.map.activity.splash;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -12,6 +11,7 @@ import ru.vpcb.test.map.activity.login.LoginActivity;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.ext.NavigationExt;
+import ru.vpcb.test.map.manager.FCManager;
 
 
 public class SplashActivity extends BaseActivity {
@@ -23,8 +23,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        appExecutors = null;
-//        authRepository = new FirebaseUserRepository(appExecutors);
 
         if (isAuthenticated()) {
             NavigationExt.navigateTo(this, HomeActivity.class);
@@ -43,7 +41,7 @@ public class SplashActivity extends BaseActivity {
                     .inject(this);
 
         }catch (Exception e){
-            Log.d(TAG,e.toString());
+            FCManager.log(TAG,e.toString());
         }
     }
 

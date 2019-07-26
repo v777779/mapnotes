@@ -1,5 +1,6 @@
 package ru.vpcb.test.map.data.repository;
 
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import io.reactivex.Observable;
 import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
@@ -30,36 +32,34 @@ public class FirebaseUserRepository implements UserRepository {
     private FirebaseAuth auth;
     private FirebaseDatabase database;
 
-// new
-
-    public FirebaseUserRepository(IAppExecutors appExecutors) {
+    public FirebaseUserRepository(IAppExecutors appExecutors) {  // ok
         this.appExecutors = appExecutors;
         this.usersPath = "users";
         this.nameKey = "name";
         this.auth = FirebaseAuth.getInstance();
         this.database = FirebaseDatabase.getInstance();
-
-// _old
-        this.oldAppExecutors = null;
     }
 
     @Override
-    public Result<AuthUser> signIn(String email, String password) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> authResultTask) {
-                if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
-                    String uid = authResultTask.getResult().getUser().getUid();
+    public Observable<AuthUser> signIn(String email, String password) {
+        return Observable.<AuthUser>create(
+                emitter -> auth
+                        .signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(authResultTask -> {
+                            if (emitter.isDisposed()) return;
 
-                    oldAppExecutors.resume(new Result.Success<>(new AuthUser(uid)));
-                } else {
-                    oldAppExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
-                }
+                            if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
+                                String uid = authResultTask.getResult().getUser().getUid();
 
-            }
-        });
-
-        return null;
+                                emitter.onNext(new AuthUser(uid));
+                            } else {
+                                emitter.onError(new UserNotAuthenticatedException());
+                            }
+                        })).subscribeOn(appExecutors.io())
+                .observeOn(appExecutors.ui())
+                .doOnDispose(() -> {
+                    int k = 1;
+                });
     }
 
 

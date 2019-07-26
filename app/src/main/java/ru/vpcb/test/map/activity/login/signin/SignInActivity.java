@@ -9,16 +9,19 @@ import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
+import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.BaseActivity;
+import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.activity.home.HomeActivity;
+import ru.vpcb.test.map.manager.FCManager;
 
 public class SignInActivity extends BaseActivity implements SignInView {
+    private static final String TAG = "SignInActivity";
 
     // TODO by inject
     @Inject
@@ -40,7 +43,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
 // TODO by inject
         userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new SignInPresenter(oldAppExecutors, userRepository);
+        presenter = new SignInPresenter(appExecutors, userRepository);
 
         signInRoot = findViewById(android.R.id.content);
         mEditEmail = findViewById(R.id.email);
@@ -60,6 +63,14 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
     @Override
     protected void setupComponent() {
+        try {
+            ((MainApp) getApplication()).getComponent()
+                    .getLoginComponent()
+                    .inject(this);
+
+        }catch (Exception e){
+            FCManager.log(TAG,e.toString());
+        }
 
     }
 

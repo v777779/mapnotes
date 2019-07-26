@@ -2,23 +2,29 @@ package ru.vpcb.test.map.activity.login.signin;
 
 import androidx.annotation.NonNull;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.ValidationExt;
-import ru.vpcb.test.map.model.AuthUser;
 
 public class SignInPresenter extends ScopedPresenter<SignInView> implements SignInMvpPresenter {
 
-    private AppExecutors appExecutors;
+    private IAppExecutors appExecutors;
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private SignInView view;
+    private CompositeDisposable compositeDisposable;
 
-    public SignInPresenter(AppExecutors appExecutors, UserRepository userRepository) {
+    public SignInPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         this.appExecutors = appExecutors;
+//        this.oldAppExecutors = appExecutors;
         this.userRepository = userRepository;
         this.view = null;
+        this.compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -29,8 +35,11 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
 
     @Override
     public void onDetach() {
-        super.onDetach();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
         this.view = null;
+        super.onDetach();
     }
 
     @Override
@@ -46,7 +55,7 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         }
 
 // TODO launch
-        appExecutors = new AppExecutors() {
+        oldAppExecutors = new AppExecutors() {
             @Override
             public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
@@ -57,9 +66,16 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
                 }
             }
         };
-        userRepository.setAppExecutors(appExecutors);
-        Result<AuthUser> result = userRepository.signIn(email, password);
 
+//        userRepository.setAppExecutors(oldAppExecutors);
+        Disposable disposable = userRepository.signIn(email, password)
+                .subscribe(result -> {
+                    view.navigateToMapScreen();
+                }, t -> {
+                    view.displaySignInError();
+                });
+
+        compositeDisposable.add(disposable);
 
     }
 

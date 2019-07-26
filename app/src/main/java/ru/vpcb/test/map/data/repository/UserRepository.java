@@ -1,12 +1,14 @@
 package ru.vpcb.test.map.data.repository;
 
+
+import io.reactivex.Observable;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.executors.AppExecutors;
 import ru.vpcb.test.map.model.AuthUser;
 
 public interface UserRepository {
 
-    Result<AuthUser> signIn(String email,String password);
+    Observable<AuthUser> signIn(String email, String password);
 
     Result<AuthUser> signUp(String email, String password);
 
