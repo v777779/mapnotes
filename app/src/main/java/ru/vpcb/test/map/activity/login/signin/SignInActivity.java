@@ -16,12 +16,10 @@ import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.ext.NavigationExt;
 
 public class SignInActivity extends BaseActivity implements SignInView {
-    private static final String TAG = "SignInActivity";
 
     @Inject
     SignInMvpPresenter presenter;
 
-    // new
     private View signInRoot;
     private EditText mEditEmail;
     private EditText mEditPass;
@@ -36,13 +34,10 @@ public class SignInActivity extends BaseActivity implements SignInView {
         mEditPass = findViewById(R.id.password);
         Button signIn = findViewById(R.id.signIn);
 
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = mEditEmail.getText().toString();
-                String pass = mEditPass.getText().toString();
-                presenter.signIn(email, pass);
-            }
+        signIn.setOnClickListener(v -> {
+            String email = mEditEmail.getText().toString();
+            String pass = mEditPass.getText().toString();
+            presenter.signIn(email, pass);
         });
 
     }

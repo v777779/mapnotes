@@ -20,13 +20,10 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @Inject
     SignUpMvpPresenter presenter;
 
-    // new
     private View signUpRoot;
     private EditText mEditName;
     private EditText mEditEmail;
     private EditText mEditPass;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +36,12 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
         mEditPass = findViewById(R.id.password);
         Button signUp = findViewById(R.id.signUp);
 
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = mEditName.getText().toString();
-                String email = mEditEmail.getText().toString();
-                String pass = mEditPass.getText().toString();
-                presenter.signUp(name, email, pass);
-            }
+        signUp.setOnClickListener(v -> {
+            String name = mEditName.getText().toString();
+            String email = mEditEmail.getText().toString();
+            String pass = mEditPass.getText().toString();
+            presenter.signUp(name, email, pass);
         });
-
-
-
     }
 
     @Override

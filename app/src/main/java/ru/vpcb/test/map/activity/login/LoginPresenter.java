@@ -5,6 +5,17 @@ import androidx.annotation.NonNull;
 public class LoginPresenter implements LoginMvpPresenter{
     private LoginView view;
 
+    private LoginPresenter() {
+    }
+
+    private static class  LazyHolder {
+        private static final LoginPresenter INSTANCE = new LoginPresenter();
+    }
+
+    public static LoginMvpPresenter getInstance(){
+        return LazyHolder.INSTANCE;
+    }
+
 
     @Override
     public void openSignIn() {
@@ -27,4 +38,6 @@ public class LoginPresenter implements LoginMvpPresenter{
     public void onDetach() {
         this.view = null;
     }
+
+
 }

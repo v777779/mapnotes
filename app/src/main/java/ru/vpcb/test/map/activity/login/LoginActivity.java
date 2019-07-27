@@ -15,13 +15,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        presenter = new LoginPresenter();
 
+        presenter = LoginPresenter.getInstance();  // Lazy в качестве демо
         findViewById(R.id.signIn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.openSignIn();
-
             }
         });
 
@@ -29,7 +28,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
             @Override
             public void onClick(View v) {
                 presenter.openSignUp();
-
             }
         });
     }
