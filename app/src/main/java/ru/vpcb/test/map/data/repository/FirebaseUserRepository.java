@@ -41,8 +41,8 @@ public class FirebaseUserRepository implements UserRepository {
     }
 
     @Override
-    public Observable<AuthUser> signIn(String email, String password) {
-        return Observable.<AuthUser>create(
+    public Observable<Result<AuthUser>> signIn(String email, String password) {
+        return Observable.<Result<AuthUser>>create(
                 emitter -> auth
                         .signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(authResultTask -> {
@@ -51,15 +51,14 @@ public class FirebaseUserRepository implements UserRepository {
                             if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                                 String uid = authResultTask.getResult().getUser().getUid();
 
-                                emitter.onNext(new AuthUser(uid));
+                                emitter.onNext(new Result.Success<>(new AuthUser(uid)));
                             } else {
-                                emitter.onError(new UserNotAuthenticatedException());
-                            }
-                        })).subscribeOn(appExecutors.io())
-                .observeOn(appExecutors.ui())
-                .doOnDispose(() -> {
-                    int k = 1;
-                });
+                                emitter.onNext(new Result.Error<>(new UserNotAuthenticatedException()));
+                             //                                emitter.onError(new UserNotAuthenticatedException());
+                           }
+                        })).subscribeOn(appExecutors.net())
+                .observeOn(appExecutors.ui());
+
     }
 
 

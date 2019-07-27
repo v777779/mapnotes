@@ -8,7 +8,7 @@ import ru.vpcb.test.map.model.AuthUser;
 
 public interface UserRepository {
 
-    Observable<AuthUser> signIn(String email, String password);
+    Observable<Result<AuthUser>> signIn(String email, String password);
 
     Result<AuthUser> signUp(String email, String password);
 
