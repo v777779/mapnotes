@@ -3,9 +3,6 @@ package ru.vpcb.test.map.data.repository;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,8 +51,8 @@ public class FirebaseUserRepository implements UserRepository {
                                 emitter.onNext(new Result.Success<>(new AuthUser(uid)));
                             } else {
                                 emitter.onNext(new Result.Error<>(new UserNotAuthenticatedException()));
-                             //                                emitter.onError(new UserNotAuthenticatedException());
-                           }
+//                                emitter.onError(new UserNotAuthenticatedException());
+                            }
                         })).subscribeOn(appExecutors.net())
                 .observeOn(appExecutors.ui());
 
@@ -63,20 +60,22 @@ public class FirebaseUserRepository implements UserRepository {
 
 
     @Override
-    public Result<AuthUser> signUp(String email, String password) {
+    public Observable<Result<AuthUser>> signUp(String email, String password) {
+        return Observable.create(emitter -> {
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(authResultTask -> {
+                        if (emitter.isDisposed()) return;
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> authResultTask) {
-                if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
-                    String uid = authResultTask.getResult().getUser().getUid();
-                    oldAppExecutors.resume(new Result.Success<>(new AuthUser(uid)));
-                } else {
-                    oldAppExecutors.resume(new Result.Error<>(new UserNotAuthenticatedException()));
-                }
-            }
+                        if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
+                            String uid = authResultTask.getResult().getUser().getUid();
+                            emitter.onNext(new Result.Success<>(new AuthUser(uid)));
+
+                        } else {
+                            emitter.onNext(new Result.Error<>(new UserNotAuthenticatedException()));
+//                            emitter.onError(new UserNotAuthenticatedException());
+                        }
+                    });
         });
-        return null;
     }
 
     @Override

@@ -13,23 +13,13 @@ import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.activity.home.HomeActivity;
-import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
-import ru.vpcb.test.map.data.repository.UserRepository;
-import ru.vpcb.test.map.executors.AppExecutors;
-import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.manager.FCManager;
 
 public class SignInActivity extends BaseActivity implements SignInView {
     private static final String TAG = "SignInActivity";
 
-    // TODO by inject
     @Inject
-    IAppExecutors appExecutors;
-
-    private SignInPresenter presenter;
-    private AppExecutors oldAppExecutors;
-    private UserRepository userRepository;
+    SignInMvpPresenter presenter;
 
     // new
     private View signInRoot;
@@ -40,10 +30,6 @@ public class SignInActivity extends BaseActivity implements SignInView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
-// TODO by inject
-        userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new SignInPresenter(appExecutors, userRepository);
 
         signInRoot = findViewById(android.R.id.content);
         mEditEmail = findViewById(R.id.email);
@@ -63,14 +49,9 @@ public class SignInActivity extends BaseActivity implements SignInView {
 
     @Override
     protected void setupComponent() {
-        try {
-            ((MainApp) getApplication()).getComponent()
-                    .getLoginComponent()
-                    .inject(this);
-
-        }catch (Exception e){
-            FCManager.log(TAG,e.toString());
-        }
+        ((MainApp) getApplication()).getComponent()
+                .getSignInComponent()
+                .inject(this);
 
     }
 

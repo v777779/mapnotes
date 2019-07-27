@@ -3,7 +3,6 @@ package ru.vpcb.test.map;
 import android.app.Application;
 
 import ru.vpcb.test.map.di.AppComponent;
-import ru.vpcb.test.map.di.AppModule;
 import ru.vpcb.test.map.di.DaggerAppComponent;
 
 public class MainApp extends Application {

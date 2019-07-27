@@ -10,7 +10,7 @@ public interface UserRepository {
 
     Observable<Result<AuthUser>> signIn(String email, String password);
 
-    Result<AuthUser> signUp(String email, String password);
+    Observable<Result<AuthUser>> signUp(String email, String password);
 
     void signOut();
 

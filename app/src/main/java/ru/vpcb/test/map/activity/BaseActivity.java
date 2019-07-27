@@ -8,12 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.manager.FCManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    private static final String TAG = "BaseActivity";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupComponent();
+        try {
+            setupComponent();
+        } catch (Exception e) {
+            FCManager.log(getClass().getSimpleName(), e.toString());
+        }
+
     }
 
     abstract protected void setupComponent();

@@ -2,7 +2,6 @@ package ru.vpcb.test.map.activity.login.signin;
 
 import androidx.annotation.NonNull;
 
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
@@ -17,14 +16,12 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
     private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private SignInView view;
-    private CompositeDisposable compositeDisposable;
+    private Disposable disposable;
 
     public SignInPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         this.appExecutors = appExecutors;
-//        this.oldAppExecutors = appExecutors;
         this.userRepository = userRepository;
         this.view = null;
-        this.compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -35,10 +32,9 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
 
     @Override
     public void onDetach() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-        }
         this.view = null;
+        if (disposable != null)
+            disposable.dispose();
         super.onDetach();
     }
 
@@ -54,30 +50,31 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
             return;
         }
 
-// TODO launch
-        oldAppExecutors = new AppExecutors() {
-            @Override
-            public <T> void resume(Result<T> result) {
-                if (result instanceof Result.Success) {
-                    view.navigateToMapScreen();
-                } else if (result instanceof Result.Error) {
-                    view.displaySignInError();
-
-                }
-            }
-        };
-
-//        userRepository.setAppExecutors(oldAppExecutors);
-        Disposable disposable = userRepository.signIn(email, password)
+        disposable = userRepository.signIn(email, password)
                 .subscribe(result -> {
-                    view.navigateToMapScreen();
+                    if (result instanceof Result.Success)
+                        view.navigateToMapScreen();
+                    else
+                        view.displaySignInError();
                 }, t -> {
                     view.displaySignInError();
                 });
 
-        compositeDisposable.add(disposable);
-
     }
 
+// Alternative
+
+//        oldAppExecutors = new AppExecutors() {
+//            @Override
+//            public <T> void resume(Result<T> result) {
+//                if (result instanceof Result.Success) {
+//                    view.navigateToMapScreen();
+//                } else if (result instanceof Result.Error) {
+//                    view.displaySignInError();
+//
+//                }
+//            }
+//        };
+//        userRepository.setAppExecutors(oldAppExecutors);
 
 }

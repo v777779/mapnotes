@@ -2,20 +2,21 @@ package ru.vpcb.test.map.activity.login.signup;
 
 import androidx.annotation.NonNull;
 
+import io.reactivex.disposables.Disposable;
 import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
-import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.ValidationExt;
-import ru.vpcb.test.map.model.AuthUser;
 
 public class SignUpPresenter extends ScopedPresenter<SignUpView> implements SignUpMvpPresenter {
 
-    private AppExecutors appExecutors;
+    private IAppExecutors appExecutors;
     private UserRepository userRepository;
     private SignUpView view;
+    private Disposable disposable;
 
-    public SignUpPresenter(AppExecutors appExecutors, UserRepository userRepository) {
+    public SignUpPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
         this.view = null;
@@ -29,8 +30,9 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 
     @Override
     public void onDetach() {
-        super.onDetach();
         this.view = null;
+        if(disposable!= null)disposable.dispose();
+        super.onDetach();
     }
 
     @Override
@@ -45,27 +47,39 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
             view.displayEmptyUserNameError();
         }
 
-// TODO launch
-        appExecutors = new AppExecutors() {
-            @Override
-            public <T> void resume(Result<T> result) {
-                if (result instanceof Result.Success) {
-// TODO launch continue
-                    userRepository.changeUserName((AuthUser) result.getData(), name);
-                    view.navigateToMapScreen();
-                } else if (result instanceof Result.Error) {
-                    view.displaySignUpError();
 
-                }
-            }
-        };
-        userRepository.setAppExecutors(appExecutors);
-        Result<AuthUser> result = userRepository.signUp(email, password);
+        disposable = userRepository.signUp(email, password)
+                .subscribe(result -> {
+                    if (result instanceof Result.Success) {
+                        userRepository.changeUserName(result.getData(), name);
+                        view.navigateToMapScreen();
+                    } else {
+                        view.displaySignUpError();
+                    }
+                }, t -> {
+                    view.displaySignUpError();
+                });
 
     }
 
 
 // Alternative
+
+//        AppExecutors oldAppExecutors = new AppExecutors() {
+//            @Override
+//            public <T> void resume(Result<T> result) {
+//                if (result instanceof Result.Success) {
+//                    userRepository.changeUserName((AuthUser) result.getData(), name);
+//                    view.navigateToMapScreen();
+//                } else if (result instanceof Result.Error) {
+//                    view.displaySignUpError();
+//
+//                }
+//            }
+//        };
+//        userRepository.setAppExecutors(oldAppExecutors);
+//        Result<AuthUser> result = userRepository.signUp(email, password);
+
 
 //    public void signUp(String name, String email, String password) {
 //        if (view == null) return;
@@ -79,12 +93,12 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 //        }
 //
 //// TODO_ launch
-//        appExecutors = new AppExecutors() {
+//        oldAppExecutors = new AppExecutors() {
 //            @Override
 //            public <T> void resume(Result<T> result) {
 //                if (result instanceof Result.Success) {
 //// TODO_ launch
-//                    appExecutors = new AppExecutors() {
+//                    oldAppExecutors = new AppExecutors() {
 //                        @Override
 //                        public <T> void resume(Result<T> result) {
 //                            if (result instanceof Result.Success) {
@@ -95,7 +109,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 //                            }
 //                        }
 //                    };
-//                    userRepository.setAppExecutors(appExecutors);
+//                    userRepository.setAppExecutors(oldAppExecutors);
 //                    userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
 //
 //
@@ -106,7 +120,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 //            }
 //        };
 //
-//        userRepository.setAppExecutors(appExecutors);
+//        userRepository.setAppExecutors(oldAppExecutors);
 //        Result<AuthUser> result = userRepository.signUp(email, password);
 //
 //    }

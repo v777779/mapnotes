@@ -9,23 +9,16 @@ import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
+import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.activity.home.HomeActivity;
-import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
-import ru.vpcb.test.map.executors.AppExecutors;
-import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
 
 public class SignUpActivity extends BaseActivity implements SignUpView {
 
-    // TODO by inject
     @Inject
-    IAppExecutors appExecutors;
-
-    private AppExecutors oldAppExecutors;
-    private SignUpMvpPresenter presenter;
-    private FirebaseUserRepository userRepository;
+    SignUpMvpPresenter presenter;
 
     // new
     private View signUpRoot;
@@ -38,12 +31,8 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-// TODO by inject
-        userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new SignUpPresenter(oldAppExecutors, userRepository);
-
         setContentView(R.layout.activity_sign_up);
+
         signUpRoot = findViewById(android.R.id.content);
         mEditName = findViewById(R.id.name);
         mEditEmail = findViewById(R.id.email);
@@ -66,7 +55,9 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
 
     @Override
     protected void setupComponent() {
-
+        ((MainApp) getApplication()).getComponent()
+                .getSignUpComponent()
+                .inject(this);
     }
 
     @Override
