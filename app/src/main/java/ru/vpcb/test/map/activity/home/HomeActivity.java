@@ -27,6 +27,7 @@ import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.activity.login.LoginActivity;
 import ru.vpcb.test.map.add.AddNoteFragment;
+import ru.vpcb.test.map.di.activity.home.HomeComponent;
 import ru.vpcb.test.map.ext.NavigationExt;
 import ru.vpcb.test.map.ext.PermissionExt;
 import ru.vpcb.test.map.map.MapFragment;
@@ -101,9 +102,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     @Override
     public void setupComponent() {
-        ((MainApp) getApplication()).getComponent()
-                .getHomeComponent()
-                .inject(this);
+        HomeComponent component = MainApp.plus(this);
+        component.inject(this);
     }
 
     @Override
@@ -165,6 +165,13 @@ public class HomeActivity extends BaseActivity implements HomeView {
     protected void onStop() {
         presenter.onDetach();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (isFinishing())
+            MainApp.clear(this);
+        super.onDestroy();
     }
 
     @Override

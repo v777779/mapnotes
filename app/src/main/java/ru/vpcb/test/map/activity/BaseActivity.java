@@ -25,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ICompone
     }
 
     @Override
-    public void setupComponent() { // stub
+    public void setupComponent()  { // stub
     }
 
 

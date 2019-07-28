@@ -11,7 +11,6 @@ import ru.vpcb.test.map.activity.login.LoginActivity;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.ext.NavigationExt;
-import ru.vpcb.test.map.manager.FCManager;
 
 
 public class SplashActivity extends BaseActivity {
@@ -34,15 +33,11 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    public void setupComponent() {
-        try {
-            ((MainApp) getApplication()).getComponent()
+    public void setupComponent(){
+            MainApp.get(this)
                     .getSplashComponent()
                     .inject(this);
 
-        }catch (Exception e){
-            FCManager.log(TAG,e.toString());
-        }
     }
 
     private boolean isAuthenticated() {

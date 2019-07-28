@@ -30,7 +30,6 @@ import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.IComponent;
 import ru.vpcb.test.map.activity.home.HomeActivity;
-import ru.vpcb.test.map.data.provider.AddressLocationProvider;
 import ru.vpcb.test.map.data.provider.LocationProvider;
 import ru.vpcb.test.map.executors.IListener;
 import ru.vpcb.test.map.ext.PermissionExt;
@@ -51,8 +50,9 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     }
 
     @Inject
-    MapMvpPresenter presenter;                          // by auto @Singleton
-    private LocationProvider locationProvider;
+    MapMvpPresenter presenter;
+    @Inject
+    LocationProvider locationProvider;
 
     private AppCompatActivity activity;
     private GoogleMap map;
@@ -65,9 +65,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         super.onAttach(activity);
         this.activity = (AppCompatActivity) activity;
         setupComponent();
-
-// TODO by inject
-        this.locationProvider = new AddressLocationProvider(activity);
 
         this.map = null;
         this.markers = new ArrayList<>();
@@ -105,7 +102,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     @Override
     public void onStart() {
         super.onStart();
-//        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this);
         locationProvider.startLocationUpdates();
         locationProvider.addUpdatableLocationListener(new IListener<Location>() {
@@ -227,6 +223,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
 
     @Override
     public void setupComponent() {
-        MainApp.get(activity).inject(this);
+        MainApp.plus(activity)
+                .inject(this);
     }
 }

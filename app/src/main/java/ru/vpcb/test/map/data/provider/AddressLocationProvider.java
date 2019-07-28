@@ -3,6 +3,7 @@ package ru.vpcb.test.map.data.provider;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.LocationManager;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -18,6 +19,8 @@ import ru.vpcb.test.map.ext.PermissionExt;
 import ru.vpcb.test.map.model.Location;
 
 public class AddressLocationProvider implements LocationProvider {
+    public static final long REQUEST_INTERVAL = 3000;
+
     private Context context;
     private long requestInterval;
 

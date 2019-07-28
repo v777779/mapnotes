@@ -46,7 +46,7 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
 
     @Override
     public void setupComponent() {
-        ((MainApp) getApplication()).getComponent()
+        MainApp.get(this)
                 .getSignUpComponent()
                 .inject(this);
     }
