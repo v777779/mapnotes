@@ -22,17 +22,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
+import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.activity.BaseActivity;
 import ru.vpcb.test.map.activity.login.LoginActivity;
 import ru.vpcb.test.map.add.AddNoteFragment;
-import ru.vpcb.test.map.data.repository.FirebaseUserRepository;
-import ru.vpcb.test.map.data.repository.UserRepository;
-import ru.vpcb.test.map.executors.AppExecutors;
-import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.ext.NavigationExt;
 import ru.vpcb.test.map.ext.PermissionExt;
-import ru.vpcb.test.map.map.GeneralMapFragment;
 import ru.vpcb.test.map.map.MapFragment;
 import ru.vpcb.test.map.nopermissions.NoLocationPermissionFragment;
 import ru.vpcb.test.map.search.SearchNotesFragment;
@@ -43,12 +39,9 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     // TODO by inject
     @Inject
-    IAppExecutors appExecutors;
-
-    private AppExecutors oldAppExecutors;
-    private UserRepository userRepository;
-    private HomeMvpPresenter presenter;
-    private MapFragment mapFragment;
+    HomeMvpPresenter presenter;
+    @Inject
+    MapFragment mapFragment;
 
     private View layout;
     private View bottomSheet;
@@ -66,9 +59,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
         setSupportActionBar(toolbar);
 
 // TODO by inject
-        userRepository = new FirebaseUserRepository(appExecutors);
-        presenter = new HomePresenter(oldAppExecutors, userRepository);
-        mapFragment = new GeneralMapFragment();
+//        mapFragment = new GeneralMapFragment();
 
         layout = findViewById(android.R.id.content);
         bottomSheet = findViewById(R.id.bottomSheet);
@@ -109,8 +100,10 @@ public class HomeActivity extends BaseActivity implements HomeView {
     }
 
     @Override
-    protected void setupComponent() {
-
+    public void setupComponent() {
+        ((MainApp) getApplication()).getComponent()
+                .getHomeComponent()
+                .inject(this);
     }
 
     @Override

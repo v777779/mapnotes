@@ -43,7 +43,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
     }
 
     @Override
-    protected void setupComponent() {
+    public void setupComponent() {
         ((MainApp) getApplication()).getComponent()
                 .getSignInComponent()
                 .inject(this);

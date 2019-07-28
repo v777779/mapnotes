@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import ru.vpcb.test.map.R;
 import ru.vpcb.test.map.manager.FCManager;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements IComponent {
     private static final String TAG = "BaseActivity";
 
     @Override
@@ -24,7 +24,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    abstract protected void setupComponent();
+    @Override
+    public void setupComponent() { // stub
+    }
+
 
     protected void setupActionBar(int id) {
         Toolbar toolbar = findViewById(R.id.toolbar);

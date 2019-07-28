@@ -14,4 +14,5 @@ public interface MapFragment {
     public boolean hasMarkersOnMap();
 
     void clearAllMarkers();
-}
+
+ }

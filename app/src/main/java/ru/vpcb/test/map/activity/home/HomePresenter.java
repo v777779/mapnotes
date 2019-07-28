@@ -9,15 +9,17 @@ import ru.vpcb.test.map.base.ScopedPresenter;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.repository.UserRepository;
 import ru.vpcb.test.map.executors.AppExecutors;
+import ru.vpcb.test.map.executors.IAppExecutors;
 import ru.vpcb.test.map.model.AuthUser;
 
 public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpPresenter {
 
-    private AppExecutors appExecutors;
+    private IAppExecutors appExecutors;
+    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private HomeView view;
 
-    public HomePresenter(AppExecutors appExecutors, UserRepository userRepository) {
+    public HomePresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
     }
@@ -76,7 +78,7 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
 
 
 // TODO launch  UI Context
-        appExecutors = new AppExecutors() {
+        oldAppExecutors = new AppExecutors() {
             @Override
             public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Error) {
@@ -84,7 +86,7 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
                 }
             }
         };
-        userRepository.setAppExecutors(appExecutors);
+        userRepository.setAppExecutors(oldAppExecutors);
         Result<AuthUser> currentUser = userRepository.getCurrentUser();
 
     }

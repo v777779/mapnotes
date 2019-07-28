@@ -32,10 +32,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         });
     }
 
-    @Override
-    protected void setupComponent() {
 
-    }
 
     @Override
     protected void onStart() {

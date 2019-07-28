@@ -12,22 +12,18 @@ import androidx.fragment.app.FragmentManager;
 
 import ru.vpcb.test.map.R;
 
+
 public class GeneralMapFragment extends Fragment implements MapFragment {
 
     private GoogleMapFragment googleMapFragment;
     private boolean isInteractionMode;
-
-    public GeneralMapFragment() {
-
-        this.googleMapFragment = new GoogleMapFragment();
-
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
+        this.googleMapFragment = GoogleMapFragment.getInstance();                                   //  googleMapFragmentLazy.get(); // lazy init
         FragmentManager fm = getFragmentManager();
         if (!(fm == null || googleMapFragment == null)) {
             fm.beginTransaction()

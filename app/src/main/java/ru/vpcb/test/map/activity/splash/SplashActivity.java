@@ -34,7 +34,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void setupComponent() {
+    public void setupComponent() {
         try {
             ((MainApp) getApplication()).getComponent()
                     .getSplashComponent()

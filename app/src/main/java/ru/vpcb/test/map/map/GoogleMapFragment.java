@@ -10,6 +10,7 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -23,33 +24,49 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import ru.vpcb.test.map.MainApp;
 import ru.vpcb.test.map.R;
+import ru.vpcb.test.map.activity.IComponent;
+import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.data.provider.AddressLocationProvider;
 import ru.vpcb.test.map.data.provider.LocationProvider;
 import ru.vpcb.test.map.executors.IListener;
 import ru.vpcb.test.map.ext.PermissionExt;
-import ru.vpcb.test.map.activity.home.HomeActivity;
 import ru.vpcb.test.map.model.Location;
 import ru.vpcb.test.map.model.Note;
 
-public class GoogleMapFragment extends SupportMapFragment implements
-        MapView, OnMapReadyCallback {
+public class GoogleMapFragment extends SupportMapFragment implements MapView, OnMapReadyCallback, IComponent {
+    private static GoogleMapFragment instance;
 
-    // TODO by inject
-    private MapMvpPresenter presenter;
+    public static GoogleMapFragment getInstance() {
+        if (instance == null) {
+            synchronized (GoogleMapFragment.class) {
+                if (instance == null)
+                    instance = new GoogleMapFragment();
+            }
+        }
+        return instance;
+    }
+
+    @Inject
+    MapMvpPresenter presenter;                          // by auto @Singleton
     private LocationProvider locationProvider;
 
+    private AppCompatActivity activity;
     private GoogleMap map;
     private List<MarkerOptions> markers;
     private boolean isInteractionMode;
     private BroadcastReceiver displayOnMapBroadcastListener;
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        this.activity = (AppCompatActivity) activity;
+        setupComponent();
+
 // TODO by inject
-        this.presenter = new GoogleMapPresenter();
         this.locationProvider = new AddressLocationProvider(activity);
 
         this.map = null;
@@ -178,7 +195,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
 
-// methods
+    // methods
 // TODO Check Map Not Showed at First Location
     private void updateInitLocation(GoogleMap map) {
         if (map == null) return;
@@ -208,4 +225,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return markers;
     }
 
+    @Override
+    public void setupComponent() {
+        MainApp.get(activity).inject(this);
+    }
 }
