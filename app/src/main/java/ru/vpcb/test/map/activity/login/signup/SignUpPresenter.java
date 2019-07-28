@@ -47,8 +47,8 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
             view.displayEmptyUserNameError();
         }
 
-
         disposable = userRepository.signUp(email, password)
+                .observeOn(appExecutors.ui())
                 .subscribe(result -> {
                     if (result instanceof Result.Success) {
                         userRepository.changeUserName(result.getData(), name);

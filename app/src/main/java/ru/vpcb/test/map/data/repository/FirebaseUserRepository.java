@@ -11,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import ru.vpcb.test.map.Sync;
 import ru.vpcb.test.map.data.Result;
 import ru.vpcb.test.map.data.exception.UserNotAuthenticatedException;
@@ -38,44 +38,44 @@ public class FirebaseUserRepository implements UserRepository {
     }
 
     @Override
-    public Observable<Result<AuthUser>> signIn(String email, String password) {
-        return Observable.<Result<AuthUser>>create(
-                emitter -> auth
-                        .signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(authResultTask -> {
-                            if (emitter.isDisposed()) return;
+    public Single<Result<AuthUser>> signIn(String email, String password) {
+        return Single.<Result<AuthUser>>create(                                                     // single for auto dispose
+                emitter -> {
+                    auth.signInWithEmailAndPassword(email, password)                                // net pool thread works
+                            .addOnCompleteListener(authResultTask -> {
+                                if (emitter.isDisposed())                                           // main thread by Firebase
+                                    return;
+                                if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
+                                    String uid = authResultTask.getResult().getUser().getUid();
 
-                            if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
-                                String uid = authResultTask.getResult().getUser().getUid();
-
-                                emitter.onNext(new Result.Success<>(new AuthUser(uid)));
-                            } else {
-                                emitter.onNext(new Result.Error<>(new UserNotAuthenticatedException()));
-//                                emitter.onError(new UserNotAuthenticatedException());
-                            }
-                        })).subscribeOn(appExecutors.net())
+                                    emitter.onSuccess(new Result.Success<>(new AuthUser(uid)));
+                                } else {
+                                    emitter.onSuccess(new Result.Error<>(new UserNotAuthenticatedException()));
+//                                    emitter.onError(new UserNotAuthenticatedException());
+                                }
+                            });
+                }).subscribeOn(appExecutors.net())
                 .observeOn(appExecutors.ui());
-
     }
 
 
     @Override
-    public Observable<Result<AuthUser>> signUp(String email, String password) {
-        return Observable.create(emitter -> {
+    public Single<Result<AuthUser>> signUp(String email, String password) {
+        return Single.<Result<AuthUser>>create(emitter -> {
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(authResultTask -> {
                         if (emitter.isDisposed()) return;
-
                         if (authResultTask.isSuccessful() && authResultTask.getResult() != null) {
                             String uid = authResultTask.getResult().getUser().getUid();
-                            emitter.onNext(new Result.Success<>(new AuthUser(uid)));
+                            emitter.onSuccess(new Result.Success<>(new AuthUser(uid)));
 
                         } else {
-                            emitter.onNext(new Result.Error<>(new UserNotAuthenticatedException()));
+                            emitter.onSuccess(new Result.Error<>(new UserNotAuthenticatedException()));
 //                            emitter.onError(new UserNotAuthenticatedException());
                         }
                     });
-        });
+        }).subscribeOn(appExecutors.net())
+                .observeOn(appExecutors.ui());
     }
 
     @Override

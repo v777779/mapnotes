@@ -1,5 +1,7 @@
 package ru.vpcb.test.map.activity.login.signin;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 
 import io.reactivex.disposables.Disposable;
@@ -38,6 +40,7 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         super.onDetach();
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void signIn(String email, String password) {
 
@@ -51,6 +54,7 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
         }
 
         disposable = userRepository.signIn(email, password)
+                .observeOn(appExecutors.ui())
                 .subscribe(result -> {
                     if (result instanceof Result.Success)
                         view.navigateToMapScreen();
@@ -59,7 +63,6 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
                 }, t -> {
                     view.displaySignInError();
                 });
-
     }
 
 // Alternative
