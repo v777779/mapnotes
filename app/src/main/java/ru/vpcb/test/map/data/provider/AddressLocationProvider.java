@@ -36,7 +36,9 @@ public class AddressLocationProvider implements LocationProvider {
         this.requestInterval = requestInterval;
 
         this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-        this.locationRequest = LocationRequest.create().setInterval(this.requestInterval);
+        this.locationRequest = LocationRequest.create()
+                .setInterval(this.requestInterval)
+                .setFastestInterval(this.requestInterval);  // to real delay for requestInterval
         this.locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {

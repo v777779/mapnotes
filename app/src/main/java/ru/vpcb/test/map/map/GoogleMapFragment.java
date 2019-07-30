@@ -195,7 +195,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
 // TODO Check Map Not Showed at First Location
     private void updateInitLocation(GoogleMap map) {
         if (map == null) return;
-        float defaultZoom = 18.0f;
+        float defaultZoom = 12.0f;
         LatLng initialLoc = map.getCameraPosition().target;
         CameraUpdate location = CameraUpdateFactory.newLatLngZoom(initialLoc, defaultZoom);
         map.moveCamera(location);
