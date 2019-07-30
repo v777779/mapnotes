@@ -44,7 +44,7 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
     @Override
     public void handleLocationUpdate(boolean isInteractionMode, Location newLocation) {
         if (view == null) return;
-        if (!isInteractionMode && newLocation != currentLocation) {
+        if (!isInteractionMode && !newLocation.equals(currentLocation)) {
             view.animateCamera(newLocation);
         }
         currentLocation = newLocation;

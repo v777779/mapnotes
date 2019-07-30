@@ -3,6 +3,9 @@ package ru.vpcb.test.map.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Location implements Parcelable {
     private double latitude;
     private double longitude;
@@ -46,6 +49,22 @@ public class Location implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return Double.compare(location.latitude, latitude) == 0 &&
+                Double.compare(location.longitude, longitude) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new double[]{latitude, longitude});
+//        return Objects.hash(latitude, longitude);
+    }
+
 
 // methods
 
