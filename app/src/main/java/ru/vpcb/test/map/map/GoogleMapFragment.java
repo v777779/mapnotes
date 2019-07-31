@@ -99,7 +99,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 .unregisterReceiver(displayOnMapBroadcastListener);
     }
 
-// TODO Check this Properties.FRAGMENT_CONTEXT setup
+    // TODO Check this Properties.FRAGMENT_CONTEXT setup
     @Override
     public void onStart() {
         super.onStart();
@@ -114,7 +114,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         getMapAsync(this);
     }
 
-// TODO Check this Properties.FRAGMENT_CONTEXT release
+    // TODO Check this Properties.FRAGMENT_CONTEXT release
     @Override
     public void onStop() {
 //        releaseProperties(Properties.FRAGMENT_CONTEXT)
@@ -186,7 +186,23 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         }
     }
 
+    @Override
+    public void setupComponent() {
+        MainApp.plus(activity)
+                .inject(this);
+    }
+
 // methods
+
+    void clearAllMarkers() {
+        if (map == null || markers == null) return;
+        map.clear();
+        markers.clear();
+    }
+
+    List<MarkerOptions> getMarkers() {
+        return markers;
+    }
 
     private void updateInitLocation(GoogleMap map) {
         if (map == null) return;
@@ -196,11 +212,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         map.moveCamera(location);
     }
 
-    void clearAllMarkers() {
-        if (map == null || markers == null) return;
-        map.clear();
-        markers.clear();
-    }
 
     private boolean isInteractionMode() {
         return isInteractionMode;
@@ -211,13 +222,5 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         presenter.handleInteractionMode(isInteractionMode);
     }
 
-    List<MarkerOptions> getMarkers() {
-        return markers;
-    }
 
-    @Override
-    public void setupComponent() {
-        MainApp.plus(activity)
-                .inject(this);
-    }
 }

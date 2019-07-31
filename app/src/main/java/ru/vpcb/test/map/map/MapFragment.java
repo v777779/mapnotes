@@ -11,7 +11,7 @@ public interface MapFragment {
 
     void setInteractionMode(boolean isInteractionMode);
 
-    public boolean hasMarkersOnMap();
+    boolean hasMarkersOnMap();
 
     void clearAllMarkers();
 
