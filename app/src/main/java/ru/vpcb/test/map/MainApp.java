@@ -3,6 +3,7 @@ package ru.vpcb.test.map;
 import android.app.Activity;
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ru.vpcb.test.map.di.AppComponent;
@@ -23,7 +24,7 @@ public class MainApp extends Application {
         return getApplication(activity).getComponent();
     }
 
-    public static HomeComponent plus(AppCompatActivity activity) {
+    public static HomeComponent plus(@NonNull AppCompatActivity activity) {
         MainApp app = getApplication(activity);
         return app.getHomeComponent(activity);
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
@@ -83,9 +84,10 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     @Override
     public void onResume() {
         super.onResume();
-        Context context = getContext();
-        if (context == null) return;
-        LocalBroadcastManager.getInstance(context)
+        if (activity == null) {
+            return;
+        }
+        LocalBroadcastManager.getInstance(activity)
                 .registerReceiver(displayOnMapBroadcastListener,
                         new IntentFilter(HomeActivity.DISPLAY_LOCATION));
     }
@@ -93,9 +95,10 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     @Override
     public void onPause() {
         super.onPause();
-        Context context = getContext();
-        if (context == null) return;
-        LocalBroadcastManager.getInstance(context)
+        if (activity == null) {
+            return;
+        }
+        LocalBroadcastManager.getInstance(activity)
                 .unregisterReceiver(displayOnMapBroadcastListener);
     }
 
@@ -103,23 +106,31 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     @Override
     public void onStart() {
         super.onStart();
-        presenter.onAttach(this);
-        locationProvider.startLocationUpdates();
-        locationProvider.addUpdatableLocationListener(new IListener<Location>() {
-            @Override
-            public void invoke(Location location) {
-                presenter.handleLocationUpdate(isInteractionMode(), location);
-            }
-        });
+        if (presenter != null) {
+            presenter.onAttach(this);
+        }
+        if (locationProvider != null) {
+            locationProvider.startLocationUpdates();
+            locationProvider.addUpdatableLocationListener(new IListener<Location>() {
+                @Override
+                public void invoke(Location location) {
+                    presenter.handleLocationUpdate(isInteractionMode(), location);
+                }
+            });
+        }
         getMapAsync(this);
     }
 
-    // TODO Check this Properties.FRAGMENT_CONTEXT release
+// TODO Check this Properties.FRAGMENT_CONTEXT release
     @Override
     public void onStop() {
 //        releaseProperties(Properties.FRAGMENT_CONTEXT)
-        locationProvider.stopLocationUpdates();
-        presenter.onDetach();
+        if (locationProvider != null) {
+            locationProvider.stopLocationUpdates();
+        }
+        if (presenter != null) {
+            presenter.onDetach();
+        }
         super.onStop();
     }
 
@@ -152,24 +163,11 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         updateInitLocation(map);
         Activity activity = getActivity();
         if (activity == null) return;
-        if (!locationProvider.isLocationAvailable()) {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setMessage(R.string.use_location_message)
-                    .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            activity.finish();
-                        }
-                    }).create();
-
-            dialog.show();
-
+        if (presenter != null) {
+            presenter.checkEnableGpsLocation();
+        }
+        if (map == null) {
+            return;
         }
         if (PermissionExt.checkLocationPermission(activity)) {
             map.setMyLocationEnabled(true);
@@ -187,9 +185,66 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     }
 
     @Override
+    public boolean isLocationAvailable() {
+        boolean isGpsEnabled = false;
+        boolean isNetworkEnabled = false;
+
+        if (activity == null) {
+            return false;
+        }
+
+        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null) {
+            return false;
+        }
+
+        try {
+            isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        } catch (Exception e) {
+            //
+        }
+        return isGpsEnabled || isNetworkEnabled;
+
+    }
+
+    public void showLocationAlertDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setMessage(R.string.use_location_message)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.openSettings();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.exit();
+                    }
+                }).create();
+
+        dialog.show();
+    }
+
+    public void openSettings() {
+        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+    }
+
+    public void exit() {
+        if (activity == null) {
+            return;
+        }
+        activity.finish();
+    }
+
+    @Override
     public void setupComponent() {
-        MainApp.plus(activity)
-                .inject(this);
+        if (activity == null) {
+            return;
+        }
+        MainApp.plus(activity).inject(this);
     }
 
 // methods

@@ -49,4 +49,21 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
         }
         currentLocation = newLocation;
     }
+
+    @Override
+    public void checkEnableGpsLocation() {
+        if (view == null) return;
+        if (!view.isLocationAvailable()) {
+            view.showLocationAlertDialog();
+        }
+    }
+
+    @Override
+    public void openSettings() {
+        view.openSettings();
+    }
+
+    public void exit() {
+        view.exit();
+    }
 }

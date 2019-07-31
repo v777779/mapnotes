@@ -2,7 +2,6 @@ package ru.vpcb.test.map.data.provider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 
@@ -59,7 +58,7 @@ public class AddressLocationProvider implements LocationProvider {
     }
 
     public AddressLocationProvider(Context context) {
-        this(context, 3_000);
+        this(context, REQUEST_INTERVAL);
     }
 
     @Override
@@ -84,19 +83,6 @@ public class AddressLocationProvider implements LocationProvider {
     @Override
     public void stopLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
-
-    @Override
-    public boolean isLocationAvailable() {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        boolean isGpsEnabled = false;
-        try {
-            isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        } catch (Exception e) {
-            // not needed because GPS disabled
-        }
-        return isGpsEnabled;
     }
 
 // methods

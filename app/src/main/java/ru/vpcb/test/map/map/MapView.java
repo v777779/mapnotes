@@ -11,5 +11,12 @@ public interface MapView extends MvpView {
     void animateCamera(@NonNull Location currentLocation);
 
     void displayNoteOnMap(Note note);
-    
+
+    boolean isLocationAvailable();
+
+    void showLocationAlertDialog();
+
+    void openSettings();
+
+    void exit();
 }

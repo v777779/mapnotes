@@ -12,5 +12,4 @@ public interface LocationProvider {
 
     void stopLocationUpdates();
 
-    boolean isLocationAvailable();
 }

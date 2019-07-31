@@ -129,17 +129,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback);
 
-        if (!PermissionExt.checkLocationPermission(this)) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                presenter.showLocationPermissionRationale();
-            } else {
-
-                PermissionExt.requestLocationPermissions(this);
-            }
-        } else {
-            showContentWhichRequirePermissions();
-        }
+        presenter.checkEnablePermissions();
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(hideExpandedMenuListener, new IntentFilter(DISPLAY_LOCATION));
@@ -240,6 +230,26 @@ public class HomeActivity extends BaseActivity implements HomeView {
         finish();
         NavigationExt.navigateTo(this, LoginActivity.class);
     }
+
+
+    @Override
+    public boolean checkLocationPermission() {
+        return PermissionExt.checkLocationPermission(this);
+    }
+
+    @Override
+    public boolean shouldShowRequestPermission() {
+        return ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+
+
+@Override
+    public void requestLocationPermission() {
+        PermissionExt.requestLocationPermissions(this);
+    }
+
 
 // methods
 

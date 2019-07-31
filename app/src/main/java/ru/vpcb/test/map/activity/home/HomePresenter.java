@@ -63,14 +63,6 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
 
     }
 
-    @Override
-    public void showLocationPermissionRationale() {
-        if (view == null) return;
-
-        view.showPermissionExplanationSnackBar();
-        view.hideContentWhichRequirePermissions();
-
-    }
 
     @Override
     public void checkUser() {
@@ -99,4 +91,22 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
         view.navigateToLoginScreen();
 
     }
+
+    public void checkEnablePermissions() {
+        if (view == null) return;
+
+        if (!view.checkLocationPermission()) {
+            if (view.shouldShowRequestPermission()) {
+                view.showPermissionExplanationSnackBar();
+                view.hideContentWhichRequirePermissions();
+            } else {
+                view.requestLocationPermission();
+            }
+        } else {
+            view.showContentWhichRequirePermissions();
+        }
+    }
+
+
+
 }

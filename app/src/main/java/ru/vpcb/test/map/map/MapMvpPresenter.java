@@ -12,4 +12,10 @@ public interface MapMvpPresenter extends MvpPresenter<MapView> {
     void handleMapNote(@NonNull Note note);
 
     void handleLocationUpdate(boolean isInteractionMode, Location newLocation);
+
+    void checkEnableGpsLocation();
+
+    void openSettings();
+
+    void exit();
 }

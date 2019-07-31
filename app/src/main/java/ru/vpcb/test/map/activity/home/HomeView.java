@@ -19,4 +19,12 @@ public interface HomeView extends MvpView {
     void showPermissionExplanationSnackBar();
 
     void navigateToLoginScreen();
+
+    boolean checkLocationPermission() ;
+
+    void  requestLocationPermission();
+
+    boolean shouldShowRequestPermission();
+
+
 }
