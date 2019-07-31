@@ -58,7 +58,7 @@ public class GeneralMapFragment extends Fragment implements MapFragment {
     @Override
     public void clearAllMarkers() {
         if (googleMapFragment == null || googleMapFragment.getMarkers() == null) return;
-        googleMapFragment.getMarkers().clear();
+        googleMapFragment.clearAllMarkers();
     }
 
 // methods

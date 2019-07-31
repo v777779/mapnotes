@@ -99,6 +99,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 .unregisterReceiver(displayOnMapBroadcastListener);
     }
 
+// TODO Check this Properties.FRAGMENT_CONTEXT setup
     @Override
     public void onStart() {
         super.onStart();
@@ -113,6 +114,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         getMapAsync(this);
     }
 
+// TODO Check this Properties.FRAGMENT_CONTEXT release
     @Override
     public void onStop() {
 //        releaseProperties(Properties.FRAGMENT_CONTEXT)
@@ -171,28 +173,21 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         }
         if (PermissionExt.checkLocationPermission(activity)) {
             map.setMyLocationEnabled(true);
-            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                @Override
-                public boolean onMyLocationButtonClick() {
-                    setInteractionMode(false);
-                    return true;
-                }
+            map.setOnMyLocationButtonClickListener(() -> {
+                setInteractionMode(false);
+                return true;
             });
 
-            map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-                @Override
-                public void onCameraMoveStarted(int reason) {
-                    if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
-                        setInteractionMode(true);
-                    }
+            map.setOnCameraMoveStartedListener(reason -> {
+                if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                    setInteractionMode(true);
                 }
             });
         }
     }
 
+// methods
 
-    // methods
-// TODO Check Map Not Showed at First Location
     private void updateInitLocation(GoogleMap map) {
         if (map == null) return;
         float defaultZoom = 12.0f;
@@ -207,16 +202,16 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         markers.clear();
     }
 
-    public boolean isInteractionMode() {
+    private boolean isInteractionMode() {
         return isInteractionMode;
     }
 
-    public void setInteractionMode(boolean mode) {
+    private void setInteractionMode(boolean mode) {
         isInteractionMode = mode;
         presenter.handleInteractionMode(isInteractionMode);
     }
 
-    public List<MarkerOptions> getMarkers() {
+    List<MarkerOptions> getMarkers() {
         return markers;
     }
 
