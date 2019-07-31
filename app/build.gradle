@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 29
@@ -13,6 +14,11 @@ android {
 
 //        vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
+        lintOptions {
+            checkReleaseBuilds false
+            abortOnError false
+        }
+
     }
     buildTypes {
         release {
@@ -51,10 +57,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:18.0.0'
     implementation 'com.google.firebase:firebase-firestore:20.1.0'
     implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+
 // gps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
-
 
 
 // work manager

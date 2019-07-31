@@ -2,19 +2,22 @@ package ru.vpcb.map.notes.activity.login;
 
 import android.os.Bundle;
 import android.view.View;
+
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
-import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.activity.login.signin.SignInActivity;
 import ru.vpcb.map.notes.activity.login.signup.SignUpActivity;
+import ru.vpcb.map.notes.ext.NavigationExt;
 
 public class LoginActivity extends BaseActivity implements LoginView {
+    private static final String TAG = "LoginActivity";
     private LoginMvpPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         presenter = LoginPresenter.getInstance();  // Lazy в качестве демо
         findViewById(R.id.signIn).setOnClickListener(new View.OnClickListener() {
@@ -30,6 +33,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 presenter.openSignUp();
             }
         });
+
     }
 
 

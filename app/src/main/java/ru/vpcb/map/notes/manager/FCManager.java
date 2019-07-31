@@ -1,18 +1,36 @@
 package ru.vpcb.map.notes.manager;
 
+import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 
 public class FCManager {
-    private static final String TAG = "FCManager";
 
-    public static void log(String tag, String s) {
+    // static
+    synchronized public static void log(Throwable t) {
+        if (t == null) return;
+        Crashlytics.logException(t);
+    }
+
+    synchronized public static void log(String s) {
         if (TextUtils.isEmpty(s)) return;
-        if (TextUtils.isEmpty(tag)) tag = TAG;
-        Log.d(tag, s);
+        Crashlytics.log(s);
     }
 
-    public static void log(String s) {
-        log(TAG, s);
+    // under synchronized
+    public static void setup(Context context) {
+        if (Fabric.isInitialized()) return;
+        Fabric.with(context, new Crashlytics());
     }
+
+    // test
+    public static void forceCrash() {
+        Crashlytics.getInstance().crash();
+    }
+
+
 }

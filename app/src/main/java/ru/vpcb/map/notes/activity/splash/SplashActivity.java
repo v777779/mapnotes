@@ -30,13 +30,14 @@ public class SplashActivity extends BaseActivity {
         }
         finish();
 
+//        analyticManager.setCurrentScreen(this, TAG);
     }
 
     @Override
-    public void setupComponent(){
-            MainApp.get(this)
-                    .getSplashComponent()
-                    .inject(this);
+    public void setupComponent() {
+        MainApp.get(this)
+                .getSplashComponent()
+                .inject(this);
 
     }
 

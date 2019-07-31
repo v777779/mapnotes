@@ -1,6 +1,6 @@
 package ru.vpcb.map.notes.di.activity.home;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -11,6 +11,7 @@ import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.di.activity.ActivityScope;
 import ru.vpcb.map.notes.executors.IAppExecutors;
+import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.map.GeneralMapFragment;
 import ru.vpcb.map.notes.map.GoogleMapPresenter;
 import ru.vpcb.map.notes.map.MapFragment;
@@ -18,9 +19,9 @@ import ru.vpcb.map.notes.map.MapMvpPresenter;
 
 @Module
 public class HomeModule {
-    private AppCompatActivity activity;
+    private Activity activity;
 
-    public HomeModule(AppCompatActivity activity) {
+    public HomeModule(Activity activity) {
         this.activity = activity;
     }
 
@@ -49,4 +50,9 @@ public class HomeModule {
         return new AddressLocationProvider(activity, AddressLocationProvider.REQUEST_INTERVAL);
     }
 
+    @Provides
+    @ActivityScope
+    FAManager provideFAManager() {
+        return new FAManager(activity);
+    }
 }

@@ -13,6 +13,7 @@ import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.di.activity.login.signup.SignUpModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
 
 public class SignUpActivity extends BaseActivity implements SignUpView {
@@ -47,7 +48,7 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @Override
     public void setupComponent() {
         MainApp.get(this)
-                .getSignUpComponent()
+                .getSignUpComponent(new SignUpModule(this))
                 .inject(this);
     }
 

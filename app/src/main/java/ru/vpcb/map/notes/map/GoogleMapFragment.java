@@ -34,6 +34,7 @@ import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.executors.IListener;
 import ru.vpcb.map.notes.ext.PermissionExt;
+import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
@@ -54,17 +55,20 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     MapMvpPresenter presenter;
     @Inject
     LocationProvider locationProvider;
+//to inject
+    private FAManager analyticsManager;
 
-    private AppCompatActivity activity;
+    private Activity activity;
     private GoogleMap map;
     private List<MarkerOptions> markers;
     private boolean isInteractionMode;
     private BroadcastReceiver displayOnMapBroadcastListener;
 
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = (AppCompatActivity) activity;
+        this.activity = activity;
         setupComponent();
 
         this.map = null;
@@ -77,6 +81,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 presenter.handleMapNote(note);
             }
         };
+
 
 
     }
@@ -143,6 +148,8 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 new LatLng(currentLocation.getLatitude(),
                         currentLocation.getLongitude()))
         );
+// test!!! works
+        analyticsManager.logEventLocation(currentLocation);
     }
 
     @Override
@@ -155,6 +162,8 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         map.addMarker(markerOptions).showInfoWindow();
         map.animateCamera(CameraUpdateFactory.newLatLng(notePos));
         markers.add(markerOptions);
+// test!!! works
+        analyticsManager.logEventNote(note);
     }
 
     @Override
@@ -245,6 +254,8 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
             return;
         }
         MainApp.plus(activity).inject(this);
+
+        analyticsManager = new FAManager(activity);
     }
 
 // methods

@@ -13,12 +13,17 @@ import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.di.activity.login.signin.SignInModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
+import ru.vpcb.map.notes.manager.FAManager;
 
 public class SignInActivity extends BaseActivity implements SignInView {
+    private static final String TAG = "SignInActivityAAA";
 
     @Inject
     SignInMvpPresenter presenter;
+    @Inject
+    FAManager analyticManager;
 
     private View signInRoot;
     private EditText mEditEmail;
@@ -38,6 +43,8 @@ public class SignInActivity extends BaseActivity implements SignInView {
             String email = mEditEmail.getText().toString();
             String pass = mEditPass.getText().toString();
             presenter.signIn(email, pass);
+            analyticManager.logEventLogin(email);
+//            analyticManager.logEventImage("120000012", "SuperImageTask");  // works
         });
 
     }
@@ -45,7 +52,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void setupComponent() {
         MainApp.get(this)
-                .getSignInComponent()
+                .getSignInComponent(new SignInModule(this))
                 .inject(this);
 
     }

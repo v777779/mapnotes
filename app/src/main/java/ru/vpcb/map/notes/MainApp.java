@@ -10,6 +10,7 @@ import ru.vpcb.map.notes.di.AppComponent;
 import ru.vpcb.map.notes.di.DaggerAppComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeModule;
+import ru.vpcb.map.notes.manager.FCManager;
 
 public class MainApp extends Application {
     private AppComponent component;
@@ -24,7 +25,7 @@ public class MainApp extends Application {
         return getApplication(activity).getComponent();
     }
 
-    public static HomeComponent plus(@NonNull AppCompatActivity activity) {
+    public static HomeComponent plus(@NonNull Activity activity) {
         MainApp app = getApplication(activity);
         return app.getHomeComponent(activity);
     }
@@ -37,7 +38,7 @@ public class MainApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        FCManager.setup(this);                // Crashlytics
         initComponent();
     }
 
@@ -52,7 +53,7 @@ public class MainApp extends Application {
         return component;
     }
 
-    private HomeComponent getHomeComponent(AppCompatActivity activity) {
+    private HomeComponent getHomeComponent(Activity activity) {
         if (homeComponent == null)
             homeComponent = component.getHomeComponent(new HomeModule(activity));
         return homeComponent;
