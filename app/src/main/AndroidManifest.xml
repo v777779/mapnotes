@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.vpcb.test.map">
+    package="ru.vpcb.map.notes">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -8,7 +8,7 @@
     <!--NETWORK_STATE is necessary for check network available only-->
 
     <application
-        android:name=".MainApp"
+        android:name="ru.vpcb.map.notes.MainApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.login.signup.SignUpActivity" />
-        <activity android:name=".activity.login.signin.SignInActivity" />
+
         <activity
             android:name=".activity.splash.SplashActivity"
             android:label="@string/app_name"
@@ -32,15 +31,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.login.LoginActivity"
-            android:label="@string/login_title" />
-        <activity
             android:name=".activity.home.HomeActivity"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".activity.login.signin.SignInActivity"
+            android:label="@string/title_activity_sign_in" />
+        <activity
+            android:name=".activity.login.signup.SignUpActivity"
+            android:label="@string/title_activity_sign_up" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

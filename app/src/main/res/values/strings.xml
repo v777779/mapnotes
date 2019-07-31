@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">MapTest</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_maps">Map</string>
-    <!--demo-->
+    <string name="app_name">MapNotes</string>
+    <string name="title_activity_sign_in">Sign in</string>
+    <string name="title_activity_sign_up">Sign up</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_home">Map Notes</string>
+
+    <!--menu-->
     <string name="title_home">Home</string>
-    <string name="title_login">Login</string>
+    <string name="title_login">Home</string>
     <string name="title_maps">Maps</string>
 
     <string name="prompt_email">Email</string>
