@@ -31,6 +31,7 @@ import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.ext.PermissionExt;
 import ru.vpcb.map.notes.manager.FAManager;
+import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.map.MapFragment;
 import ru.vpcb.map.notes.nopermissions.NoLocationPermissionFragment;
 import ru.vpcb.map.notes.search.SearchNotesFragment;
@@ -97,13 +98,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
                 return presenter.handleNavigationItemClick(item.getItemId());
             }
         };
-
-    }
-
-    @Override
-    public void setupComponent() {
-        HomeComponent component = MainApp.plus(this);
-        component.inject(this);
     }
 
     @Override
@@ -171,6 +165,16 @@ public class HomeActivity extends BaseActivity implements HomeView {
             mapFragment.clearAllMarkers();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void setupComponent() {
+        try {
+            HomeComponent component = MainApp.plus(this);
+            component.inject(this);
+        } catch (Exception e) {
+            FCManager.log(e);
         }
     }
 
@@ -244,8 +248,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
     }
 
 
-
-@Override
+    @Override
     public void requestLocationPermission() {
         PermissionExt.requestLocationPermissions(this);
     }

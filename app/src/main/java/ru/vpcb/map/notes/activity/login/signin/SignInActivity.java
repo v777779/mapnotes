@@ -16,6 +16,7 @@ import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.di.activity.login.signin.SignInModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FAManager;
+import ru.vpcb.map.notes.manager.FCManager;
 
 public class SignInActivity extends BaseActivity implements SignInView {
 
@@ -44,16 +45,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
             presenter.signIn(email, pass);
 
         });
-
     }
-
-    @Override
-    public void setupComponent() {
-        MainApp.get(this)
-                .getSignInComponent(new SignInModule(this))
-                .inject(this);
-    }
-
 
     @Override
     protected void onStart() {
@@ -65,8 +57,19 @@ public class SignInActivity extends BaseActivity implements SignInView {
     protected void onStop() {
         presenter.onDetach();
         super.onStop();
-
     }
+
+    @Override
+    public void setupComponent() {
+        try {
+            MainApp.get(this)
+                    .getSignInComponent(new SignInModule(this))
+                    .inject(this);
+        } catch (Exception e) {
+            FCManager.log(e);
+        }
+    }
+
 
 // sing in view support
 

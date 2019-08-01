@@ -35,6 +35,7 @@ import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.executors.IListener;
 import ru.vpcb.map.notes.ext.PermissionExt;
 import ru.vpcb.map.notes.manager.FAManager;
+import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
@@ -54,7 +55,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     private boolean isInteractionMode;
     private BroadcastReceiver displayOnMapBroadcastListener;
 
-
     @Override
     public void onAttach(Activity activity) {
         setupComponent(activity);
@@ -67,13 +67,16 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         this.displayOnMapBroadcastListener = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                if (intent == null) {
+                    return;
+                }
                 Note note = intent.getParcelableExtra(HomeActivity.EXTRA_NOTE);
+                if (note == null || presenter == null) {
+                    return;
+                }
                 presenter.handleMapNote(note);
             }
         };
-
-
-
     }
 
     @Override
@@ -97,7 +100,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 .unregisterReceiver(displayOnMapBroadcastListener);
     }
 
-    // TODO Check this Properties.FRAGMENT_CONTEXT setup
     @Override
     public void onStart() {
         super.onStart();
@@ -116,10 +118,8 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         getMapAsync(this);
     }
 
-// TODO Check this Properties.FRAGMENT_CONTEXT release
     @Override
     public void onStop() {
-//        releaseProperties(Properties.FRAGMENT_CONTEXT)
         if (locationProvider != null) {
             locationProvider.stopLocationUpdates();
         }
@@ -129,11 +129,12 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         super.onStop();
     }
 
-// support view
-
+    // support view
     @Override
     public void animateCamera(@NonNull Location currentLocation) {
-        if (map == null) return;
+        if (map == null) {
+            return;
+        }
         map.animateCamera(CameraUpdateFactory.newLatLng(
                 new LatLng(currentLocation.getLatitude(),
                         currentLocation.getLongitude()))
@@ -238,20 +239,24 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         activity.finish();
     }
 
-    public void sendAnalytics(Note note){
+    public void sendAnalytics(Note note) {
         analyticsManager.logEventNote(note);
     }
 
-    public void sendAnalytics(Location location){
+    public void sendAnalytics(Location location) {
         analyticsManager.logEventLocation(location);
     }
 
     @Override
     public void setupComponent(Activity activity) {
-        if (activity == null) {
-            return;
+        try {
+            if (activity == null) {
+                return;
+            }
+            MainApp.plus(activity).inject(this);
+        }catch (Exception e){
+            FCManager.log(e);
         }
-        MainApp.plus(activity).inject(this);
     }
 
 // methods

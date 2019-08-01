@@ -17,20 +17,13 @@ public abstract class BaseActivity extends AppCompatActivity implements ICompone
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setupComponent();
         super.onCreate(savedInstanceState);
-        try {
-
-            setupComponent();
-        } catch (Exception e) {
-            FCManager.log(e);
-        }
-
     }
 
     @Override
     public void setupComponent()  { // stub
     }
-
 
     protected void setupActionBar(int id) {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -40,16 +33,4 @@ public abstract class BaseActivity extends AppCompatActivity implements ICompone
         setSupportActionBar(toolbar);
     }
 
-
-    private  FAManager setupServices() {
-        try {
-
-            FCManager.setup(this);                   // Crashlytics
-            return new FAManager(this);       // Analytics
-
-        } catch (Exception e) {
-            Log.d(TAG, e.toString());
-        }
-        return null;
-    }
 }
