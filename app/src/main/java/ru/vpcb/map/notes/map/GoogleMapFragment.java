@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.IComponent;
+import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.executors.IListener;
@@ -37,18 +38,8 @@ import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
-public class GoogleMapFragment extends SupportMapFragment implements MapView, OnMapReadyCallback, IComponent {
-    private static GoogleMapFragment instance;
-
-    public static GoogleMapFragment getInstance() {
-        if (instance == null) {
-            synchronized (GoogleMapFragment.class) {
-                if (instance == null)
-                    instance = new GoogleMapFragment();
-            }
-        }
-        return instance;
-    }
+public class GoogleMapFragment extends SupportMapFragment implements MapView, OnMapReadyCallback,
+        IComponentFragment {
 
     @Inject
     MapMvpPresenter presenter;
@@ -66,10 +57,10 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
 
     @Override
     public void onAttach(Activity activity) {
+        setupComponent(activity);
         super.onAttach(activity);
-        this.activity = activity;
-        setupComponent();
 
+        this.activity = activity;
         this.map = null;
         this.markers = new ArrayList<>();
         this.isInteractionMode = false;
@@ -256,7 +247,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     }
 
     @Override
-    public void setupComponent() {
+    public void setupComponent(Activity activity) {
         if (activity == null) {
             return;
         }
