@@ -19,4 +19,9 @@ public interface MapView extends MvpView {
     void openSettings();
 
     void exit();
+
+    void sendAnalytics(Location location);
+
+    void sendAnalytics(Note note);
+
 }

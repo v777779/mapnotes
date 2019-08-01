@@ -15,11 +15,14 @@ import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.di.activity.login.signup.SignUpModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
+import ru.vpcb.map.notes.manager.FAManager;
 
 public class SignUpActivity extends BaseActivity implements SignUpView {
 
     @Inject
     SignUpMvpPresenter presenter;
+    @Inject
+    FAManager analyticsManager;
 
     private View signUpRoot;
     private EditText mEditName;
@@ -89,5 +92,13 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @Override
     public void displayEmptyUserNameError() {
         Snackbar.make(signUpRoot, R.string.error_name_should_not_be_empty, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void sendAnalytics(int id, String s) {
+        if (analyticsManager == null) {
+            return;
+        }
+        analyticsManager.logEventLogin(s);
     }
 }

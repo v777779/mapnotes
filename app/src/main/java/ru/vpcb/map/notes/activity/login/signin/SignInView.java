@@ -10,4 +10,9 @@ public interface SignInView extends MvpView {
     void displayPasswordError();
 
     void displaySignInError();
+
+    void sendAnalytics(String s);
+
+    void sendAnalytics(int id, String s);
+
 }

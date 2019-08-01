@@ -18,8 +18,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        presenter = LoginPresenter.getInstance();  // Lazy Singleton в качестве демо
 
-        presenter = LoginPresenter.getInstance();  // Lazy в качестве демо
         findViewById(R.id.signIn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

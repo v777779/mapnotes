@@ -11,7 +11,6 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -55,8 +54,8 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     MapMvpPresenter presenter;
     @Inject
     LocationProvider locationProvider;
-//to inject
-    private FAManager analyticsManager;
+    @Inject
+    FAManager analyticsManager;
 
     private Activity activity;
     private GoogleMap map;
@@ -148,8 +147,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 new LatLng(currentLocation.getLatitude(),
                         currentLocation.getLongitude()))
         );
-// test!!! works
-        analyticsManager.logEventLocation(currentLocation);
+
     }
 
     @Override
@@ -162,8 +160,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         map.addMarker(markerOptions).showInfoWindow();
         map.animateCamera(CameraUpdateFactory.newLatLng(notePos));
         markers.add(markerOptions);
-// test!!! works
-        analyticsManager.logEventNote(note);
     }
 
     @Override
@@ -218,6 +214,7 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
 
     }
 
+    @Override
     public void showLocationAlertDialog() {
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setMessage(R.string.use_location_message)
@@ -237,15 +234,25 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         dialog.show();
     }
 
+    @Override
     public void openSettings() {
         startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
     }
 
+    @Override
     public void exit() {
         if (activity == null) {
             return;
         }
         activity.finish();
+    }
+
+    public void sendAnalytics(Note note){
+        analyticsManager.logEventNote(note);
+    }
+
+    public void sendAnalytics(Location location){
+        analyticsManager.logEventLocation(location);
     }
 
     @Override
@@ -254,8 +261,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
             return;
         }
         MainApp.plus(activity).inject(this);
-
-        analyticsManager = new FAManager(activity);
     }
 
 // methods

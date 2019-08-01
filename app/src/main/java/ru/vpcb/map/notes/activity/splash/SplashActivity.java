@@ -14,7 +14,6 @@ import ru.vpcb.map.notes.ext.NavigationExt;
 
 
 public class SplashActivity extends BaseActivity {
-    private static final String TAG = "SplashActivity";
 
     @Inject
     UserRepository authRepository;
@@ -30,7 +29,6 @@ public class SplashActivity extends BaseActivity {
         }
         finish();
 
-//        analyticManager.setCurrentScreen(this, TAG);
     }
 
     @Override

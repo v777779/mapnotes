@@ -18,12 +18,11 @@ import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FAManager;
 
 public class SignInActivity extends BaseActivity implements SignInView {
-    private static final String TAG = "SignInActivityAAA";
 
     @Inject
     SignInMvpPresenter presenter;
     @Inject
-    FAManager analyticManager;
+    FAManager analyticsManager;
 
     private View signInRoot;
     private EditText mEditEmail;
@@ -43,8 +42,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
             String email = mEditEmail.getText().toString();
             String pass = mEditPass.getText().toString();
             presenter.signIn(email, pass);
-            analyticManager.logEventLogin(email);
-//            analyticManager.logEventImage("120000012", "SuperImageTask");  // works
+
         });
 
     }
@@ -54,7 +52,6 @@ public class SignInActivity extends BaseActivity implements SignInView {
         MainApp.get(this)
                 .getSignInComponent(new SignInModule(this))
                 .inject(this);
-
     }
 
 
@@ -99,4 +96,22 @@ public class SignInActivity extends BaseActivity implements SignInView {
         });
         snackbar.show();
     }
+
+    @Override
+    public void sendAnalytics(String s) {   // works
+        if (analyticsManager == null) {
+            return;
+        }
+        analyticsManager.logEventLogin(s);
+    }
+
+    @Override
+    public void sendAnalytics(int id, String s) {
+        if (analyticsManager == null) {
+            return;
+        }
+        analyticsManager.logEventImage(String.valueOf(id), s);
+    }
+
+
 }

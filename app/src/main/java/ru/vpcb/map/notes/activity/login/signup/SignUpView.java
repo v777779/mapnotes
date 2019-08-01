@@ -12,4 +12,7 @@ public interface SignUpView extends MvpView {
     void displaySignUpError();
 
     void displayEmptyUserNameError();
+
+    void sendAnalytics(int id, String s);
+
 }

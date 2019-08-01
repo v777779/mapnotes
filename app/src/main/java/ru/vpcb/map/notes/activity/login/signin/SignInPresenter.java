@@ -53,6 +53,9 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
             return;
         }
 
+        view.sendAnalytics(email);
+        view.sendAnalytics(120000012, "ImageValue");  // works
+
         disposable = userRepository.signIn(email, password)
                 .observeOn(appExecutors.ui())
                 .subscribe(result -> {
@@ -63,6 +66,7 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
                 }, t -> {
                     view.displaySignInError();
                 });
+
     }
 
 // Alternative

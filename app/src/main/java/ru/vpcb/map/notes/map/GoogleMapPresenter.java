@@ -29,30 +29,42 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
 
     @Override
     public void handleInteractionMode(boolean isInteractionMode) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         if (!isInteractionMode) {
             view.animateCamera(currentLocation);
+            view.sendAnalytics(currentLocation);
+
         }
     }
 
     @Override
     public void handleMapNote(@NonNull Note note) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         view.displayNoteOnMap(note);
+        view.sendAnalytics(note);
     }
 
     @Override
     public void handleLocationUpdate(boolean isInteractionMode, Location newLocation) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         if (!isInteractionMode && !newLocation.equals(currentLocation)) {
             view.animateCamera(newLocation);
+            view.sendAnalytics(newLocation);
         }
         currentLocation = newLocation;
     }
 
     @Override
     public void checkEnableGpsLocation() {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         if (!view.isLocationAvailable()) {
             view.showLocationAlertDialog();
         }
@@ -60,10 +72,16 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
 
     @Override
     public void openSettings() {
+        if (view == null) {
+            return;
+        }
         view.openSettings();
     }
 
     public void exit() {
+        if (view == null) {
+            return;
+        }
         view.exit();
     }
 }

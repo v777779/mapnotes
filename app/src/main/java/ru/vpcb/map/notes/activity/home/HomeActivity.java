@@ -30,6 +30,7 @@ import ru.vpcb.map.notes.add.AddNoteFragment;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.ext.PermissionExt;
+import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.map.MapFragment;
 import ru.vpcb.map.notes.nopermissions.NoLocationPermissionFragment;
 import ru.vpcb.map.notes.search.SearchNotesFragment;
@@ -43,6 +44,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
     HomeMvpPresenter presenter;
     @Inject
     MapFragment mapFragment;
+    @Inject
+    FAManager analyticsManager;
 
     private View layout;
     private View bottomSheet;
@@ -58,9 +61,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-// TODO by inject
-//        mapFragment = new GeneralMapFragment();
 
         layout = findViewById(android.R.id.content);
         bottomSheet = findViewById(R.id.bottomSheet);

@@ -47,6 +47,8 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
             view.displayEmptyUserNameError();
         }
 
+        view.sendAnalytics(-1, email);
+
         disposable = userRepository.signUp(email, password)
                 .observeOn(appExecutors.ui())
                 .subscribe(result -> {
