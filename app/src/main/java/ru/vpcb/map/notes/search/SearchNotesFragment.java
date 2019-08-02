@@ -1,5 +1,6 @@
 package ru.vpcb.map.notes.search;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import javax.inject.Inject;
 
 import ru.vpcb.map.notes.R;
+import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
 import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
@@ -40,7 +42,7 @@ import ru.vpcb.map.notes.search.adapter.NotesAdapter;
 import static ru.vpcb.map.notes.activity.home.HomeActivity.DISPLAY_LOCATION;
 import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;
 
-public class SearchNotesFragment extends Fragment implements SearchNotesView {
+public class SearchNotesFragment extends Fragment implements SearchNotesView, IComponentFragment {
 
     // TODO by inject
     @Inject
@@ -61,6 +63,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView {
 
     @Override
     public void onAttach(Context context) {
+
         super.onAttach(context);
 
         oldAppExecutors = null;
@@ -162,5 +165,10 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView {
     @Override
     public void clearSearchResults() {
         adapter.clear();
+    }
+
+    @Override
+    public void setupComponent(Activity activity) {
+
     }
 }

@@ -128,7 +128,7 @@ public class FirebaseUserRepository implements UserRepository {
                     }
                 });
             }
-        });
+        }).subscribeOn(appExecutors.net());
 
     }
 

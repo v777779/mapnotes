@@ -11,6 +11,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IJob;
@@ -42,8 +47,39 @@ public class FirebaseNotesRepository implements NotesRepository {
         newNoteRef.setValue(note);
     }
 
-
     @Override
+    public Single<Result<List<Note>>> getNotes() {
+        return Single.<Result<List<Note>>>create(emitter -> {
+            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(emitter.isDisposed()){
+                        return;
+                    }
+                    if (dataSnapshot.exists()) {
+                        List<Note> noteResults = new ArrayList<>();
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            Note note = child.getValue(Note.class);
+// TODO check sync
+//                            replaceAuthorName.join(note);
+                            noteResults.add(note);
+                        }
+                        emitter.onSuccess( new Result.Success<>(noteResults));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    if(emitter.isDisposed()){
+                        return;
+                    }
+                    emitter.onSuccess( new Result.Error<>(databaseError.toException()));
+                }
+            });
+        }).subscribeOn(Schedulers.io());
+
+    }
+        @Override
     public Result<List<Note>> getNotes(IJob<Note> replaceAuthorName) {
 
         database.getReference(notesPath).addValueEventListener(new ValueEventListener() {

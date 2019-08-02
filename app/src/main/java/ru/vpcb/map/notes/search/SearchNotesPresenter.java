@@ -2,10 +2,14 @@ package ru.vpcb.map.notes.search;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
@@ -74,15 +78,42 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
             }
         };
-        IJob<Note> notesPreProcessor = new IJob<Note>() {
-            @Override
-            public void join(Note note) {
-                replaceNoteAuthorIdToNameJob(note, defaultUserName);
-            }
-        };
+        IJob<Note> notesPreProcessor = note -> replaceNoteAuthorIdToNameJob(note, defaultUserName);
 
         notesRepository.setExecutors(appExecutors);
-        Result<List<Note>> notes = notesRepository.getNotes(notesPreProcessor);
+        Disposable disposable = notesRepository.getNotes()
+                .map(result -> {
+                    if(result instanceof Result.Success) {
+                        List<Note> list = result.getData();
+                        for (Note note : list) {
+                            composite.add(userRepository.getHumanReadableName(note.getUser())
+                                    .subscribe(resultName -> {
+                                        if (resultName instanceof Result.Success) {
+                                            note.setUser(resultName.getData());
+                                        } else {
+                                            note.setUser(defaultUserName);
+                                        }
+                                    }));
+                        }
+
+                        return new Result.Success<>(list);
+                    }else {
+                        return result;
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    if (result instanceof Result.Error) {
+                        view.displayLoadingNotesError();
+                    }
+                    if (result instanceof Result.Success) {
+                        for (Object note : (List) result.getData()) {
+                            view.displayNote((Note) note);
+                        }
+                    }
+
+                });
+        composite.add(disposable);
     }
 
     @Override
