@@ -12,6 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import ru.vpcb.map.notes.Sync;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.exception.UserNotAuthenticatedException;
@@ -100,30 +102,34 @@ public class FirebaseUserRepository implements UserRepository {
     }
 
     @Override
-    public Result<String> getHumanReadableName(String userId) {
-
-        database.getReference(usersPath).child(userId).addValueEventListener(new ValueEventListener() {
+    public Single<Result<String>> getHumanReadableName(String userId) {
+        return Single.create(new SingleOnSubscribe<Result<String>>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
-                    String s = "";
-                    if (!(snapshot == null || snapshot.getValue() == null)) {
-                        s = snapshot.getValue().toString();
+            public void subscribe(SingleEmitter<Result<String>> emitter) throws Exception {
+                database.getReference(usersPath).child(userId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(emitter.isDisposed())return;
+                        if (dataSnapshot.exists()) {
+                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                            if (snapshot == null || snapshot.getValue() == null) {
+                                return;
+                            }
+                            emitter.onSuccess(new Result.Success<>(snapshot.getValue().toString()));
+                        }
                     }
-                    Result<String> result = new Result.Success<>(s);
-                    oldAppExecutors.resume(result);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Result<String> result = new Result.Error<>(databaseError.toException());
-                oldAppExecutors.resume(result);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//                        if(emitter.isDisposed()){
+//                            return;
+//                        }
+//                        emitter.onError(databaseError.toException());
+                    }
+                });
             }
         });
 
-        return null;
     }
 
     @Override

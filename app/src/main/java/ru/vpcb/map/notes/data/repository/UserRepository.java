@@ -18,7 +18,7 @@ public interface UserRepository {
 
     void changeUserName(AuthUser user,String name);
 
-    Result<String> getHumanReadableName(String userId);
+    Single<Result<String>> getHumanReadableName(String userId);
 
     Result<String>  getUserIdFromHumanReadableName(String userName);
 

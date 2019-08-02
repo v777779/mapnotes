@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
@@ -23,6 +25,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private SearchNotesView view;
     private int notesSearchCategory;
     private int usersSearchCategory;
+    private CompositeDisposable composite;
 
     public SearchNotesPresenter(AppExecutors appExecutors, UserRepository userRepository,
                                 NotesRepository notesRepository) {
@@ -39,12 +42,17 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     public void onAttach(@NonNull SearchNotesView view) {
         super.onAttach(view);
         this.view = view;
+        this.composite = new CompositeDisposable();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         this.view = null;
+        if (composite != null) {
+            composite.dispose();
+        }
+        super.onDetach();
+
     }
 
     @Override
@@ -59,8 +67,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     view.displayLoadingNotesError();
                 }
                 if (result instanceof Result.Success) {
-                    for (Object note : (List)result.getData()) {
-                        view.displayNote((Note)note);
+                    for (Object note : (List) result.getData()) {
+                        view.displayNote((Note) note);
                     }
                 }
 
@@ -91,13 +99,13 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 // TODO launch
             appExecutors = new AppExecutors() {
                 @Override
-                public <T>void resume(Result<T> result) {
+                public <T> void resume(Result<T> result) {
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
-                        for (Object note : (List)result.getData()) {
-                            view.displayNote((Note)note);
+                        for (Object note : (List) result.getData()) {
+                            view.displayNote((Note) note);
                         }
                     }
                 }
@@ -116,13 +124,13 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 // TODO launch
             AppExecutors noteExecutors = new AppExecutors() {
                 @Override
-                public <T>void resume(Result<T> result) {
+                public <T> void resume(Result<T> result) {
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
-                        for (Object note : (List)result.getData()) {
-                            view.displayNote((Note)note);
+                        for (Object note : (List) result.getData()) {
+                            view.displayNote((Note) note);
                         }
                     }
                 }
@@ -130,12 +138,12 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
             AppExecutors userExecutors = new AppExecutors() {
                 @Override
-                public <T>void resume(Result<T> result) {
+                public <T> void resume(Result<T> result) {
                     if (result instanceof Result.Success) {
 // TODO launch
                         notesRepository.setExecutors(noteExecutors);
                         Result<List<Note>> notes = notesRepository.getNotesByUser(
-                                ((AuthUser)result.getData()).getUid(), text);
+                                ((AuthUser) result.getData()).getUid(), text);
                     }
                     if (result instanceof Result.Error) {
                         view.displayUnknownUserError();
@@ -157,9 +165,9 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 // TODO launch
         AppExecutors userExecutors = new AppExecutors() {
             @Override
-            public <T>void resume(Result<T> result) {
+            public <T> void resume(Result<T> result) {
                 if (result instanceof Result.Success) {
-                    note.setUser((String)result.getData());
+                    note.setUser((String) result.getData());
                 } else {
                     note.setUser(defaultUserName);
                 }
@@ -167,7 +175,17 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         };
 // TODO launch
         userRepository.setAppExecutors(userExecutors);
-        Result<String> userName = userRepository.getHumanReadableName(note.getUser());
+        Disposable disposable = userRepository.getHumanReadableName(note.getUser())
+                .subscribe(result -> {
+                    if (result instanceof Result.Success) {
+                        note.setUser((String) result.getData());
+                    } else {
+                        note.setUser(defaultUserName);
+                    }
+                });
+        if (composite != null) {
+            composite.add(disposable);
+        }
 
     }
 }
