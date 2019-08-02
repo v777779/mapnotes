@@ -162,23 +162,10 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 //methods
 
     private void replaceNoteAuthorIdToNameJob(Note note, String defaultUserName) {
-// TODO launch
-        AppExecutors userExecutors = new AppExecutors() {
-            @Override
-            public <T> void resume(Result<T> result) {
-                if (result instanceof Result.Success) {
-                    note.setUser((String) result.getData());
-                } else {
-                    note.setUser(defaultUserName);
-                }
-            }
-        };
-// TODO launch
-        userRepository.setAppExecutors(userExecutors);
         Disposable disposable = userRepository.getHumanReadableName(note.getUser())
                 .subscribe(result -> {
                     if (result instanceof Result.Success) {
-                        note.setUser((String) result.getData());
+                        note.setUser(result.getData());
                     } else {
                         note.setUser(defaultUserName);
                     }
@@ -186,6 +173,5 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (composite != null) {
             composite.add(disposable);
         }
-
     }
 }
