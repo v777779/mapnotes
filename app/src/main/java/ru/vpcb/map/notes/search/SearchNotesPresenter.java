@@ -74,8 +74,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                              @Override
                              public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
                                  if (result instanceof Result.Success) {
-                                     Observable<Note> on = Observable.fromIterable(result.getData());
-                                     Observable<String> os = Observable.fromIterable(result.getData())
+                                     Observable<Note> notes = Observable.fromIterable(result.getData());
+                                     Observable<String> names = Observable.fromIterable(result.getData())
                                              .concatMap(new Function<Note, ObservableSource<String>>() {
                                                  @Override
                                                  public ObservableSource<String> apply(Note note) throws Exception {
@@ -92,7 +92,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                                                              });
                                                  }
                                              });
-                                     return Observable.zip(on, os, (n, s) -> {
+                                     return Observable.zip(notes, names, (n, s) -> {
                                          n.setUser(s);
                                          return n;
                                      }).toList()
@@ -102,82 +102,21 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                              }
                          });
 
-
-//                    // from single<list> to single<list>
-//                    Single<Result<List<Note>>> notes = notesRepository.getNotes()
-//                            .observeOn(appExecutors.net())
-//                            .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
-//                                @Override
-//                                public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
-//                                    if (result instanceof Result.Success) {
-//                                        return Observable.fromIterable(result.getData())                        // Observable<Note>
-//                                                .concatMap((Function<Note, ObservableSource<Note>>) note ->     // zip(<Note>,<Name>)
-//                                                        Observable.zip(Observable.just(new Result.Success<>(note)),
-//                                                                userRepository
-//                                                                        .getHumanReadableName(note.getUser())
-//                                                                        .toObservable()
-//                                                                        .observeOn(appExecutors.net()),
-//                                                                (n, s) -> {
-//                                                                    if (s instanceof Result.Success) {          // note, name-> note.set(name)
-//                                                                        note.setUser(s.getData());
-//                                                                    } else {
-//                                                                        note.setUser(defaultUserName);
-//                                                                    }
-//                                                                    return note;
-//                                                                }))
-//                                                .toList()                                                       // Single<List>
-//                                                .map(Result.Success::new);                                      // Single<Result<List>>
-//                                    }
-//                                    return Single.just(new Result.Error<>(result.getException()));
-//                                }
-//                            });
-
-                    Disposable disposable = notes
-                            .observeOn(appExecutors.ui())
-                            .subscribe(result -> {
-                                if (result instanceof Result.Error) {
-                                    view.displayLoadingNotesError();
-                                }
-                                if (result instanceof Result.Success) {
-                                    for (Note note : result.getData()) {
-                                        view.displayNote((Note) note);
-                                    }
-                                }
-                            });
+        Disposable disposable = notes
+                .observeOn(appExecutors.ui())
+                .subscribe(result -> {
+                    if (result instanceof Result.Error) {
+                        view.displayLoadingNotesError();
+                    }
+                    if (result instanceof Result.Success) {
+                        for (Note note : result.getData()) {
+                            view.displayNote((Note) note);
+                        }
+                    }
+                });
 
 
-// from observable<> to observable<>
-//                    Observable<Result<Note>> notes = notesRepository.getNote()
-//                            .observeOn(appExecutors.net())
-//                            .concatMap(result -> {
-//                                if (result instanceof Result.Success) {
-//                                    return Observable.zip(Observable.just(result),
-//                                            userRepository
-//                                                    .getHumanReadableName(result.getData().getUser())
-//                                                    .toObservable()
-//                                                    .observeOn(appExecutors.net()),
-//                                            (r, s) -> {
-//                                                if (s instanceof Result.Success)
-//                                                    r.getData().setUser(s.getData());
-//                                                else
-//                                                    r.getData().setUser(defaultUserName);
-//                                                return r;
-//                                            });
-//                                } else {
-//                                    return Observable.fromCallable(() -> result); // фиксированный объект смысла нет
-//                                }
-//                            });
-//
-//                    Disposable disposable = notes.observeOn(appExecutors.ui())
-//                            .subscribe(result -> {
-//                                if (result instanceof Result.Error) {
-//                                    view.displayLoadingNotesError();
-//                                }
-//                                if (result instanceof Result.Success) {
-//                                    Note note = result.getData();
-//                                    view.displayNote((Note) note);
-//                                }
-//                            });
+
 
         composite.add(disposable);
                 }
@@ -272,3 +211,67 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             }
         }
     }
+// alternative
+// from single<list> to single<list>
+//                    Single<Result<List<Note>>> notes = notesRepository.getNotes()
+//                            .observeOn(appExecutors.net())
+//                            .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
+//                                @Override
+//                                public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
+//                                    if (result instanceof Result.Success) {
+//                                        return Observable.fromIterable(result.getData())                        // Observable<Note>
+//                                                .concatMap((Function<Note, ObservableSource<Note>>) note ->     // zip(<Note>,<Name>)
+//                                                        Observable.zip(Observable.just(new Result.Success<>(note)),
+//                                                                userRepository
+//                                                                        .getHumanReadableName(note.getUser())
+//                                                                        .toObservable()
+//                                                                        .observeOn(appExecutors.net()),
+//                                                                (n, s) -> {
+//                                                                    if (s instanceof Result.Success) {          // note, name-> note.set(name)
+//                                                                        note.setUser(s.getData());
+//                                                                    } else {
+//                                                                        note.setUser(defaultUserName);
+//                                                                    }
+//                                                                    return note;
+//                                                                }))
+//                                                .toList()                                                       // Single<List>
+//                                                .map(Result.Success::new);                                      // Single<Result<List>>
+//                                    }
+//                                    return Single.just(new Result.Error<>(result.getException()));
+//                                }
+//                            });
+
+
+
+// from observable<> to observable<>
+//                    Observable<Result<Note>> notes = notesRepository.getNote()
+//                            .observeOn(appExecutors.net())
+//                            .concatMap(result -> {
+//                                if (result instanceof Result.Success) {
+//                                    return Observable.zip(Observable.just(result),
+//                                            userRepository
+//                                                    .getHumanReadableName(result.getData().getUser())
+//                                                    .toObservable()
+//                                                    .observeOn(appExecutors.net()),
+//                                            (r, s) -> {
+//                                                if (s instanceof Result.Success)
+//                                                    r.getData().setUser(s.getData());
+//                                                else
+//                                                    r.getData().setUser(defaultUserName);
+//                                                return r;
+//                                            });
+//                                } else {
+//                                    return Observable.fromCallable(() -> result); // фиксированный объект смысла нет
+//                                }
+//                            });
+//
+//                    Disposable disposable = notes.observeOn(appExecutors.ui())
+//                            .subscribe(result -> {
+//                                if (result instanceof Result.Error) {
+//                                    view.displayLoadingNotesError();
+//                                }
+//                                if (result instanceof Result.Success) {
+//                                    Note note = result.getData();
+//                                    view.displayNote((Note) note);
+//                                }
+//                            });
