@@ -88,8 +88,6 @@ public class FirebaseNotesRepository implements NotesRepository {
                         List<Note> noteResults = new ArrayList<>();
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             Note note = child.getValue(Note.class);
-// TODO check sync
-//                            replaceAuthorName.join(note);
                             noteResults.add(note);
                         }
                         emitter.onSuccess( new Result.Success<>(noteResults));
