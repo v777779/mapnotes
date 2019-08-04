@@ -33,7 +33,7 @@ public class SplashPresenter implements SplashMvpPresenter {
     @Override
     public void checkGoogleServices() {
         if (view == null) return;
-        int code = view.codeGooglePlayServices();
+        int code = view.isPlayServicesAvailable();
 
         if (code == ConnectionResult.SUCCESS) {
             startMapNotes();
@@ -59,7 +59,7 @@ public class SplashPresenter implements SplashMvpPresenter {
     public void playMarketResults(int requestCode) {
         if (view == null) return;
         if (requestCode == GPS_REQUEST_CODE) {
-            if (view.codeGooglePlayServices() == SUCCESS) {
+            if (view.isPlayServicesAvailable() == SUCCESS) {
                 startMapNotes();
             } else {
                 view.finishView();

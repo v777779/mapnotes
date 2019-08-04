@@ -7,7 +7,7 @@ public interface SplashView extends MvpView {
 
     void getAlertDialog();
 
-    int codeGooglePlayServices();
+    int isPlayServicesAvailable();
 
     boolean isInstalledPlayMarket();
 

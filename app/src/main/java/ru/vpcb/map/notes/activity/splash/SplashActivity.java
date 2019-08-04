@@ -139,7 +139,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     }
 
     @Override
-    public int codeGooglePlayServices() {
+    public int isPlayServicesAvailable() {
         return GoogleApiAvailability.getInstance()
                 .isGooglePlayServicesAvailable(this);
     }
