@@ -11,10 +11,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
+import io.reactivex.Observable;
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
 import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.AppExecutors;
@@ -45,6 +43,36 @@ public class FirebaseNotesRepository implements NotesRepository {
         DatabaseReference notesRef = database.getReference(notesPath);
         DatabaseReference newNoteRef = notesRef.push();
         newNoteRef.setValue(note);
+    }
+
+    public Observable<Result<Note>> getNote() {
+        return Observable.<Result<Note>>create(emitter -> {
+            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(emitter.isDisposed()){
+                        return;
+                    }
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            Note note = child.getValue(Note.class);
+                            emitter.onNext( new Result.Success<>(note));
+                        }
+                        emitter.onComplete();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    if(emitter.isDisposed()){
+                        return;
+                    }
+                    emitter.onNext(new Result.Error<>(databaseError.toException()));
+                    emitter.onComplete();
+                }
+            });
+        }).subscribeOn(Schedulers.io());
+
     }
 
     @Override
