@@ -1,8 +1,5 @@
 package ru.vpcb.map.notes.activity.splash;
 
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -10,14 +7,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.List;
 
@@ -33,38 +27,56 @@ import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 
-import static com.google.android.gms.common.ConnectionResult.SERVICE_MISSING;
-import static com.google.android.gms.common.ConnectionResult.SUCCESS;
 
-
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements SplashView {
     private static final String GooglePlayStorePackageNameOld = "com.google.market";
     private static final String GooglePlayStorePackageNameNew = "com.android.vending";
-    private static int GPS_REQUEST_CODE = 20001;
+    public static int GPS_REQUEST_CODE = 20001;
 
     @Inject
     UserRepository authRepository;
+
+    private SplashMvpPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkGooglePlayServices()) {
-            return;
-        }
-        startMapNotes();
+        presenter = SplashPresenter.getInstance();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (presenter != null) {
+            presenter.checkGoogleServices();
+
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (presenter != null) {
+            presenter.onAttach(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (presenter != null) {
+            presenter.onDetach();
+        }
+        super.onStop();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GPS_REQUEST_CODE) {
-            if (stateGooglePlayServices() == SUCCESS) {
-                startMapNotes();
-            } else {
-                finish();
-            }
+        if (presenter != null) {
+            presenter.playMarketResults(requestCode);
         }
     }
 
@@ -79,46 +91,40 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    private void startMapNotes() {
-        if (isAuthenticated()) {
-            NavigationExt.navigateTo(this, HomeActivity.class);
-        } else {
-            NavigationExt.navigateTo(this, LoginActivity.class);
+
+    @Override
+    public void finishView() {
+        finish();
+    }
+
+    @Override
+    public void navigateToLogin() {
+        NavigationExt.navigateTo(this, HomeActivity.class);
+    }
+
+    @Override
+    public void navigateToHome() {
+        NavigationExt.navigateTo(this, LoginActivity.class);
+    }
+
+    @Override
+    public void navigateToPlayMarket() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
         }
         finish();
     }
 
-    // TODO Presenter
-    private boolean isAuthenticated() {
+    @Override
+    public boolean isAuthenticated() {
         return (authRepository.getCurrentUser() instanceof Result.Success);
     }
 
-    // TODO Presenter
-    private void getErrorDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setMessage(R.string.update_services_message)
-                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
-                        } catch (android.content.ActivityNotFoundException anfe) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
-                        }
-                        finish();
-                    }
-                })
-                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                }).create();
 
-        dialog.show();
-    }
-
-    private boolean isInstalledPlayMarket() {
+    @Override
+    public boolean isInstalledPlayMarket() {
         PackageManager pm = getApplication().getPackageManager();
         List<PackageInfo> packages = pm.getInstalledPackages(
                 PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -132,37 +138,53 @@ public class SplashActivity extends BaseActivity {
         return false;
     }
 
-    private int stateGooglePlayServices() {
+    @Override
+    public int codeGooglePlayServices() {
         return GoogleApiAvailability.getInstance()
                 .isGooglePlayServicesAvailable(this);
     }
 
-    private boolean checkGooglePlayServices() {
-        boolean isMarket = isInstalledPlayMarket();
-        int code = stateGooglePlayServices();
-
-        if (code != ConnectionResult.SUCCESS) {
-            /*
-             * Google Play Services is missing or update is required
-             *  return code could be
-             * SUCCESS,
-             * SERVICE_MISSING, SERVICE_VERSION_UPDATE_REQUIRED,
-             * SERVICE_DISABLED, SERVICE_INVALID.
-             */
-            if (isMarket) {
-                GoogleApiAvailability.getInstance().getErrorDialog(this, code,
-                        GPS_REQUEST_CODE, dialogInterface -> {
-                            finish();
+    @Override
+    public void getAlertDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setMessage(R.string.update_services_message)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (presenter != null) {
+                            presenter.onPositive();
                         }
-                ).show();
-            } else {
-                getErrorDialog();
-            }
-            return false;
-        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (presenter != null) {
+                            presenter.onNegative();
+                        }
+                    }
+                }).create();
 
-        return true;
+        dialog.show();
     }
 
+
+    @Override
+    public void getErrorDialog(int code) {
+        /*
+         * Google Play Services is missing or update is required
+         *  return code could be
+         * SUCCESS,
+         * SERVICE_MISSING, SERVICE_VERSION_UPDATE_REQUIRED,
+         * SERVICE_DISABLED, SERVICE_INVALID.
+         */
+        GoogleApiAvailability.getInstance().getErrorDialog(this, code, GPS_REQUEST_CODE,
+                dialogInterface -> {
+                    if (presenter != null) {
+                        presenter.onNegative();
+                    }
+                }
+        ).show();
+    }
 
 }
