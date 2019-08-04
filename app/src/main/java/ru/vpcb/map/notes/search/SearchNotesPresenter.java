@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import ru.vpcb.map.notes.base.ScopedPresenter;
@@ -65,10 +64,9 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) return;
         view.clearSearchResults();
 
-// вариант 1
-        Observable<Result<Note>> names = notesRepository.getNote()
+        Observable<Result<Note>> notes = notesRepository.getNote()
                 .observeOn(appExecutors.net())
-                .flatMap(result -> {
+                .concatMap(result -> {
                     if (result instanceof Result.Success) {
                         return Observable.zip(Observable.just(result),
                                 userRepository
@@ -87,89 +85,17 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     }
                 });
 
-        Disposable disposableNames = names.observeOn(appExecutors.ui())
-                .subscribe(n -> {
-                    if (n instanceof Result.Success) {
-                        Note note = n.getData();
-                        System.out.println(note.getUser() + " " + note.getLatitude() + " " + note.getLongitude());
-                    } else {
-                        System.out.println(n.getException().toString());
-                    }
-                });
-
-// вариант 2
-        Observable<Result<Note>> notes = notesRepository.getNote();
-        Observable<Result<String>> strings = notesRepository.getNote()
-                .flatMap(result -> {
-                    if (result instanceof Result.Success) {
-                        return userRepository
-                                .getHumanReadableName(result.getData().getUser())
-                                .toObservable();
-                    }else {
-                        return Observable.just(new Result.Error<>(result.getException()));
-                    }
-                }
-        );
-
-        Disposable disposables = Observable.zip(notes, strings, (n, s) -> {
-            if (n instanceof Result.Success) {
-                Note note = n.getData();
-                if (s instanceof Result.Success) {
-                    note.setUser(s.getData());
-                } else {
-                    note.setUser(defaultUserName);
-                }
-                return new Result.Success<>(note);
-            } else {
-                return n;
-            }
-        })
-                .subscribeOn(appExecutors.net())
-                .observeOn(appExecutors.ui())
-                .subscribe(n -> {
-                    if (n instanceof Result.Success) {
-                        Note note = n.getData();
-                        System.out.println(note.getUser() + " " + note.getLatitude() + " " + note.getLongitude());
-                    } else {
-                        System.out.println(n.getData().toString());
-                    }
-                });
-
-// вариант 3
-        Disposable disposable = notesRepository
-                .getNotes()
-                .observeOn(appExecutors.net())
-                .map(result -> {
-                    if (result instanceof Result.Success) {
-                        List<Note> list = result.getData();
-                        for (Note note : list) {
-                            Result<String> resultName = userRepository
-                                    .getHumanReadableName(note.getUser())
-                                    .blockingGet();
-                            if (resultName instanceof Result.Success) {
-                                note.setUser(resultName.getData());
-                            } else {
-                                note.setUser(defaultUserName);
-                            }
-                        }
-
-                        return new Result.Success<>(list);
-                    } else {
-                        return result;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
+        Disposable disposable = notes.observeOn(appExecutors.ui())
                 .subscribe(result -> {
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
-                        for (Object note : (List) result.getData()) {
+                       Note note = result.getData();
                             view.displayNote((Note) note);
-                        }
                     }
-
                 });
+
         composite.add(disposable);
     }
 
