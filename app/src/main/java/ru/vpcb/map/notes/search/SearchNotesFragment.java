@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 
+import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
@@ -36,6 +37,7 @@ import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
 import ru.vpcb.map.notes.search.adapter.NotesAdapter;
 
@@ -63,7 +65,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
 
     @Override
     public void onAttach(Context context) {
-
+        setupComponent((Activity)context);
         super.onAttach(context);
 
         oldAppExecutors = null;
@@ -169,6 +171,13 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
 
     @Override
     public void setupComponent(Activity activity) {
-
+        try {
+            if (activity == null) {
+                return;
+            }
+            MainApp.plus(activity).inject(this);
+        }catch (Exception e){
+            FCManager.log(e);
+        }
     }
 }
