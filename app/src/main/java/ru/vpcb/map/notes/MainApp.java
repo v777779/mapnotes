@@ -10,7 +10,6 @@ import ru.vpcb.map.notes.di.AppComponent;
 import ru.vpcb.map.notes.di.DaggerAppComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeModule;
-import ru.vpcb.map.notes.manager.FCManager;
 
 public class MainApp extends Application {
     private AppComponent component;
@@ -38,7 +37,7 @@ public class MainApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FCManager.setup(this);                // Crashlytics
+//        FCManager.setup(this);                // Crashlytics  нет необходимости
         initComponent();
     }
 
