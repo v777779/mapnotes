@@ -12,9 +12,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import ru.vpcb.map.notes.Sync;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.exception.UserNotAuthenticatedException;
 import ru.vpcb.map.notes.executors.AppExecutors;
@@ -103,66 +100,63 @@ public class FirebaseUserRepository implements UserRepository {
 
     @Override
     public Single<Result<String>> getHumanReadableName(String userId) {
-        return Single.create(new SingleOnSubscribe<Result<String>>() {
-            @Override
-            public void subscribe(SingleEmitter<Result<String>> emitter) throws Exception {
-                database.getReference(usersPath).child(userId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(emitter.isDisposed())return;
-                        if (dataSnapshot.exists()) {
-                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
-                            if (snapshot == null || snapshot.getValue() == null) {
-                                return;
+        return Single.<Result<String>>create(
+                emitter -> database
+                        .getReference(usersPath)
+                        .child(userId)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (emitter.isDisposed()) return;
+                                if (dataSnapshot.exists()) {
+                                    DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                                    if (snapshot == null || snapshot.getValue() == null) {
+                                        return;
+                                    }
+                                    emitter.onSuccess(new Result.Success<>(snapshot.getValue().toString()));
+                                } else {
+                                    emitter.onSuccess(new Result.Error<>(new NullPointerException()));
+                                }
                             }
-                            emitter.onSuccess(new Result.Success<>(snapshot.getValue().toString()));
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                        if(emitter.isDisposed()){
-//                            return;
-//                        }
-//                        emitter.onError(databaseError.toException());
-                    }
-                });
-            }
-        }).subscribeOn(appExecutors.net());
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        })
+        ).subscribeOn(appExecutors.net());
     }
 
     @Override
-    public Result<String> getUserIdFromHumanReadableName(String userName) {
-        final Sync<String> sync = new Sync<>();
-        database.getReference(usersPath)
-                .orderByChild(nameKey)
-                .equalTo(userName)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
-                            String s = "";
-                            if (!(snapshot == null || snapshot.getKey() == null)) {
-                                s = snapshot.getKey();
+    public Single<Result<String>> getUserIdFromHumanReadableName(String userName) {
+        return Single.create(emitter ->
+                database
+                        .getReference(usersPath)
+                        .orderByChild(nameKey)
+                        .equalTo(userName)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (emitter.isDisposed()) {
+                                    return;
+                                }
+                                if (dataSnapshot.exists()) {
+                                    DataSnapshot snapshot = dataSnapshot.getChildren()
+                                            .iterator()
+                                            .next();
+                                    if (snapshot == null || snapshot.getKey() == null) {
+                                        return;
+                                    }
+                                    emitter.onSuccess(new Result.Success<>(snapshot.getKey()));
+                                } else {
+                                    emitter.onSuccess(new Result.Error<>(new NullPointerException()));
+                                }
                             }
-                            oldAppExecutors.resume(new Result.Success<>(s));
-                            Result<String> result = new Result.Success<>(s);
-                            sync.setResult(result);
-                        }
-                        sync.unlock();
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Result<String> result = new Result.Error<>(databaseError.toException());
-                        sync.setResult(result);
-                        sync.unlock();
-                    }
-                });
-        sync.waiting();
-        return sync.getResult();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        })
+        );
     }
 
 

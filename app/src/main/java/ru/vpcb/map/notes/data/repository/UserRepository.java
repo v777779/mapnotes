@@ -20,7 +20,7 @@ public interface UserRepository {
 
     Single<Result<String>> getHumanReadableName(String userId);
 
-    Result<String>  getUserIdFromHumanReadableName(String userName);
+    Single<Result<String>> getUserIdFromHumanReadableName(String userName);
 
     void setAppExecutors(AppExecutors appExecutors);
 }

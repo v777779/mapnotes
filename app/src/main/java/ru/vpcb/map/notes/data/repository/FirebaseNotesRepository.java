@@ -11,7 +11,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.data.Result;
@@ -45,63 +44,38 @@ public class FirebaseNotesRepository implements NotesRepository {
         newNoteRef.setValue(note);
     }
 
-    public Observable<Result<Note>> getNote() {
-        return Observable.<Result<Note>>create(emitter -> {
-            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (emitter.isDisposed()) {
-                        return;
-                    }
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Note note = child.getValue(Note.class);
-                            emitter.onNext(new Result.Success<>(note));
-                        }
-                        emitter.onComplete();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    if (emitter.isDisposed()) {
-                        return;
-                    }
-                    emitter.onNext(new Result.Error<>(databaseError.toException()));
-                    emitter.onComplete();
-                }
-            });
-        }).subscribeOn(Schedulers.io());
-
-    }
 
     @Override
     public Single<Result<List<Note>>> getNotes() {
         return Single.<Result<List<Note>>>create(emitter -> {
-            database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (emitter.isDisposed()) {
-                        return;
-                    }
-                    if (dataSnapshot.exists()) {
-                        List<Note> noteResults = new ArrayList<>();
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            Note note = child.getValue(Note.class);
-                            noteResults.add(note);
+            database
+                    .getReference(notesPath)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (emitter.isDisposed()) {
+                                return;
+                            }
+                            if (dataSnapshot.exists()) {
+                                List<Note> noteResults = new ArrayList<>();
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    Note note = child.getValue(Note.class);
+                                    noteResults.add(note);
+                                }
+                                emitter.onSuccess(new Result.Success<>(noteResults));
+                            } else {
+                                emitter.onSuccess(new Result.Error<>(new NullPointerException()));
+                            }
                         }
-                        emitter.onSuccess(new Result.Success<>(noteResults));
-                    }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    if (emitter.isDisposed()) {
-                        return;
-                    }
-                    emitter.onSuccess(new Result.Error<>(databaseError.toException()));
-                }
-            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            if (emitter.isDisposed()) {
+                                return;
+                            }
+                            emitter.onSuccess(new Result.Error<>(databaseError.toException()));
+                        }
+                    });
         }).subscribeOn(Schedulers.io());
 
     }
@@ -109,32 +83,33 @@ public class FirebaseNotesRepository implements NotesRepository {
     @Override
     public Result<List<Note>> getNotes(IJob<Note> replaceAuthorName) {
 
-        database.getReference(notesPath).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    List<Note> noteResults = new ArrayList<>();
-                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        Note note = child.getValue(Note.class);
+        database.getReference(notesPath)
+                .addListenerForSingleValueEvent(new ValueEventListener() {          // self removed
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            List<Note> noteResults = new ArrayList<>();
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                Note note = child.getValue(Note.class);
 // TODO check sync
-                        replaceAuthorName.join(note);
-                        noteResults.add(note);
+                                replaceAuthorName.join(note);
+                                noteResults.add(note);
+                            }
+                            Result<List<Note>> result = new Result.Success<>(noteResults);
+                            appExecutors.resume(result);
+
+                        } else {
+                            Result<List<Note>> result = new Result.Error<>(new NullPointerException());
+                            appExecutors.resume(result);
+                        }
                     }
-                    Result<List<Note>> result = new Result.Success<>(noteResults);
-                    appExecutors.resume(result);
 
-                } else {
-                    Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                    appExecutors.resume(result);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                appExecutors.resume(result);
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Result<List<Note>> result = new Result.Error<>(databaseError.toException());
+                        appExecutors.resume(result);
+                    }
+                });
 
         return null;
     }
@@ -146,8 +121,8 @@ public class FirebaseNotesRepository implements NotesRepository {
             database.getReference(notesPath)
                     .orderByChild(textKey)
                     .startAt(text)
-                    .endAt(text + "\uf8ff")                                                         // MUST BE HERE!!!
-                    .addListenerForSingleValueEvent(new ValueEventListener() {                      // SingleValueListener self destroyed
+                    .endAt(text + "\uf8ff")                                     // MUST BE HERE!!!
+                    .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (emitter.isDisposed()) {
@@ -184,7 +159,7 @@ public class FirebaseNotesRepository implements NotesRepository {
         database.getReference(notesPath)
                 .orderByChild(userKey)
                 .equalTo(userId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -220,5 +195,36 @@ public class FirebaseNotesRepository implements NotesRepository {
         this.appExecutors = appExecutors;
     }
 
-
 }
+
+// alternative
+//    public Observable<Result<Note>> getNote() {
+//        return Observable.<Result<Note>>create(emitter -> {
+//            database.getReference(notesPath)
+//                    .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            if (emitter.isDisposed()) {
+//                                return;
+//                            }
+//                            if (dataSnapshot.exists()) {
+//                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+//                                    Note note = child.getValue(Note.class);
+//                                    emitter.onNext(new Result.Success<>(note));
+//                                }
+//                                emitter.onComplete();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//                            if (emitter.isDisposed()) {
+//                                return;
+//                            }
+//                            emitter.onNext(new Result.Error<>(databaseError.toException()));
+//                            emitter.onComplete();
+//                        }
+//                    });
+//        }).subscribeOn(Schedulers.io());
+//
+//    }

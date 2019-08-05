@@ -30,6 +30,7 @@ import ru.vpcb.map.notes.add.AddNoteFragment;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.ext.PermissionExt;
+import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.map.MapFragment;
@@ -245,6 +246,11 @@ public class HomeActivity extends BaseActivity implements HomeView {
     public boolean shouldShowRequestPermission() {
         return ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    @Override
+    public boolean isOnline() {
+        return ValidationExt.isOnline(this);
     }
 
 

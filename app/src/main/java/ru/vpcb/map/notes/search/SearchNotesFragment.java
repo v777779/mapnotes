@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -37,6 +38,7 @@ import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
 import ru.vpcb.map.notes.search.adapter.NotesAdapter;
@@ -59,13 +61,13 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     private LatLonFormatter coordinateFormatter;
     private NotesAdapter adapter;
 
-    private View mRootView;
-    private AppCompatActivity mActivity;
+    private View rootView;
+    private AppCompatActivity activity;
 
 
     @Override
     public void onAttach(Context context) {
-        setupComponent((Activity)context);
+        setupComponent((Activity) context);
         super.onAttach(context);
 
         oldAppExecutors = null;
@@ -76,35 +78,35 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         defaultUserName = context.getString(R.string.unknown_user);
         coordinateFormatter = new CoordinateFormatter();
 
-        mActivity = (AppCompatActivity) context;
+        activity = (AppCompatActivity) context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_search_notes, container, false);
+        rootView = inflater.inflate(R.layout.fragment_search_notes, container, false);
 
-        RecyclerView recyclerView = mRootView.findViewById(R.id.recyclerView);
-        Spinner searchOptions = mRootView.findViewById(R.id.searchOptions);
-        Button searchButton = mRootView.findViewById(R.id.searchButton);
-        TextView searchText = mRootView.findViewById(R.id.searchText);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView);
+        Spinner searchOptions = rootView.findViewById(R.id.searchOptions);
+        Button searchButton = rootView.findViewById(R.id.searchButton);
+        TextView searchText = rootView.findViewById(R.id.searchText);
 
         searchOptions.setAdapter(ArrayAdapter.createFromResource(
-                mActivity,
+                activity,
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line));
         adapter = new NotesAdapter(coordinateFormatter, new IListener<Note>() {
             @Override
             public void invoke(Note note) {
-                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(mActivity);
+                LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
                 Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);
                 broadcastManager.sendBroadcast(intent);
             }
         });
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(
-                new DividerItemDecoration(mActivity, layoutManager.getOrientation()));
+                new DividerItemDecoration(activity, layoutManager.getOrientation()));
         recyclerView.setAdapter(adapter);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +117,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
             }
         });
 
-        return mRootView;
+        return rootView;
     }
 
 
@@ -152,15 +154,17 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
 
     @Override
     public void displayLoadingNotesError() {
-        if (mActivity != null) {
-            Snackbar.make(mRootView, R.string.loading_notes_error, Snackbar.LENGTH_LONG).show();
+        if (activity != null) {
+            getSnackBarWithOffset(R.string.loading_notes_error).show();
+
         }
     }
 
     @Override
     public void displayUnknownUserError() {
-        if (mActivity != null) {
-            Snackbar.make(mRootView, R.string.unknown_user_error, Snackbar.LENGTH_LONG).show();
+        if (activity != null) {
+            getSnackBarWithOffset( R.string.unknown_user_error).show();
+
         }
     }
 
@@ -170,14 +174,32 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     }
 
     @Override
+    public boolean isOnline() {
+        if (activity == null) {
+            return false;
+        }
+        return ValidationExt.isOnline(activity);
+    }
+
+    @Override
     public void setupComponent(Activity activity) {
         try {
             if (activity == null) {
                 return;
             }
             MainApp.plus(activity).inject(this);
-        }catch (Exception e){
+        } catch (Exception e) {
             FCManager.log(e);
         }
+    }
+
+    private Snackbar getSnackBarWithOffset(int id) {
+        Snackbar snackbar = Snackbar.make(rootView, id, Snackbar.LENGTH_LONG);
+        CoordinatorLayout.LayoutParams lp =
+                (CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams();
+        int margin = activity.getResources().getDimensionPixelSize(R.dimen.snackbar_bottom_margin);
+        lp.setMargins(0, 0, 0, margin);
+        snackbar.getView().setLayoutParams(lp);
+        return snackbar;
     }
 }

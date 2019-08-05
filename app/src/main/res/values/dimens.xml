@@ -16,4 +16,6 @@
 
     <dimen name="search_padding_bottom">@dimen/design_bottom_navigation_height</dimen>
 
+    <dimen name="snackbar_bottom_margin">56dp</dimen>
+
 </resources>

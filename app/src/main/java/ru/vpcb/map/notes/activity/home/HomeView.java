@@ -26,5 +26,6 @@ public interface HomeView extends MvpView {
 
     boolean shouldShowRequestPermission();
 
+    boolean isOnline();
 
 }

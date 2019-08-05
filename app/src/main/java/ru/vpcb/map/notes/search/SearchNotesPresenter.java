@@ -68,6 +68,11 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) return;
         view.clearSearchResults();
 
+        if (!view.isOnline()) {
+            view.displayLoadingNotesError();
+            return;
+        }
+
         Single<Result<List<Note>>> notes = notesRepository
                 .getNotes()
                 .compose(updateNames(defaultUserName));
@@ -93,6 +98,11 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     public void searchNotes(String text, int categoryPosition, String defaultUserName) {
         if (view == null) return;
 
+        if (!view.isOnline()) {
+            view.displayLoadingNotesError();
+            return;
+        }
+
         view.clearSearchResults();
         if (text.isEmpty()) {
             getNotes(defaultUserName);
@@ -101,7 +111,6 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
         if (categoryPosition == this.notesSearchCategory) {  // search notes name
 
-            notesRepository.setExecutors(oldAppExecutors);
             Disposable disposable = notesRepository
                     .getNotesByNoteText(text, null)
                     .compose(updateNames(defaultUserName))
@@ -150,7 +159,20 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             };
 // TODO launch
             userRepository.setAppExecutors(userExecutors);
-            Result<String> userId = userRepository.getUserIdFromHumanReadableName(text);
+            Single<Result<String>> user = userRepository
+                    .getUserIdFromHumanReadableName(text)
+                    .observeOn(appExecutors.ui());
+            Disposable disposable = user
+                    .subscribe(result -> {
+                        if (result instanceof Result.Success)
+                            System.out.println(result.getData());
+                        else {
+                            view.displayLoadingNotesError();
+                        }
+                    });
+
+            int k = 1;
+            composite.add(disposable);
         } else {
             throw new IllegalArgumentException("Incorrect ID of category");
 
@@ -214,43 +236,6 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         };
     }
 
-    private Single<Result<List<Note>>> updateUserNames(Single<Result<List<Note>>> single,
-                                                       String defaultUserName) {
-        return single
-                .observeOn(appExecutors.net())
-                .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
-                    @Override
-                    public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
-                        if (result instanceof Result.Success) {
-                            Observable<Note> notes = Observable.fromIterable(result.getData());
-                            Observable<String> names = Observable.fromIterable(result.getData())
-                                    .concatMap(new Function<Note, ObservableSource<String>>() {
-                                        @Override
-                                        public ObservableSource<String> apply(Note note) throws Exception {
-                                            return userRepository
-                                                    .getHumanReadableName(note.getUser())
-                                                    .toObservable()
-                                                    .observeOn(appExecutors.net())
-                                                    .map(r -> {
-                                                        if (r instanceof Result.Success) {
-                                                            return r.getData();
-                                                        } else {
-                                                            return defaultUserName;
-                                                        }
-                                                    });
-                                        }
-                                    });
-                            return Observable.zip(notes, names, (n, s) -> {
-                                n.setUser(s);
-                                return n;
-                            }).toList()
-                                    .map(Result.Success::new);
-                        }
-                        return Single.just(new Result.Error<>(result.getException()));
-                    }
-                });
-
-    }
 
 }
 // alternative
@@ -316,3 +301,41 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 //                                    view.displayNote((Note) note);
 //                                }
 //                            });
+
+//    private Single<Result<List<Note>>> updateUserNames(Single<Result<List<Note>>> single,
+//                                                       String defaultUserName) {
+//        return single
+//                .observeOn(appExecutors.net())
+//                .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
+//                    @Override
+//                    public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
+//                        if (result instanceof Result.Success) {
+//                            Observable<Note> notes = Observable.fromIterable(result.getData());
+//                            Observable<String> names = Observable.fromIterable(result.getData())
+//                                    .concatMap(new Function<Note, ObservableSource<String>>() {
+//                                        @Override
+//                                        public ObservableSource<String> apply(Note note) throws Exception {
+//                                            return userRepository
+//                                                    .getHumanReadableName(note.getUser())
+//                                                    .toObservable()
+//                                                    .observeOn(appExecutors.net())
+//                                                    .map(r -> {
+//                                                        if (r instanceof Result.Success) {
+//                                                            return r.getData();
+//                                                        } else {
+//                                                            return defaultUserName;
+//                                                        }
+//                                                    });
+//                                        }
+//                                    });
+//                            return Observable.zip(notes, names, (n, s) -> {
+//                                n.setUser(s);
+//                                return n;
+//                            }).toList()
+//                                    .map(Result.Success::new);
+//                        }
+//                        return Single.just(new Result.Error<>(result.getException()));
+//                    }
+//                });
+//
+//    }

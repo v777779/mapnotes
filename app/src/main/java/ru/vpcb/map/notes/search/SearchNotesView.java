@@ -11,4 +11,6 @@ public interface SearchNotesView extends MvpView {
     void displayUnknownUserError();
 
     void clearSearchResults();
+
+    boolean isOnline();
 }
