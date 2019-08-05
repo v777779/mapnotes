@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -110,9 +112,13 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void navigateToPlayMarket() {
         try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=" +
+                            GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
         } catch (android.content.ActivityNotFoundException anfe) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=" +
+                            GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
         }
         finish();
     }
@@ -126,8 +132,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public boolean isInstalledPlayMarket() {
         PackageManager pm = getApplication().getPackageManager();
-        List<PackageInfo> packages = pm.getInstalledPackages(
-                PackageManager.GET_UNINSTALLED_PACKAGES);
+        List<PackageInfo> packages;
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+            packages = getInstalledPackages();
+        }else {
+            packages = matchInstalledPackages();
+        }
         for (PackageInfo info : packages) {
             if (info.packageName.equals(GooglePlayStorePackageNameOld) ||
                     info.packageName.equals(GooglePlayStorePackageNameNew)) {
@@ -186,5 +196,22 @@ public class SplashActivity extends BaseActivity implements SplashView {
                 }
         ).show();
     }
+
+    @SuppressWarnings("deprecation")
+    private List<PackageInfo> getInstalledPackages() {
+        PackageManager pm = getApplication().getPackageManager();
+        return pm.getInstalledPackages(
+                PackageManager.GET_UNINSTALLED_PACKAGES);
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private List<PackageInfo> matchInstalledPackages() {
+        PackageManager pm = getApplication().getPackageManager();
+       return pm.getInstalledPackages(
+                PackageManager.MATCH_UNINSTALLED_PACKAGES);
+
+    }
+
 
 }
