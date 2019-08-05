@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.SingleTransformer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -17,7 +18,6 @@ import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.executors.IJob;
 import ru.vpcb.map.notes.model.AuthUser;
 import ru.vpcb.map.notes.model.Note;
 
@@ -68,39 +68,9 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) return;
         view.clearSearchResults();
 
-        Single<Result<List<Note>>> notes = notesRepository.getNotes()
-                .observeOn(appExecutors.net())
-                .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
-                    @Override
-                    public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
-                        if (result instanceof Result.Success) {
-                            Observable<Note> notes = Observable.fromIterable(result.getData());
-                            Observable<String> names = Observable.fromIterable(result.getData())
-                                    .concatMap(new Function<Note, ObservableSource<String>>() {
-                                        @Override
-                                        public ObservableSource<String> apply(Note note) throws Exception {
-                                            return userRepository
-                                                    .getHumanReadableName(note.getUser())
-                                                    .toObservable()
-                                                    .observeOn(appExecutors.net())
-                                                    .map(r -> {
-                                                        if (r instanceof Result.Success) {
-                                                            return r.getData();
-                                                        } else {
-                                                            return defaultUserName;
-                                                        }
-                                                    });
-                                        }
-                                    });
-                            return Observable.zip(notes, names, (n, s) -> {
-                                n.setUser(s);
-                                return n;
-                            }).toList()
-                                    .map(Result.Success::new);
-                        }
-                        return Single.just(new Result.Error<>(result.getException()));
-                    }
-                });
+        Single<Result<List<Note>>> notes = notesRepository
+                .getNotes()
+                .compose(updateNames(defaultUserName));
 
         Disposable disposable = notes
                 .observeOn(appExecutors.ui())
@@ -110,13 +80,14 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     }
                     if (result instanceof Result.Success) {
                         for (Note note : result.getData()) {
-                            view.displayNote((Note) note);
+                            view.displayNote(note);
                         }
                     }
                 });
 
         composite.add(disposable);
     }
+
 
     @Override
     public void searchNotes(String text, int categoryPosition, String defaultUserName) {
@@ -128,32 +99,26 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             return;
         }
 
-        if (categoryPosition == this.notesSearchCategory) {
-// TODO launch
-            oldAppExecutors = new AppExecutors() {
-                @Override
-                public <T> void resume(Result<T> result) {
-                    if (result instanceof Result.Error) {
-                        view.displayLoadingNotesError();
-                    }
-                    if (result instanceof Result.Success) {
-                        for (Object note : (List) result.getData()) {
-                            view.displayNote((Note) note);
-                        }
-                    }
-                }
-            };
-// TODO sync problem
-            IJob<Note> notePreProcessor = new IJob<Note>() {
-                @Override
-                public void join(Note note) {
-                    replaceNoteAuthorIdToNameJob(note, defaultUserName);
-                }
-            };
-            notesRepository.setExecutors(oldAppExecutors);
-            Result<List<Note>> notes = notesRepository.getNotesByNoteText(text, notePreProcessor);
+        if (categoryPosition == this.notesSearchCategory) {  // search notes name
 
-        } else if (categoryPosition == usersSearchCategory) {
+            notesRepository.setExecutors(oldAppExecutors);
+            Disposable disposable = notesRepository
+                    .getNotesByNoteText(text, null)
+                    .compose(updateNames(defaultUserName))
+                    .observeOn(appExecutors.ui())
+                    .subscribe(result -> {
+                        if (result instanceof Result.Error) {
+                            view.displayLoadingNotesError();
+                        }
+                        if (result instanceof Result.Success) {
+                            for (Object note : (List) result.getData()) {
+                                view.displayNote((Note) note);
+                            }
+                        }
+                    });
+            composite.add(disposable);
+
+        } else if (categoryPosition == usersSearchCategory) { // search user name
 // TODO launch
             AppExecutors noteExecutors = new AppExecutors() {
                 @Override
@@ -207,6 +172,86 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             composite.add(disposable);
         }
     }
+
+    private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
+        return new SingleTransformer<Result<List<Note>>, Result<List<Note>>>() {
+            @Override
+            public SingleSource<Result<List<Note>>> apply(Single<Result<List<Note>>> upstream) {
+                return upstream
+                        .observeOn(appExecutors.net())
+                        .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
+                            @Override
+                            public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
+                                if (result instanceof Result.Success) {
+                                    Observable<Note> notes = Observable.fromIterable(result.getData());
+                                    Observable<String> names = Observable.fromIterable(result.getData())
+                                            .concatMap(new Function<Note, ObservableSource<String>>() {
+                                                @Override
+                                                public ObservableSource<String> apply(Note note) throws Exception {
+                                                    return userRepository
+                                                            .getHumanReadableName(note.getUser())
+                                                            .toObservable()
+                                                            .observeOn(appExecutors.net())
+                                                            .map(r -> {
+                                                                if (r instanceof Result.Success) {
+                                                                    return r.getData();
+                                                                } else {
+                                                                    return defaultUserName;
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                    return Observable.zip(notes, names, (n, s) -> {
+                                        n.setUser(s);
+                                        return n;
+                                    }).toList()
+                                            .map(Result.Success::new);
+                                }
+                                return Single.just(new Result.Error<>(result.getException()));
+                            }
+                        });
+            }
+        };
+    }
+
+    private Single<Result<List<Note>>> updateUserNames(Single<Result<List<Note>>> single,
+                                                       String defaultUserName) {
+        return single
+                .observeOn(appExecutors.net())
+                .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
+                    @Override
+                    public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
+                        if (result instanceof Result.Success) {
+                            Observable<Note> notes = Observable.fromIterable(result.getData());
+                            Observable<String> names = Observable.fromIterable(result.getData())
+                                    .concatMap(new Function<Note, ObservableSource<String>>() {
+                                        @Override
+                                        public ObservableSource<String> apply(Note note) throws Exception {
+                                            return userRepository
+                                                    .getHumanReadableName(note.getUser())
+                                                    .toObservable()
+                                                    .observeOn(appExecutors.net())
+                                                    .map(r -> {
+                                                        if (r instanceof Result.Success) {
+                                                            return r.getData();
+                                                        } else {
+                                                            return defaultUserName;
+                                                        }
+                                                    });
+                                        }
+                                    });
+                            return Observable.zip(notes, names, (n, s) -> {
+                                n.setUser(s);
+                                return n;
+                            }).toList()
+                                    .map(Result.Success::new);
+                        }
+                        return Single.just(new Result.Error<>(result.getException()));
+                    }
+                });
+
+    }
+
 }
 // alternative
 // from single<list> to single<list>
