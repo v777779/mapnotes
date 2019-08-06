@@ -98,6 +98,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
                 activity,
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line));
+
         adapter = new NotesAdapter(coordinateFormatter, new IListener<Note>() {
             @Override
             public void invoke(Note note) {
@@ -106,6 +107,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
                 broadcastManager.sendBroadcast(intent);
             }
         });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(

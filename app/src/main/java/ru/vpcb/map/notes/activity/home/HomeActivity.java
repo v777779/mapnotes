@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +31,6 @@ import ru.vpcb.map.notes.add.AddNoteFragment;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.ext.PermissionExt;
-import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.map.MapFragment;
@@ -68,6 +68,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
         bottomSheet = findViewById(R.id.bottomSheet);
         navigation = findViewById(R.id.navigation);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
         hideExpandedMenuListener = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -89,17 +90,17 @@ public class HomeActivity extends BaseActivity implements HomeView {
             public void onSlide(@NonNull View view, float v) {
             }
         };
+
         mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (navigation.getSelectedItemId() == item.getItemId() &&
+                if (navigation.getSelectedItemId() == item.getItemId() &&                           // блокирует повторы с search и add
                         bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
                     return false;
                 }
                 return presenter.handleNavigationItemClick(item.getItemId());
             }
         };
-
     }
 
     @Override
@@ -125,7 +126,18 @@ public class HomeActivity extends BaseActivity implements HomeView {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback);
 
-        presenter.checkEnablePermissions();
+//        presenter.checkEnablePermissions();
+
+        if (!PermissionExt.checkLocationPermission(this)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                presenter.showLocationPermissionRationale();
+            } else {
+                PermissionExt.requestLocationPermissions(this);
+            }
+        } else {
+            presenter.showLocationRequirePermissions();
+        }
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(hideExpandedMenuListener, new IntentFilter(DISPLAY_LOCATION));
@@ -169,6 +181,18 @@ public class HomeActivity extends BaseActivity implements HomeView {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermissionExt.LOCATION_REQUEST_CODE) {
+            if ((grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                showContentWhichRequirePermissions();
+            } else {
+                hideContentWhichRequirePermissions();
+            }
+        }
+    }
+
 
     @Override
     public void setupComponent() {
@@ -221,7 +245,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     @Override
     public void showPermissionExplanationSnackBar() {
-
         Snackbar.make(layout, R.string.permission_explanation, Snackbar.LENGTH_LONG)
                 .setAction(R.string.permission_grant_text, new View.OnClickListener() {
                     @Override
@@ -238,27 +261,19 @@ public class HomeActivity extends BaseActivity implements HomeView {
     }
 
 
-    @Override
-    public boolean checkLocationPermission() {
-        return PermissionExt.checkLocationPermission(this);
-    }
+//    @Override
+//    public boolean checkLocationPermission() {
+//        return PermissionExt.checkLocationPermission(this);
+//    }
 
-    @Override
-    public boolean shouldShowRequestPermission() {
-        return ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-    }
+//    public boolean shouldShowRequestPermission() {
+//        return ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION);
+//    }
 
-    @Override
-    public boolean isOnline() {
-        return ValidationExt.isOnline(this);
-    }
-
-
-    @Override
-    public void requestLocationPermission() {
-        PermissionExt.requestLocationPermissions(this);
-    }
+//    public void requestLocationPermission() {
+//        PermissionExt.requestLocationPermissions(this);
+//    }
 
 
 // methods

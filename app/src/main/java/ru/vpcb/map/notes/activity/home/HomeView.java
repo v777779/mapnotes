@@ -20,12 +20,4 @@ public interface HomeView extends MvpView {
 
     void navigateToLoginScreen();
 
-    boolean checkLocationPermission() ;
-
-    void  requestLocationPermission();
-
-    boolean shouldShowRequestPermission();
-
-    boolean isOnline();
-
 }
