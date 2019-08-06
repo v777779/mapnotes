@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -159,32 +158,31 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     @Override
     public void displayLoadingNotesError() {
         if (activity != null) {
-            getSnackBarWithOffset(R.string.loading_notes_error).show();
-
+            Snackbar.make(rootView, R.string.loading_notes_error, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void displayUnknownNoteError() {
         if (activity != null) {
-            getSnackBarWithOffset(R.string.unknown_note_error).show();
-
+            Snackbar.make(rootView, R.string.unknown_note_error, Snackbar.LENGTH_LONG).show();
         }
     }
+
     @Override
     public void displayUnknownUserError() {
         if (activity != null) {
-            getSnackBarWithOffset(R.string.unknown_user_error).show();
-
+            Snackbar.make(rootView, R.string.unknown_user_error, Snackbar.LENGTH_LONG).show();
         }
     }
+
     @Override
     public void displayNoInternetError() {
         if (activity != null) {
-            getSnackBarWithOffset(R.string.no_internet_error).show();
-
+            Snackbar.make(rootView, R.string.no_internet_error, Snackbar.LENGTH_LONG).show();
         }
     }
+
     @Override
     public void clearSearchResults() {
         adapter.clear();
@@ -210,24 +208,15 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         }
     }
 
-    public void showProgress(boolean isVisible){
-        if(progressBar == null){
+    public void showProgress(boolean isVisible) {
+        if (progressBar == null) {
             return;
         }
-        if(isVisible){
+        if (isVisible) {
             progressBar.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             progressBar.setVisibility(View.GONE);
         }
     }
 
-    private Snackbar getSnackBarWithOffset(int id) {
-        Snackbar snackbar = Snackbar.make(rootView, id, Snackbar.LENGTH_LONG);
-        CoordinatorLayout.LayoutParams lp =
-                (CoordinatorLayout.LayoutParams) snackbar.getView().getLayoutParams();
-        int margin = activity.getResources().getDimensionPixelSize(R.dimen.snackbar_bottom_margin);
-        lp.setMargins(0, 0, 0, margin);
-        snackbar.getView().setLayoutParams(lp);
-        return snackbar;
-    }
 }

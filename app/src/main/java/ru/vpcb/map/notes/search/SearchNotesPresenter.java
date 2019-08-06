@@ -23,14 +23,14 @@ import ru.vpcb.map.notes.model.Note;
 
 public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         implements SearchNotesMvpPresenter {
+    private static final int NOTES_SEARCH_CATEGORY = 0;
+    private static final int USERS_SEARCH_CATEGORY = 1;
 
     private IAppExecutors appExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
 
     private SearchNotesView view;
-    private int notesSearchCategory;
-    private int usersSearchCategory;
     private CompositeDisposable composite;
 
     SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
@@ -39,8 +39,6 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         this.userRepository = userRepository;
         this.notesRepository = notesRepository;
         this.view = null;
-        this.notesSearchCategory = 0;
-        this.usersSearchCategory = 1;
     }
 
 
@@ -113,8 +111,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             return;
         }
 
-        if (categoryPosition == this.notesSearchCategory) {  // search notes name
-
+        if (categoryPosition == NOTES_SEARCH_CATEGORY) {  // search notes name
             Disposable disposable = notesRepository
                     .getNotesByNoteText(text)
                     .compose(updateNames(defaultUserName))
@@ -131,7 +128,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     });
             composite.add(disposable);
 
-        } else if (categoryPosition == usersSearchCategory) { // search user name
+        } else if (categoryPosition == USERS_SEARCH_CATEGORY) { // search user name
 
             Disposable disposable = userRepository
                     .getUserIdFromHumanReadableName(text)
