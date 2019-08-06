@@ -161,15 +161,15 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             userRepository.setAppExecutors(userExecutors);
             String s = "kRh2U1xtFSVTlO6uuKAAklaTtT22";
             Disposable disposableU = notesRepository.getNotesByUser(s, text)
-            .observeOn(appExecutors.ui())
-            .subscribe(result->{
-                if(result instanceof Result.Success) {
-                    System.out.println(result.getData());
-                }else {
-                    System.out.println(result.getException().toString());
-                }
+                    .observeOn(appExecutors.ui())
+                    .subscribe(result -> {
+                        if (result instanceof Result.Success) {
+                            System.out.println(result.getData());
+                        } else {
+                            System.out.println(result.getException().toString());
+                        }
 
-            });
+                    });
 
 
             Single<Result<String>> user = userRepository
@@ -209,49 +209,75 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     }
 
     private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
-        return new SingleTransformer<Result<List<Note>>, Result<List<Note>>>() {
-            @Override
-            public SingleSource<Result<List<Note>>> apply(Single<Result<List<Note>>> upstream) {
-                return upstream
-                        .observeOn(appExecutors.net())
-                        .flatMap(new Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>() {
-                            @Override
-                            public SingleSource<Result<List<Note>>> apply(Result<List<Note>> result) throws Exception {
-                                if (result instanceof Result.Success) {
-                                    Observable<Note> notes = Observable.fromIterable(result.getData());
-                                    Observable<String> names = Observable.fromIterable(result.getData())
-                                            .concatMap(new Function<Note, ObservableSource<String>>() {
-                                                @Override
-                                                public ObservableSource<String> apply(Note note) throws Exception {
-                                                    return userRepository
-                                                            .getHumanReadableName(note.getUser())
-                                                            .toObservable()
-                                                            .observeOn(appExecutors.net())
-                                                            .map(r -> {
-                                                                if (r instanceof Result.Success) {
-                                                                    return r.getData();
-                                                                } else {
-                                                                    return defaultUserName;
-                                                                }
-                                                            });
-                                                }
-                                            });
-                                    return Observable.zip(notes, names, (n, s) -> {
-                                        n.setUser(s);
-                                        return n;
-                                    }).toList()
-                                            .map(Result.Success::new);
-                                }
-                                return Single.just(new Result.Error<>(result.getException()));
+        return upstream -> upstream
+                .observeOn(appExecutors.net())
+                .flatMap((Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>)
+                        result -> {                                                                 // flatMap <R<List>> to Single<R<List>>
+                            if (result instanceof Result.Success) {
+                                // flatMap ordered <Note> to O<Note> ordered
+                                return Observable
+                                        .fromIterable(result.getData())                             // Observable<Note>
+                                        .concatMap((Function<Note, ObservableSource<Note>>)
+                                                note -> Observable.zip(                             // zip(O<Note>,O<String>) to O<Note>
+                                                Observable.just(new Result.Success<>(note)),
+                                                userRepository
+                                                        .getHumanReadableName(note.getUser())
+                                                        .toObservable()
+                                                        .observeOn(appExecutors.net()),
+                                                (n, s) -> {
+                                                    if (s instanceof Result.Success) {              // note, name-> note.set(name)
+                                                        note.setUser(s.getData());
+                                                    } else {
+                                                        note.setUser(defaultUserName);
+                                                    }
+                                                    return note;
+                                                }))
+                                        .toList()                                                   // Single<List>
+                                        .map(Result.Success::new);                                  // Single<R<List>>
                             }
+                            return Single.just(new Result.Error<>(result.getException()));
                         });
-            }
-        };
     }
 
-
 }
+
 // alternative
+//
+//    private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames2(String defaultUserName) {
+//        return new SingleTransformer<Result<List<Note>>, Result<List<Note>>>() {
+//            @Override
+//            public SingleSource<Result<List<Note>>> apply(Single<Result<List<Note>>> upstream) {
+//                return upstream
+//                        .observeOn(appExecutors.net())
+//                        .flatMap((Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>)   // flatMap <R> to Single<R>
+//                                result -> {
+//                                    if (result instanceof Result.Success) {
+//                                        Observable<Note> notes = Observable.fromIterable(result.getData());  // O<Note>
+//                                        Observable<String> names = notes
+//                                                .concatMap((Function<Note, ObservableSource<String>>) // flatMap ordered <Note> to O<String>
+//                                                        note -> userRepository
+//                                                                .getHumanReadableName(note.getUser())
+//                                                                .toObservable()
+//                                                                .observeOn(appExecutors.net())
+//                                                                .map(r -> {
+//                                                                    if (r instanceof Result.Success) {
+//                                                                        return r.getData();
+//                                                                    } else {
+//                                                                        return defaultUserName;
+//                                                                    }
+//                                                                }));
+//                                        return Observable.zip(notes, names, (n, s) -> {             // zip(O<Note>,O<String>) to O<Note>
+//                                            n.setUser(s);
+//                                            return n;
+//                                        }).toList()
+//                                                .map(Result.Success::new);
+//                                    }
+//                                    return Single.just(new Result.Error<>(result.getException()));
+//                                });
+//            }
+//        };
+//    }
+//
 // from single<list> to single<list>
 //                    Single<Result<List<Note>>> notes = notesRepository.getNotes()
 //                            .observeOn(appExecutors.net())

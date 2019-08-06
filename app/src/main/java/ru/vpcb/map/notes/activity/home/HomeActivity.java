@@ -99,6 +99,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
                 return presenter.handleNavigationItemClick(item.getItemId());
             }
         };
+
     }
 
     @Override
@@ -108,7 +109,7 @@ public class HomeActivity extends BaseActivity implements HomeView {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.navigation_sign_out) {
             presenter.signOut();

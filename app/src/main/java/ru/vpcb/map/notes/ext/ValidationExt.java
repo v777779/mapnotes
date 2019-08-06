@@ -2,10 +2,14 @@ package ru.vpcb.map.notes.ext;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.util.Patterns;
 
 import java.util.regex.Matcher;
+
 
 public class ValidationExt {
 
@@ -20,7 +24,6 @@ public class ValidationExt {
      * @param context Context of calling activity
      * @return boolean status of connection, true if connected, false if not
      */
-
     @SuppressWarnings("deprecation")
     public static boolean isOnline(Context context) {
         ConnectivityManager cm =
@@ -28,7 +31,23 @@ public class ValidationExt {
         if (cm == null) {
             return false;
         }
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Network network = cm.getActiveNetwork();
+            if (network == null) {
+                return false;
+            }
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            LinkProperties properties = cm.getLinkProperties(network);
+            if (capabilities == null) {
+                return false;
+            }
+            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }else{
+            android.net.NetworkInfo netInfo = cm.getActiveNetworkInfo(); // suppress import deprecated
+            return netInfo != null && netInfo.isConnectedOrConnecting();
+        }
+
     }
+
+
 }

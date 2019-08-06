@@ -3,6 +3,7 @@
     package="ru.vpcb.map.notes">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--from API17 FINE_LOCATION is necessary only-->
     <!--NETWORK_STATE is necessary for check network available only-->
