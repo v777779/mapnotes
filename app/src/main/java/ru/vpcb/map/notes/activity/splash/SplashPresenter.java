@@ -53,7 +53,7 @@ public class SplashPresenter implements SplashMvpPresenter {
         } else {
             view.navigateToLogin();
         }
-        view.close();
+        view.finishActivity();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SplashPresenter implements SplashMvpPresenter {
             if (view.isPlayServicesAvailable() == SUCCESS) {
                 startMapNotes();
             } else {
-                view.close();
+                view.finishActivity();
             }
         }
     }
@@ -81,7 +81,7 @@ public class SplashPresenter implements SplashMvpPresenter {
         if (view == null) {
             return;
         }
-        view.close();
+        view.finishActivity();
     }
 
 

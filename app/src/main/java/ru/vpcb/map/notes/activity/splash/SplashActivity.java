@@ -95,7 +95,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
 
     @Override
-    public void close() {
+    public void finishActivity() {
         finish();
     }
 
@@ -120,7 +120,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
                     Uri.parse("https://play.google.com/store/apps/details?id=" +
                             GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)));
         }
-        finish();
+        finishActivity();
     }
 
     @Override
