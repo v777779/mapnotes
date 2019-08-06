@@ -121,6 +121,10 @@ public class FirebaseUserRepository implements UserRepository {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
+                                if (emitter.isDisposed()) {
+                                    return;
+                                }
+                                emitter.onSuccess(new Result.Error<>(new NullPointerException()));
                             }
                         })
         ).subscribeOn(appExecutors.net());
@@ -128,7 +132,7 @@ public class FirebaseUserRepository implements UserRepository {
 
     @Override
     public Single<Result<String>> getUserIdFromHumanReadableName(String userName) {
-        return Single.create(emitter ->
+        return Single.<Result<String>>create(emitter ->
                 database
                         .getReference(usersPath)
                         .orderByChild(nameKey)
@@ -154,9 +158,13 @@ public class FirebaseUserRepository implements UserRepository {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
+                                if (emitter.isDisposed()) {
+                                    return;
+                                }
+                                emitter.onSuccess(new Result.Error<>(new NullPointerException()));
                             }
                         })
-        );
+        ).subscribeOn(appExecutors.net());
     }
 
 

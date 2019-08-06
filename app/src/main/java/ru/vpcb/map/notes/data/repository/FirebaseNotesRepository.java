@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
@@ -78,7 +77,7 @@ public class FirebaseNotesRepository implements NotesRepository {
                             emitter.onSuccess(new Result.Error<>(databaseError.toException()));
                         }
                     });
-        }).subscribeOn(Schedulers.io());
+        }).subscribeOn(appExecutors.net());
 
     }
 
@@ -118,8 +117,8 @@ public class FirebaseNotesRepository implements NotesRepository {
 
 
     @Override
-    public Single<Result<List<Note>>> getNotesByNoteText(String text, IJob<Note> replaceAuthorName) {
-        return Single.create(emitter -> {
+    public Single<Result<List<Note>>> getNotesByNoteText(String text) {
+        return Single.<Result<List<Note>>>create(emitter -> {
             database.getReference(notesPath)
                     .orderByChild(textKey)
                     .startAt(text)
@@ -152,7 +151,7 @@ public class FirebaseNotesRepository implements NotesRepository {
                         }
 
                     });
-        });
+        }).subscribeOn(appExecutors.net());
     }
 
     @Override
@@ -193,7 +192,7 @@ public class FirebaseNotesRepository implements NotesRepository {
                         }
                     });
 // TODO replace
-        }).subscribeOn(Schedulers.io());
+        }).subscribeOn(appExecutors.net());
     }
 
     @Override

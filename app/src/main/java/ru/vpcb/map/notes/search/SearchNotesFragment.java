@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     @Inject
     IAppExecutors appExecutors;
 
+
     private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
@@ -62,6 +64,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     private NotesAdapter adapter;
 
     private View rootView;
+    private ProgressBar progressBar;
     private AppCompatActivity activity;
 
 
@@ -90,6 +93,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         Spinner searchOptions = rootView.findViewById(R.id.searchOptions);
         Button searchButton = rootView.findViewById(R.id.searchButton);
         TextView searchText = rootView.findViewById(R.id.searchText);
+        progressBar = rootView.findViewById(R.id.progressBar);
 
         searchOptions.setAdapter(ArrayAdapter.createFromResource(
                 activity,
@@ -161,13 +165,26 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     }
 
     @Override
-    public void displayUnknownUserError() {
+    public void displayUnknownNoteError() {
         if (activity != null) {
-            getSnackBarWithOffset( R.string.unknown_user_error).show();
+            getSnackBarWithOffset(R.string.unknown_note_error).show();
 
         }
     }
+    @Override
+    public void displayUnknownUserError() {
+        if (activity != null) {
+            getSnackBarWithOffset(R.string.unknown_user_error).show();
 
+        }
+    }
+    @Override
+    public void displayNoInternetError() {
+        if (activity != null) {
+            getSnackBarWithOffset(R.string.no_internet_error).show();
+
+        }
+    }
     @Override
     public void clearSearchResults() {
         adapter.clear();
@@ -190,6 +207,17 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
             MainApp.plus(activity).inject(this);
         } catch (Exception e) {
             FCManager.log(e);
+        }
+    }
+
+    public void showProgress(boolean isVisible){
+        if(progressBar == null){
+            return;
+        }
+        if(isVisible){
+            progressBar.setVisibility(View.VISIBLE);
+        }else {
+            progressBar.setVisibility(View.GONE);
         }
     }
 

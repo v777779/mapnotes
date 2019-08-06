@@ -15,7 +15,7 @@ public interface NotesRepository {
 
     Result<List<Note>> getNotes(IJob<Note> replaceAuthorName);
 
-    Single<Result<List<Note>>> getNotesByNoteText(String text, IJob<Note> replaceAuthorName);
+    Single<Result<List<Note>>> getNotesByNoteText(String text);
 
     Single<Result<List<Note>>> getNotesByUser(String userId, String humanReadableName);
 

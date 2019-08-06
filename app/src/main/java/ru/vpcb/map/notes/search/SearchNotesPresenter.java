@@ -1,5 +1,7 @@
 package ru.vpcb.map.notes.search;
 
+import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -63,15 +65,18 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     }
 
     @Override
-    public void getNotes(String defaultUserName) {
-        if (view == null) return;
+    public void getNotes(String defaultUserName) {  // defaultUserName подстановка
+        if (view == null) {
+            return;
+        }
         view.clearSearchResults();
 
         if (!view.isOnline()) {
-            view.displayLoadingNotesError();
+            view.displayNoInternetError();
             return;
         }
 
+        view.showProgress(true);
         Single<Result<List<Note>>> notes = notesRepository
                 .getNotes()
                 .compose(updateNames(defaultUserName));
@@ -79,6 +84,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         Disposable disposable = notes
                 .observeOn(appExecutors.ui())
                 .subscribe(result -> {
+                    view.showProgress(false);
                     if (result instanceof Result.Error) {
                         view.displayLoadingNotesError();
                     }
@@ -95,29 +101,30 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
     @Override
     public void searchNotes(String text, int categoryPosition, String defaultUserName) {
-        if (view == null) return;
+        if (view == null){
+            return;
+        }
 
         if (!view.isOnline()) {
-            view.displayLoadingNotesError();
+            view.displayNoInternetError();
             return;
         }
 
         view.clearSearchResults();
         if (text.isEmpty()) {
-            getNotes(defaultUserName);
+            getNotes(defaultUserName); // just reload all notes
             return;
         }
 
         if (categoryPosition == this.notesSearchCategory) {  // search notes name
 
             Disposable disposable = notesRepository
-// TODO remove null
-                    .getNotesByNoteText(text, null)
+                    .getNotesByNoteText(text)
                     .compose(updateNames(defaultUserName))
                     .observeOn(appExecutors.ui())
                     .subscribe(result -> {
                         if (result instanceof Result.Error) {
-                            view.displayLoadingNotesError();
+                            view.displayUnknownNoteError();
                         }
                         if (result instanceof Result.Success) {
                             for (Object note : (List) result.getData()) {
@@ -128,64 +135,34 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             composite.add(disposable);
 
         } else if (categoryPosition == usersSearchCategory) { // search user name
-// TODO launch
-            AppExecutors noteExecutors = new AppExecutors() {
-                @Override
-                public <T> void resume(Result<T> result) {
-                    if (result instanceof Result.Error) {
-                        view.displayLoadingNotesError();
-                    }
-                    if (result instanceof Result.Success) {
-                        for (Object note : (List) result.getData()) {
-                            view.displayNote((Note) note);
-                        }
-                    }
-                }
-            };
 
-            AppExecutors userExecutors = new AppExecutors() {
-                @Override
-                public <T> void resume(Result<T> result) {
-                    if (result instanceof Result.Success) {
-// TODO launch
-                        notesRepository.setExecutors(noteExecutors);
-//                        Result<List<Note>> notes = notesRepository.getNotesByUser(
-//                                ((AuthUser) result.getData()).getUid(), text);
-                    }
-                    if (result instanceof Result.Error) {
-                        view.displayUnknownUserError();
-                    }
-                }
-            };
-// TODO launch
-            userRepository.setAppExecutors(userExecutors);
-            String s = "kRh2U1xtFSVTlO6uuKAAklaTtT22";
-            Disposable disposableU = notesRepository.getNotesByUser(s, text)
-                    .observeOn(appExecutors.ui())
-                    .subscribe(result -> {
-                        if (result instanceof Result.Success) {
-                            System.out.println(result.getData());
-                        } else {
-                            System.out.println(result.getException().toString());
-                        }
-
-                    });
-
-
-            Single<Result<String>> user = userRepository
+            Disposable disposable = userRepository
                     .getUserIdFromHumanReadableName(text)
-                    .observeOn(appExecutors.ui());
-            Disposable disposable = user
+                    .observeOn(appExecutors.net())
+                    .flatMap(new Function<Result<String>, SingleSource<Result<List<Note>>>>() {
+                        @Override
+                        public SingleSource<Result<List<Note>>> apply(Result<String> result) throws Exception {
+                            if (result instanceof Result.Success &&
+                                    !TextUtils.isEmpty(result.getData())) {
+                                String uid = result.getData();
+                                return notesRepository.getNotesByUser(uid, text);
+                            } else {
+                                return Single.just(new Result.Error<>(new NullPointerException()));
+                            }
+                        }
+                    }).observeOn(appExecutors.ui())
                     .subscribe(result -> {
-                        if (result instanceof Result.Success)
-                            System.out.println(result.getData());
-                        else {
-                            view.displayLoadingNotesError();
+                        if (result instanceof Result.Error) {
+                            view.displayUnknownUserError();
+                        }
+                        if (result instanceof Result.Success) {
+                            for (Object note : (List) result.getData()) {
+                                view.displayNote((Note) note);
+                            }
                         }
                     });
-
-            int k = 1;
             composite.add(disposable);
+
         } else {
             throw new IllegalArgumentException("Incorrect ID of category");
 
@@ -219,19 +196,19 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                                         .fromIterable(result.getData())                             // Observable<Note>
                                         .concatMap((Function<Note, ObservableSource<Note>>)
                                                 note -> Observable.zip(                             // zip(O<Note>,O<String>) to O<Note>
-                                                Observable.just(new Result.Success<>(note)),
-                                                userRepository
-                                                        .getHumanReadableName(note.getUser())
-                                                        .toObservable()
-                                                        .observeOn(appExecutors.net()),
-                                                (n, s) -> {
-                                                    if (s instanceof Result.Success) {              // note, name-> note.set(name)
-                                                        note.setUser(s.getData());
-                                                    } else {
-                                                        note.setUser(defaultUserName);
-                                                    }
-                                                    return note;
-                                                }))
+                                                        Observable.just(new Result.Success<>(note)),
+                                                        userRepository
+                                                                .getHumanReadableName(note.getUser())
+                                                                .toObservable()
+                                                                .observeOn(appExecutors.net()),
+                                                        (n, s) -> {
+                                                            if (s instanceof Result.Success) {              // note, name-> note.set(name)
+                                                                note.setUser(s.getData());
+                                                            } else {
+                                                                note.setUser(defaultUserName);
+                                                            }
+                                                            return note;
+                                                        }))
                                         .toList()                                                   // Single<List>
                                         .map(Result.Success::new);                                  // Single<R<List>>
                             }
