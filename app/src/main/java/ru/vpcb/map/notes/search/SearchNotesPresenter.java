@@ -18,7 +18,6 @@ import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.model.AuthUser;
 import ru.vpcb.map.notes.model.Note;
 
 public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
@@ -112,6 +111,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (categoryPosition == this.notesSearchCategory) {  // search notes name
 
             Disposable disposable = notesRepository
+// TODO remove null
                     .getNotesByNoteText(text, null)
                     .compose(updateNames(defaultUserName))
                     .observeOn(appExecutors.ui())
@@ -149,8 +149,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                     if (result instanceof Result.Success) {
 // TODO launch
                         notesRepository.setExecutors(noteExecutors);
-                        Result<List<Note>> notes = notesRepository.getNotesByUser(
-                                ((AuthUser) result.getData()).getUid(), text);
+//                        Result<List<Note>> notes = notesRepository.getNotesByUser(
+//                                ((AuthUser) result.getData()).getUid(), text);
                     }
                     if (result instanceof Result.Error) {
                         view.displayUnknownUserError();
@@ -159,6 +159,19 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             };
 // TODO launch
             userRepository.setAppExecutors(userExecutors);
+            String s = "kRh2U1xtFSVTlO6uuKAAklaTtT22";
+            Disposable disposableU = notesRepository.getNotesByUser(s, text)
+            .observeOn(appExecutors.ui())
+            .subscribe(result->{
+                if(result instanceof Result.Success) {
+                    System.out.println(result.getData());
+                }else {
+                    System.out.println(result.getException().toString());
+                }
+
+            });
+
+
             Single<Result<String>> user = userRepository
                     .getUserIdFromHumanReadableName(text)
                     .observeOn(appExecutors.ui());

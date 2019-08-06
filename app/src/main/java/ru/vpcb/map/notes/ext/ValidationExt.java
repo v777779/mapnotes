@@ -21,6 +21,7 @@ public class ValidationExt {
      * @return boolean status of connection, true if connected, false if not
      */
 
+    @SuppressWarnings("deprecation")
     public static boolean isOnline(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

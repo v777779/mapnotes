@@ -15,12 +15,14 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.AppExecutors;
+import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.executors.IJob;
 import ru.vpcb.map.notes.model.Note;
 
 public class FirebaseNotesRepository implements NotesRepository {
 
-    private AppExecutors appExecutors;
+    private IAppExecutors appExecutors;
+    private AppExecutors oldAppExecutors;
     private FirebaseDatabase database;
 
     private String notesPath;
@@ -28,7 +30,7 @@ public class FirebaseNotesRepository implements NotesRepository {
     private String userKey;
 
 
-    public FirebaseNotesRepository(AppExecutors appExecutors) {
+    public FirebaseNotesRepository(IAppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         this.notesPath = "notes";
         this.textKey = "text";
@@ -96,18 +98,18 @@ public class FirebaseNotesRepository implements NotesRepository {
                                 noteResults.add(note);
                             }
                             Result<List<Note>> result = new Result.Success<>(noteResults);
-                            appExecutors.resume(result);
+                            oldAppExecutors.resume(result);
 
                         } else {
                             Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                            appExecutors.resume(result);
+                            oldAppExecutors.resume(result);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                        appExecutors.resume(result);
+                        oldAppExecutors.resume(result);
                     }
                 });
 
@@ -154,45 +156,49 @@ public class FirebaseNotesRepository implements NotesRepository {
     }
 
     @Override
-    public Result<List<Note>> getNotesByUser(String userId, String humanReadableName) {
-
-        database.getReference(notesPath)
-                .orderByChild(userKey)
-                .equalTo(userId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            List<Note> noteResults = new ArrayList<>();
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                Note note = child.getValue(Note.class);
-                                if (note != null) note.setUser(humanReadableName);
-                                noteResults.add(note);
+    public Single<Result<List<Note>>> getNotesByUser(String userId, String humanReadableName) {
+        return Single.<Result<List<Note>>>create(emitter -> {
+            database.getReference(notesPath)
+                    .orderByChild(userKey)
+                    .equalTo(userId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (emitter.isDisposed()) {
+                                return;
                             }
-                            Result<List<Note>> result = new Result.Success<>(noteResults);
-                            appExecutors.resume(result);
+                            if (dataSnapshot.exists()) {
+                                List<Note> noteResults = new ArrayList<>();
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    Note note = child.getValue(Note.class);
+                                    if (note == null) {
+                                        continue;
+                                    }
+                                    note.setUser(humanReadableName);
+                                    noteResults.add(note);
+                                }
+                                emitter.onSuccess(new Result.Success<>(noteResults));
 
-                        } else {
-                            Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                            appExecutors.resume(result);
-
+                            } else {
+                                emitter.onSuccess(new Result.Error<>(new NullPointerException()));
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                        appExecutors.resume(result);
-
-                    }
-                });
-
-        return null;
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            if (emitter.isDisposed()) {
+                                return;
+                            }
+                            emitter.onSuccess(new Result.Error<>(databaseError.toException()));
+                        }
+                    });
+// TODO replace
+        }).subscribeOn(Schedulers.io());
     }
 
     @Override
     public void setExecutors(AppExecutors appExecutors) {
-        this.appExecutors = appExecutors;
+        this.oldAppExecutors = appExecutors;
     }
 
 }

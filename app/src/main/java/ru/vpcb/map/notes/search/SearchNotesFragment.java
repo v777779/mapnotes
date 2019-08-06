@@ -72,7 +72,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
 
         oldAppExecutors = null;
         userRepository = new FirebaseUserRepository(appExecutors);
-        notesRepository = new FirebaseNotesRepository(oldAppExecutors);
+        notesRepository = new FirebaseNotesRepository(appExecutors);
         presenter = new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
 
         defaultUserName = context.getString(R.string.unknown_user);
