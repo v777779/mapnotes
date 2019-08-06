@@ -103,7 +103,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
             @Override
             public void invoke(Note note) {
                 LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
-                Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);
+                Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);  // message for BroadCastReceiver
                 broadcastManager.sendBroadcast(intent);
             }
         });

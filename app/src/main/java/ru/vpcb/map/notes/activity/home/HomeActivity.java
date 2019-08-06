@@ -41,7 +41,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
     public static final String DISPLAY_LOCATION = "display_location";
     public static final String EXTRA_NOTE = "note";
 
-    // TODO by inject
     @Inject
     HomeMvpPresenter presenter;
     @Inject
@@ -50,7 +49,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
     FAManager analyticsManager;
 
     private View layout;
-    private View bottomSheet;
     private BottomSheetBehavior bottomSheetBehavior;
     private BroadcastReceiver hideExpandedMenuListener;
     private BottomSheetBehavior.BottomSheetCallback bottomSheetCallback;
@@ -65,18 +63,19 @@ public class HomeActivity extends BaseActivity implements HomeView {
         setSupportActionBar(toolbar);
 
         layout = findViewById(android.R.id.content);
-        bottomSheet = findViewById(R.id.bottomSheet);
         navigation = findViewById(R.id.navigation);
+        View bottomSheet = findViewById(R.id.bottomSheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         hideExpandedMenuListener = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getParcelableExtra(EXTRA_NOTE) != null) {
+                if (intent.getParcelableExtra(EXTRA_NOTE) != null) { // hides bottom sheet on note location
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
             }
         };
+
         bottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int newState) {
@@ -126,8 +125,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback);
 
-//        presenter.checkEnablePermissions();
-
         if (!PermissionExt.checkLocationPermission(this)) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -139,7 +136,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
             presenter.showLocationRequirePermissions();
         }
 
-        LocalBroadcastManager.getInstance(this)
+        LocalBroadcastManager
+                .getInstance(this)
                 .registerReceiver(hideExpandedMenuListener, new IntentFilter(DISPLAY_LOCATION));
     }
 
