@@ -84,29 +84,17 @@ public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpP
     @Override
     public void checkUser() {
         if (view == null) return;
-
-
-// TODO launch  UI Context
-        oldAppExecutors = new AppExecutors() {
-            @Override
-            public <T> void resume(Result<T> result) {
-                if (result instanceof Result.Error) {
-                    view.navigateToLoginScreen();
-                }
-            }
-        };
-        userRepository.setAppExecutors(oldAppExecutors);
-        Result<AuthUser> currentUser = userRepository.getCurrentUser();
-
+        Result<AuthUser> result = userRepository.getCurrentUser();
+        if (result instanceof Result.Error) {
+            view.navigateToLoginScreen();
+        }
     }
 
     @Override
     public void signOut() {
         if (view == null) return;
-// TODO launch UI Context
         userRepository.signOut();
         view.navigateToLoginScreen();
-
     }
 
 }

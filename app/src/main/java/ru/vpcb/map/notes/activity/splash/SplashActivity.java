@@ -52,7 +52,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     protected void onResume() {
         super.onResume();
         if (presenter != null) {
-            presenter.checkGoogleServices();
+            presenter.start();
 
         }
 
@@ -95,7 +95,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
 
     @Override
-    public void finishView() {
+    public void close() {
         finish();
     }
 

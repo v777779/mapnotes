@@ -31,7 +31,7 @@ public class SplashPresenter implements SplashMvpPresenter {
     }
 
     @Override
-    public void checkGoogleServices() {
+    public void start() {
         if (view == null) return;
         int code = view.isPlayServicesAvailable();
 
@@ -53,6 +53,7 @@ public class SplashPresenter implements SplashMvpPresenter {
         } else {
             view.navigateToLogin();
         }
+        view.close();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class SplashPresenter implements SplashMvpPresenter {
             if (view.isPlayServicesAvailable() == SUCCESS) {
                 startMapNotes();
             } else {
-                view.finishView();
+                view.close();
             }
         }
     }
@@ -80,7 +81,7 @@ public class SplashPresenter implements SplashMvpPresenter {
         if (view == null) {
             return;
         }
-        view.finishView();
+        view.close();
     }
 
 

@@ -11,7 +11,7 @@ public interface SplashView extends MvpView {
 
     boolean isInstalledPlayMarket();
 
-    void finishView();
+    void close();
 
     void navigateToLogin();
 
