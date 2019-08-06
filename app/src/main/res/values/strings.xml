@@ -77,12 +77,8 @@
 
     <string name="update_services_message">Check Google Play Services</string>
 
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
-
     <!--new -->
     <string name="image_description">Image Layout Description</string>
-
 
     <!--google_maps_api_key-->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">

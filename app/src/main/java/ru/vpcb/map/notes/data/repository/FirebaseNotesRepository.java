@@ -15,13 +15,11 @@ import io.reactivex.Single;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.executors.IJob;
 import ru.vpcb.map.notes.model.Note;
 
 public class FirebaseNotesRepository implements NotesRepository {
 
     private IAppExecutors appExecutors;
-    private AppExecutors oldAppExecutors;
     private FirebaseDatabase database;
 
     private String notesPath;
@@ -80,41 +78,6 @@ public class FirebaseNotesRepository implements NotesRepository {
         }).subscribeOn(appExecutors.net());
 
     }
-
-    @Override
-    public Result<List<Note>> getNotes(IJob<Note> replaceAuthorName) {
-
-        database.getReference(notesPath)
-                .addListenerForSingleValueEvent(new ValueEventListener() {          // self removed
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            List<Note> noteResults = new ArrayList<>();
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                Note note = child.getValue(Note.class);
-// TODO check sync
-                                replaceAuthorName.join(note);
-                                noteResults.add(note);
-                            }
-                            Result<List<Note>> result = new Result.Success<>(noteResults);
-                            oldAppExecutors.resume(result);
-
-                        } else {
-                            Result<List<Note>> result = new Result.Error<>(new NullPointerException());
-                            oldAppExecutors.resume(result);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Result<List<Note>> result = new Result.Error<>(databaseError.toException());
-                        oldAppExecutors.resume(result);
-                    }
-                });
-
-        return null;
-    }
-
 
     @Override
     public Single<Result<List<Note>>> getNotesByNoteText(String text) {
@@ -193,11 +156,6 @@ public class FirebaseNotesRepository implements NotesRepository {
                     });
 // TODO replace
         }).subscribeOn(appExecutors.net());
-    }
-
-    @Override
-    public void setExecutors(AppExecutors appExecutors) {
-        this.oldAppExecutors = appExecutors;
     }
 
 }

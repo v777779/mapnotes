@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.activity.IComponent;
 import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
@@ -210,13 +209,13 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     public void showLocationAlertDialog() {
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setMessage(R.string.use_location_message)
-                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         presenter.openSettings();
                     }
                 })
-                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         presenter.exit();

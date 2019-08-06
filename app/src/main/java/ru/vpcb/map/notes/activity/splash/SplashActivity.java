@@ -158,7 +158,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     public void getAlertDialog() {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setMessage(R.string.update_services_message)
-                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (presenter != null) {
@@ -166,7 +166,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (presenter != null) {

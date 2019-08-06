@@ -91,7 +91,7 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void displaySignInError() {
         Snackbar snackbar = Snackbar.make(signInRoot, R.string.error_user_cannot_be_authenticated, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.ok_button, new View.OnClickListener() {
+        snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();

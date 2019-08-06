@@ -18,16 +18,13 @@ import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.Note;
 
 public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         implements SearchNotesMvpPresenter {
 
-    IAppExecutors appExecutors;
-
-    private AppExecutors oldAppExecutors;
+    private IAppExecutors appExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
 
@@ -36,7 +33,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private int usersSearchCategory;
     private CompositeDisposable composite;
 
-    public SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
+    SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
                                 NotesRepository notesRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
@@ -171,21 +168,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
 //methods
 
-    private void replaceNoteAuthorIdToNameJob(Note note, String defaultUserName) {
-        Disposable disposable = userRepository.getHumanReadableName(note.getUser())
-                .subscribe(result -> {
-                    if (result instanceof Result.Success) {
-                        note.setUser(result.getData());
-                    } else {
-                        note.setUser(defaultUserName);
-                    }
-                });
-        if (composite != null) {
-            composite.add(disposable);
-        }
-    }
-
-    private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
+     private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
         return upstream -> upstream
                 .observeOn(appExecutors.net())
                 .flatMap((Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>)

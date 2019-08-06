@@ -53,8 +53,7 @@ public class FirebaseUserRepository implements UserRepository {
 //                                    emitter.onError(new UserNotAuthenticatedException());
                                 }
                             });
-                }).subscribeOn(appExecutors.net())
-                .observeOn(appExecutors.ui());
+                }).subscribeOn(appExecutors.net());
     }
 
 
@@ -73,8 +72,7 @@ public class FirebaseUserRepository implements UserRepository {
 //                            emitter.onError(new UserNotAuthenticatedException());
                         }
                     });
-        }).subscribeOn(appExecutors.net())
-                .observeOn(appExecutors.ui());
+        }).subscribeOn(appExecutors.net());
     }
 
     @Override
