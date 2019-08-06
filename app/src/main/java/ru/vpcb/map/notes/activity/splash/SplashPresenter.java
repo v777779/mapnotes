@@ -34,14 +34,14 @@ public class SplashPresenter implements SplashMvpPresenter {
     public void start() {
         if (view == null) return;
         int code = view.isPlayServicesAvailable();
-
         if (code == ConnectionResult.SUCCESS) {
             startMapNotes();
-        }
-        if (view.isInstalledPlayMarket()) {
-            view.getErrorDialog(code);          // play market
-        } else {
-            view.getAlertDialog();              // no play market
+        }else {
+            if (view.isInstalledPlayMarket()) {
+                view.getErrorDialog(code);          // play market
+            } else {
+                view.getAlertDialog();              // no play market
+            }
         }
     }
 
