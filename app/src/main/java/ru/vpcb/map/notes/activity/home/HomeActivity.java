@@ -240,7 +240,6 @@ public class HomeActivity extends BaseActivity implements HomeView {
         navigation.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     public void showPermissionExplanationSnackBar() {
         Snackbar.make(layout, R.string.permission_explanation, Snackbar.LENGTH_LONG)
@@ -254,8 +253,8 @@ public class HomeActivity extends BaseActivity implements HomeView {
 
     @Override
     public void navigateToLoginScreen() {
-        finish();
         NavigationExt.navigateTo(this, LoginActivity.class);
+        finish();
     }
 
 

@@ -101,12 +101,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void navigateToLogin() {
-        NavigationExt.navigateTo(this, HomeActivity.class);
+        NavigationExt.navigateTo(this, LoginActivity.class);
     }
 
     @Override
     public void navigateToHome() {
-        NavigationExt.navigateTo(this, LoginActivity.class);
+        NavigationExt.navigateTo(this, HomeActivity.class);
     }
 
     @Override
