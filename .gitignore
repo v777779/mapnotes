@@ -3,6 +3,7 @@
 .idea
 /gradle
 gradle*
+*.json
 /local.properties
 .DS_Store
 /build
