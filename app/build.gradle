@@ -12,7 +12,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-//        vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
         lintOptions {
             checkReleaseBuilds false
@@ -22,9 +21,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources  true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+//        debug {
+//            minifyEnabled true        // allows not use multidex but variables do not have names
+//            useProguard false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+
     }
     compileOptions {
         sourceCompatibility = '1.8'

@@ -2,15 +2,24 @@ package ru.vpcb.map.notes;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.multidex.MultiDex;
 
 import ru.vpcb.map.notes.di.AppComponent;
 import ru.vpcb.map.notes.di.DaggerAppComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeModule;
+/*
+    MultiDex Support fro API17
+    extends MultiDexApplication or
+    call MultiDex.install() in attachBaseContext()  used here
 
+    Crashlytics init is not necessary
+    it initialized automatically by hook in Manifest
+ */
 public class MainApp extends Application {
     private AppComponent component;
     private HomeComponent homeComponent;
@@ -35,9 +44,14 @@ public class MainApp extends Application {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
-//        FCManager.setup(this);                // Crashlytics  нет необходимости
         initComponent();
     }
 
