@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
     defaultConfig {
@@ -12,24 +14,31 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+
         multiDexEnabled = true
         lintOptions {
             checkReleaseBuilds false
             abortOnError false
         }
 
+
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources  true
+            minifyEnabled false
+//            shrinkResources  true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
         }
-//        debug {
+        debug {
 //            minifyEnabled true        // allows not use multidex but variables do not have names
 //            useProguard false
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
+
+//            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
+            resValue("string", "google_maps_key", GOOGLE_MAPS_API_KEY)                              // gradle.properties to resource
+
+        }
 
     }
     compileOptions {
