@@ -28,16 +28,13 @@ android {
             minifyEnabled false
 //            shrinkResources  true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
+            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
         }
         debug {
 //            minifyEnabled true        // allows not use multidex but variables do not have names
 //            useProguard false
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-//            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
-            resValue("string", "google_maps_key", GOOGLE_MAPS_API_KEY)                              // gradle.properties to resource
-
+            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")              // system environment to resource
         }
 
     }

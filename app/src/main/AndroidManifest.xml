@@ -45,16 +45,16 @@
             android:name=".activity.login.signup.SignUpActivity"
             android:label="@string/title_activity_sign_up" />
 
-        <!--from placeholder-->
-        <!--<meta-data-->
-            <!--android:name="com.google.android.geo.API_KEY"-->
-            <!--android:value="${google_maps_key}" />-->
 
-        <!--from string resource-->
+        <!--from environment-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <!--from string resource-->
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="@string/google_maps_api_key" />-->
 
     </application>
 
