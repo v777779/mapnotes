@@ -23,7 +23,7 @@ public class GeneralMapFragment extends Fragment implements MapFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
-        this.googleMapFragment = new GoogleMapFragment();                                   //  googleMapFragmentLazy.getApplication(); // lazy init
+        this.googleMapFragment = new GoogleMapFragment();
         FragmentManager fm = getFragmentManager();
         if (fm != null) {
             fm.beginTransaction()

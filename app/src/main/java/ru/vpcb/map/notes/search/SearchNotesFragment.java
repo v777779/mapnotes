@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -36,12 +35,6 @@ import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
-import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
-import ru.vpcb.map.notes.data.repository.FirebaseUserRepository;
-import ru.vpcb.map.notes.data.repository.NotesRepository;
-import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
-import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.executors.IListener;
 import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FCManager;
@@ -53,23 +46,17 @@ import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;
 
 public class SearchNotesFragment extends Fragment implements SearchNotesView, IComponentFragment {
 
-    // TODO by inject
     @Inject
-    IAppExecutors appExecutors;
-
-
-    private AppExecutors oldAppExecutors;
-    private UserRepository userRepository;
-    private NotesRepository notesRepository;
-    private SearchNotesMvpPresenter presenter;
-
-    private String defaultUserName;
-    private LatLonFormatter coordinateFormatter;
-    private NotesAdapter adapter;
+    SearchNotesMvpPresenter presenter;
+    @Inject
+    Activity activity;
 
     private View rootView;
     private ProgressBar progressBar;
-    private AppCompatActivity activity;
+
+    private LatLonFormatter coordinateFormatter;
+    private NotesAdapter adapter;
+    private String defaultUserName;
 
 
     @Override
@@ -77,15 +64,8 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         setupComponent((Activity) context);
         super.onAttach(context);
 
-        oldAppExecutors = null;
-        userRepository = new FirebaseUserRepository(appExecutors);
-        notesRepository = new FirebaseNotesRepository(appExecutors);
-        presenter = new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
-
         defaultUserName = context.getString(R.string.unknown_user);
         coordinateFormatter = new CoordinateFormatter();
-
-        activity = (AppCompatActivity) context;
     }
 
     @Nullable

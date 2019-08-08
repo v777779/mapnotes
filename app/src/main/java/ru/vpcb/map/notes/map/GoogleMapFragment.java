@@ -47,12 +47,13 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
     LocationProvider locationProvider;
     @Inject
     FAManager analyticsManager;
+    @Inject
+    Activity activity;
 
-    private Activity activity;
     private GoogleMap map;
+    private BroadcastReceiver displayOnMapBroadcastListener;
     private List<MarkerOptions> markers;
     private boolean isInteractionMode;
-    private BroadcastReceiver displayOnMapBroadcastListener;
 
     @Override
     public void onAttach(Activity activity) {

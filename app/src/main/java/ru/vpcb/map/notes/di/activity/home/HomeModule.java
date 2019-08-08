@@ -8,6 +8,7 @@ import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
 import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
+import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.di.activity.ActivityScope;
 import ru.vpcb.map.notes.executors.IAppExecutors;
@@ -16,6 +17,8 @@ import ru.vpcb.map.notes.map.GeneralMapFragment;
 import ru.vpcb.map.notes.map.GoogleMapPresenter;
 import ru.vpcb.map.notes.map.MapFragment;
 import ru.vpcb.map.notes.map.MapMvpPresenter;
+import ru.vpcb.map.notes.search.SearchNotesMvpPresenter;
+import ru.vpcb.map.notes.search.SearchNotesPresenter;
 
 @Module
 public class HomeModule {
@@ -48,6 +51,20 @@ public class HomeModule {
     @ActivityScope
     LocationProvider provideAddressLocationProvider() {
         return new AddressLocationProvider(activity, AddressLocationProvider.REQUEST_INTERVAL);
+    }
+
+    @Provides
+    @ActivityScope
+    SearchNotesMvpPresenter provideSearchNotesMvpPresenter(IAppExecutors appExecutors,
+                                                           UserRepository userRepository,
+                                                           NotesRepository notesRepository) {
+        return new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
+    }
+
+    @Provides
+    @ActivityScope
+    Activity provideActivity() {
+        return activity;
     }
 
     @Provides
