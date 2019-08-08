@@ -98,7 +98,7 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
         double longitude = lastLocation != null ? lastLocation.getLongitude() : 0.0;
         Note note = new Note(latitude, longitude, text, uid);
         notesRepository.addNote(note);
-
+        view.displayCurrentLocation(note);
     }
 
 // methods

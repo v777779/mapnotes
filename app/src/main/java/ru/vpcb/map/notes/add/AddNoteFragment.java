@@ -1,6 +1,7 @@
 package ru.vpcb.map.notes.add;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import javax.inject.Inject;
 
@@ -32,6 +34,10 @@ import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
+import ru.vpcb.map.notes.model.Note;
+
+import static ru.vpcb.map.notes.activity.home.HomeActivity.DISPLAY_LOCATION;
+import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;
 
 public class AddNoteFragment extends Fragment implements AddNoteView {
 
@@ -46,7 +52,7 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
     private LocationProvider locationProvider;
     private LocationFormatter locationFormatter;
 
-    private AppCompatActivity mActivity;
+    private AppCompatActivity activity;
     private View mRootView;
     private EditText note;
     private TextView currentLocation;
@@ -54,17 +60,17 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+        activity = (AppCompatActivity) context;
 
 // TODO by inject
         oldAppExecutors = null;
         userRepository = new FirebaseUserRepository(appExecutors);
         notesRepository = new FirebaseNotesRepository(appExecutors);
-        locationProvider = new AddressLocationProvider(mActivity);
-        locationFormatter = new FullAddressFormatter(new Geocoder(mActivity));
+        locationProvider = new AddressLocationProvider(activity);
+        locationFormatter = new FullAddressFormatter(new Geocoder(activity));
 
-        presenter = new AddNotePresenter(oldAppExecutors,userRepository,notesRepository,
-                locationProvider,locationFormatter);
+        presenter = new AddNotePresenter(oldAppExecutors, userRepository, notesRepository,
+                locationProvider, locationFormatter);
     }
 
 
@@ -144,10 +150,25 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
 
     @Override
     public void hideKeyboard() {
-        if(mActivity ==null)return;
-        InputMethodManager imm = (InputMethodManager)mActivity.getSystemService(
+        if (activity == null) {
+            return;
+        }
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
+        if(imm == null){
+            return;
+        }
         imm.hideSoftInputFromWindow(note.getWindowToken(), 0);
+    }
+
+    @Override
+    public void displayCurrentLocation(Note note) {
+        if (activity == null) {
+            return;
+        }
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
+        Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);                    // message for BroadCastReceiver
+        broadcastManager.sendBroadcast(intent);
 
     }
 }
