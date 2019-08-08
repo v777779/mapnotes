@@ -2,6 +2,7 @@ package ru.vpcb.map.notes.search;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,10 +16,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -107,6 +110,8 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
                 broadcastManager.sendBroadcast(intent);
             }
         });
+        SwipeHelper swipeHelper = new SwipeHelper(ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT);
+        swipeHelper.attachToRecyclerView(recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         recyclerView.setLayoutManager(layoutManager);
@@ -210,6 +215,7 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         }
     }
 
+    @Override
     public void showProgress(boolean isVisible) {
         if (progressBar == null) {
             return;
@@ -218,6 +224,78 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public String getDefaultUserName() {
+        return defaultUserName;
+    }
+
+
+    public void adapterRemoveNote(int position) {
+        adapter.removeNote(position);
+    }
+
+    public void adapterRefreshNotes() {
+        adapter.notifyDataSetChanged();
+    }
+
+    private void getAlertDialog(int position) {
+        if (activity == null) {
+            return;
+        }
+        Note note = adapter.getNote(position);
+        String description = "";
+        if (note != null) {
+            description = note.getText();
+        }
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setMessage(activity.getString(R.string.remove_note_message, description))
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (presenter != null) {
+                            presenter.onPositive(position);
+                            adapterRemoveNote(position);
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        adapterRefreshNotes();
+                    }
+                }).create();
+
+        dialog.show();
+    }
+
+
+// classes
+
+    private class SwipeCallback extends ItemTouchHelper.SimpleCallback {
+
+        SwipeCallback(int dragDirs, int swipeDirs) {
+            super(dragDirs, swipeDirs);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            getAlertDialog(position);
+        }
+    }
+
+    private class SwipeHelper extends ItemTouchHelper {
+
+        private SwipeHelper(int movement) {
+            super(new SwipeCallback(0, movement));
         }
     }
 

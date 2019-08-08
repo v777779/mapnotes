@@ -155,7 +155,7 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
         }
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        if(imm == null){
+        if (imm == null) {
             return;
         }
         imm.hideSoftInputFromWindow(note.getWindowToken(), 0);

@@ -49,20 +49,9 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
         this.view = view;
 
         locationProvider.startLocationUpdates();
-// TODO launch
-        AppExecutors userExecutors = new AppExecutors() {
-            @Override
-            public <T>void resume(Result<T> result) {
-                if (result instanceof Result.Success) {
-                    uid = ((AuthUser)result.getData()).getUid();
-                }
-            }
-        };
-// TODO launch
-        userRepository.setAppExecutors(userExecutors);
         Result<AuthUser> userResult = userRepository.getCurrentUser();
         if (userResult instanceof Result.Success) {
-            uid = ((AuthUser)userResult.getData()).getUid();
+            uid = (userResult.getData()).getUid();
         }
     }
 

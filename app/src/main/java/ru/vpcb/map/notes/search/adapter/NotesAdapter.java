@@ -59,4 +59,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void removeNote(int position) {
+        if(notes == null || position <0 || position >= notes.size()){
+            return;
+        }
+        this.notes.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public Note getNote(int position){
+        if(notes == null || position <0 || position >= notes.size()){
+            return null;
+        }
+        return notes.get(position);
+    }
+
 }

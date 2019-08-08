@@ -76,6 +76,8 @@
     <string name="no_internet_error">No Internet connection.</string>
 
     <string name="update_services_message">Check Google Play Services</string>
+    <string name="remove_note_message">Remove \"%1$s \" note?</string>
+
 
     <!--new -->
     <string name="image_description">Image Layout Description</string>

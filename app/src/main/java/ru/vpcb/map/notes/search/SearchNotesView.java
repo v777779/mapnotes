@@ -19,4 +19,7 @@ public interface SearchNotesView extends MvpView {
     boolean isOnline();
 
     void showProgress(boolean isVisible);
+
+    String getDefaultUserName();
+
 }

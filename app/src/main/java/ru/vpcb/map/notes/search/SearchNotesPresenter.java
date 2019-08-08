@@ -163,6 +163,22 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         }
     }
 
+    @Override
+    public void onPositive(int position) {
+        if(view == null){
+            return;
+        }
+
+    }
+
+    @Override
+    public void onNegative() {
+        if(view == null){
+            return;
+        }
+        getNotes(view.getDefaultUserName());
+    }
+
 //methods
 
      private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
