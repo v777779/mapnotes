@@ -57,9 +57,6 @@ public class HomeModule {
         return new GeneralMapFragment();
     }
 
-
-
-
     @Provides
     @ActivityScope
     SearchNotesMvpPresenter provideSearchNotesMvpPresenter(IAppExecutors appExecutors,

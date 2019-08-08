@@ -8,14 +8,12 @@ import io.reactivex.disposables.Disposable;
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.ext.ValidationExt;
 
 public class SignInPresenter extends ScopedPresenter<SignInView> implements SignInMvpPresenter {
 
     private IAppExecutors appExecutors;
-    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private SignInView view;
     private Disposable disposable;
@@ -68,20 +66,5 @@ public class SignInPresenter extends ScopedPresenter<SignInView> implements Sign
                 });
 
     }
-
-// Alternative
-
-//        oldAppExecutors = new AppExecutors() {
-//            @Override
-//            public <T> void resume(Result<T> result) {
-//                if (result instanceof Result.Success) {
-//                    view.navigateToMapScreen();
-//                } else if (result instanceof Result.Error) {
-//                    view.displaySignInError();
-//
-//                }
-//            }
-//        };
-//        userRepository.setAppExecutors(oldAppExecutors);
 
 }

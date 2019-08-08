@@ -8,14 +8,12 @@ import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.AuthUser;
 
 public class HomePresenter extends ScopedPresenter<HomeView> implements HomeMvpPresenter {
 
     private IAppExecutors appExecutors;
-    private AppExecutors oldAppExecutors;
     private UserRepository userRepository;
     private HomeView view;
 

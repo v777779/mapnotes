@@ -2,6 +2,7 @@ package ru.vpcb.map.notes.activity.login.signup;
 
 import androidx.annotation.NonNull;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
@@ -14,7 +15,7 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
     private IAppExecutors appExecutors;
     private UserRepository userRepository;
     private SignUpView view;
-    private Disposable disposable;
+    private CompositeDisposable composite;
 
     public SignUpPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         this.appExecutors = appExecutors;
@@ -26,12 +27,15 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
     public void onAttach(@NonNull SignUpView view) {
         super.onAttach(view);
         this.view = view;
+        composite = new CompositeDisposable();
     }
 
     @Override
     public void onDetach() {
         this.view = null;
-        if(disposable!= null)disposable.dispose();
+        if (composite != null) {
+            composite.dispose();
+        }
         super.onDetach();
     }
 
@@ -49,16 +53,25 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
 
         view.sendAnalytics(-1, email);
 
-        disposable = userRepository.signUp(email, password)
+        Disposable disposable = userRepository.signUp(email, password)
                 .observeOn(appExecutors.ui())
                 .subscribe(result -> {
                     if (result instanceof Result.Success) {
-                        userRepository.changeUserName(result.getData(), name);
-                        view.navigateToMapScreen();
+                        Disposable disposableChange = userRepository.changeUserName(result.getData(), name)
+                                .observeOn(appExecutors.ui())
+                                .subscribe(resultChange -> {
+                                    if (resultChange instanceof Result.Success) {
+                                        view.navigateToMapScreen();
+                                    } else {
+                                        view.displayChangeUserNameError();
+                                    }
+                                });
+                        composite.add(disposableChange);
                     } else {
                         view.displaySignUpError();
                     }
                 });
+        composite.add(disposable);
 
     }
 

@@ -2,6 +2,7 @@ package ru.vpcb.map.notes.data.repository;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -14,14 +15,12 @@ import com.google.firebase.database.ValueEventListener;
 import io.reactivex.Single;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.exception.UserNotAuthenticatedException;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.AuthUser;
 
 public class FirebaseUserRepository implements UserRepository {
 
     private IAppExecutors appExecutors;
-    private AppExecutors oldAppExecutors;
 
     private String usersPath;
     private String nameKey;
@@ -91,9 +90,24 @@ public class FirebaseUserRepository implements UserRepository {
     }
 
     @Override
-    public void changeUserName(AuthUser user, String name) {
-        DatabaseReference usersRef = database.getReference(usersPath);
-        usersRef.child(user.getUid()).child(nameKey).setValue(name);
+    public Single<Result<Void>> changeUserName(AuthUser user, String name) {
+        return Single.<Result<Void>>create(emitter -> {
+            DatabaseReference usersRef = database.getReference(usersPath);
+            usersRef.child(user.getUid()).child(nameKey).setValue(name, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    if (emitter.isDisposed()) {
+                        return;
+                    }
+                    if (databaseError == null)
+                        emitter.onSuccess(new Result.Success<>(null));
+                    else
+                        emitter.onSuccess(new Result.Error<>(databaseError.toException()));
+                }
+            });
+
+        }).subscribeOn(appExecutors.net());
+
     }
 
     @Override
@@ -164,29 +178,12 @@ public class FirebaseUserRepository implements UserRepository {
                         })
         ).subscribeOn(appExecutors.net());
     }
-
-
-    // TODO inject
-    @Override
-    public void setAppExecutors(AppExecutors appExecutors) {
-        this.oldAppExecutors = appExecutors;
-    }
-
+}
 
 // Alternative
-
 //    @Override
 //    public void changeUserName(AuthUser user, String name) {
 //        DatabaseReference usersRef = database.getReference(usersPath);
-//        usersRef.child(user.getUid()).child(nameKey).setValue(name, new DatabaseReference.CompletionListener() {
-//            @Override
-//            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-//                if (databaseError == null)
-//                    oldAppExecutors.resume(new Result.Success<>(null));
-//                else
-//                    oldAppExecutors.resume(new Result.Error<>(databaseError.toException()));
-//            }
-//        });
-//
+//        usersRef.child(user.getUid()).child(nameKey).setValue(name);
 //    }
-}
+

@@ -100,6 +100,12 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     }
 
     @Override
+    public void displayChangeUserNameError() {
+        Snackbar.make(signUpRoot, R.string.error_name_not_changed, Snackbar.LENGTH_LONG).show();
+    }
+
+
+    @Override
     public void sendAnalytics(int id, String s) {
         if (analyticsManager == null) {
             return;

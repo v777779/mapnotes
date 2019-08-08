@@ -3,7 +3,6 @@ package ru.vpcb.map.notes.data.repository;
 
 import io.reactivex.Single;
 import ru.vpcb.map.notes.data.Result;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.model.AuthUser;
 
 public interface UserRepository {
@@ -16,11 +15,10 @@ public interface UserRepository {
 
     Result<AuthUser> getCurrentUser();
 
-    void changeUserName(AuthUser user,String name);
+    Single<Result<Void>> changeUserName(AuthUser user,String name);
 
     Single<Result<String>> getHumanReadableName(String userId);
 
     Single<Result<String>> getUserIdFromHumanReadableName(String userName);
 
-    void setAppExecutors(AppExecutors appExecutors);
 }
