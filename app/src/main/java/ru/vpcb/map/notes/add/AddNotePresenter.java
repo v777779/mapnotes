@@ -61,6 +61,9 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
 // TODO launch
         userRepository.setAppExecutors(userExecutors);
         Result<AuthUser> userResult = userRepository.getCurrentUser();
+        if (userResult instanceof Result.Success) {
+            uid = ((AuthUser)userResult.getData()).getUid();
+        }
     }
 
     @Override
