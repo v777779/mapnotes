@@ -34,7 +34,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private CompositeDisposable composite;
 
     SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
-                                NotesRepository notesRepository) {
+                         NotesRepository notesRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
         this.notesRepository = notesRepository;
@@ -96,7 +96,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
 
     @Override
     public void searchNotes(String text, int categoryPosition, String defaultUserName) {
-        if (view == null){
+        if (view == null) {
             return;
         }
 
@@ -164,24 +164,25 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     }
 
     @Override
-    public void onPositive(int position) {
-        if(view == null){
+    public void onPositive(@NonNull Note note) {
+        if (view == null) {
             return;
         }
-
+        notesRepository.removeNote(note);
+        view.refreshFragment();
     }
 
     @Override
     public void onNegative() {
-        if(view == null){
+        if (view == null) {
             return;
         }
-        getNotes(view.getDefaultUserName());
+        view.refreshAdapter();
     }
 
 //methods
 
-     private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
+    private SingleTransformer<Result<List<Note>>, Result<List<Note>>> updateNames(String defaultUserName) {
         return upstream -> upstream
                 .observeOn(appExecutors.net())
                 .flatMap((Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>)

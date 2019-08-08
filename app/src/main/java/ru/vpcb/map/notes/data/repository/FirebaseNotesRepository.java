@@ -13,7 +13,6 @@ import java.util.List;
 
 import io.reactivex.Single;
 import ru.vpcb.map.notes.data.Result;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.Note;
 
@@ -156,6 +155,15 @@ public class FirebaseNotesRepository implements NotesRepository {
                     });
 // TODO replace
         }).subscribeOn(appExecutors.net());
+    }
+
+    @Override
+    public void removeNote(Note note) {
+        DatabaseReference notesRef = database.getReference(notesPath);
+        int k = 1;
+//        DatabaseReference newNoteRef = notesRef.push();
+//        newNoteRef.setValue(note);
+
     }
 
 }

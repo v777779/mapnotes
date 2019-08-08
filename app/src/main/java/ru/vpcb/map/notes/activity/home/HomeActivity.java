@@ -39,7 +39,9 @@ import ru.vpcb.map.notes.search.SearchNotesFragment;
 
 public class HomeActivity extends BaseActivity implements HomeView {
     public static final String DISPLAY_LOCATION = "display_location";
+    public static final String REFRESH_NOTES = "refresh_notes";
     public static final String EXTRA_NOTE = "note";
+
 
     @Inject
     HomeMvpPresenter presenter;
@@ -70,8 +72,15 @@ public class HomeActivity extends BaseActivity implements HomeView {
         hideExpandedMenuListener = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getParcelableExtra(EXTRA_NOTE) != null) { // hides bottom sheet on note location
+                if (intent == null) {
+                    return;
+                }
+                String action = intent.getAction();
+                if (HomeActivity.DISPLAY_LOCATION.equals(action) &&
+                        intent.getParcelableExtra(EXTRA_NOTE) != null) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                } else if (HomeActivity.REFRESH_NOTES.equals(action)) {
+                    presenter.handleNavigationItemClick(R.id.navigation_search_notes);
                 }
             }
         };
@@ -136,9 +145,11 @@ public class HomeActivity extends BaseActivity implements HomeView {
             presenter.showLocationRequirePermissions();
         }
 
+        IntentFilter filter = new IntentFilter(DISPLAY_LOCATION);
+        filter.addAction(REFRESH_NOTES);
         LocalBroadcastManager
                 .getInstance(this)
-                .registerReceiver(hideExpandedMenuListener, new IntentFilter(DISPLAY_LOCATION));
+                .registerReceiver(hideExpandedMenuListener, filter);
     }
 
     @Override

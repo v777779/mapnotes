@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import javax.inject.Inject;
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.IComponentFragment;
+import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
 import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
@@ -227,44 +229,57 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
         }
     }
 
-    @Override
-    public String getDefaultUserName() {
+    public String defaultUserName() {
         return defaultUserName;
     }
 
-
-    public void adapterRemoveNote(int position) {
-        adapter.removeNote(position);
-    }
-
-    public void adapterRefreshNotes() {
+    @Override
+    public void refreshAdapter() {
+        if (adapter == null) {
+            return;
+        }
         adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void refreshFragment() {
+        if (activity == null) {
+            return;
+        }
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
+        Intent intent = new Intent(HomeActivity.REFRESH_NOTES);  // message for BroadCastReceiver
+        broadcastManager.sendBroadcast(intent);
+    }
+
 
     private void getAlertDialog(int position) {
         if (activity == null) {
             return;
         }
         Note note = adapter.getNote(position);
-        String description = "";
-        if (note != null) {
-            description = note.getText();
+        if (note == null || TextUtils.isEmpty(note.getText())) {
+            return;
         }
         AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setMessage(activity.getString(R.string.remove_note_message, description))
+                .setMessage(activity.getString(R.string.remove_note_message, note.getText()))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (presenter != null) {
-                            presenter.onPositive(position);
-                            adapterRemoveNote(position);
+                        if (presenter == null) {
+                            return;
                         }
+                        presenter.onPositive(note);
+
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        adapterRefreshNotes();
+                        if (presenter == null) {
+                            return;
+                        }
+                        presenter.onNegative();
+
                     }
                 }).create();
 

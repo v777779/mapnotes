@@ -20,6 +20,10 @@ public interface SearchNotesView extends MvpView {
 
     void showProgress(boolean isVisible);
 
-    String getDefaultUserName();
+    String defaultUserName();
+
+    void refreshAdapter();
+
+    void refreshFragment();
 
 }
