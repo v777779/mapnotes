@@ -58,8 +58,6 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
                     } else {
                         view.displaySignUpError();
                     }
-                }, t -> {
-                    view.displaySignUpError();
                 });
 
     }

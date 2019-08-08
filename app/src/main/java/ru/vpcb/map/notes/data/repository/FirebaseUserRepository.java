@@ -68,7 +68,7 @@ public class FirebaseUserRepository implements UserRepository {
                             emitter.onSuccess(new Result.Success<>(new AuthUser(uid)));
 
                         } else {
-                            emitter.onSuccess(new Result.Error<>(new UserNotAuthenticatedException()));
+                            emitter.onSuccess(new Result.Error<>(authResultTask.getException()));
 //                            emitter.onError(new UserNotAuthenticatedException());
                         }
                     });
