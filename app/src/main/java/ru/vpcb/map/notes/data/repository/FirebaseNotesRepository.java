@@ -1,6 +1,7 @@
 package ru.vpcb.map.notes.data.repository;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.Note;
@@ -58,7 +61,12 @@ public class FirebaseNotesRepository implements NotesRepository {
                                 List<Note> noteResults = new ArrayList<>();
                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     Note note = child.getValue(Note.class);
+                                    if (note == null) {
+                                        return;
+                                    }
+                                    note.setKey(child.getKey());
                                     noteResults.add(note);
+
                                 }
                                 emitter.onSuccess(new Result.Success<>(noteResults));
                             } else {
@@ -95,7 +103,12 @@ public class FirebaseNotesRepository implements NotesRepository {
                                 List<Note> noteResults = new ArrayList<>();
                                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                                     Note note = child.getValue(Note.class);
+                                    if (note == null) {
+                                        continue;
+                                    }
+                                    note.setKey(child.getKey());
                                     noteResults.add(note);
+
                                 }
                                 emitter.onSuccess(new Result.Success<>(noteResults));
 
@@ -135,6 +148,7 @@ public class FirebaseNotesRepository implements NotesRepository {
                                     if (note == null) {
                                         continue;
                                     }
+                                    note.setKey(child.getKey());
                                     note.setUser(humanReadableName);
                                     noteResults.add(note);
                                 }
@@ -153,16 +167,32 @@ public class FirebaseNotesRepository implements NotesRepository {
                             emitter.onSuccess(new Result.Error<>(databaseError.toException()));
                         }
                     });
-// TODO replace
         }).subscribeOn(appExecutors.net());
     }
 
     @Override
-    public void removeNote(Note note) {
-        DatabaseReference notesRef = database.getReference(notesPath);
-        int k = 1;
-//        DatabaseReference newNoteRef = notesRef.push();
-//        newNoteRef.setValue(note);
+    public Single<Result<String>> removeNote(Note note) {
+
+        return Single.create(new SingleOnSubscribe<Result<String>>() {
+            @Override
+            public void subscribe(SingleEmitter<Result<String>> emitter) throws Exception {
+                DatabaseReference notesRef = database.getReference(notesPath + "/" + note.getKey());
+                notesRef.removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                        if(emitter.isDisposed()){
+                            return;
+                        }
+                        if(databaseError == null){
+                            emitter.onSuccess(new Result.Success<>(databaseReference.getKey()));
+                        }else {
+                            emitter.onSuccess(new Result.Error<>(databaseError.toException()));
+                        }
+                    }
+                });
+            }
+        }).subscribeOn(appExecutors.net());
 
     }
 

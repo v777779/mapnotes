@@ -33,7 +33,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private SearchNotesView view;
     private CompositeDisposable composite;
 
-    SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
+    public SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
                          NotesRepository notesRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
@@ -168,8 +168,24 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) {
             return;
         }
-        notesRepository.removeNote(note);
-        view.refreshFragment();
+        if (!view.isOnline()) {
+            view.displayNoInternetError();
+            return;
+        }
+        view.showProgress(true);
+        Disposable disposable = notesRepository.removeNote(note)
+                .observeOn(appExecutors.ui())
+                .subscribe(result -> {
+                    view.showProgress(false);
+                    if (result instanceof Result.Success) {
+                        view.refreshFragment();
+                    } else {
+                        view.displayRemoveNoteError();
+                        view.refreshAdapter();
+                    }
+                });
+
+        composite.add(disposable);
     }
 
     @Override

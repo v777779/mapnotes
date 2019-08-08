@@ -15,6 +15,6 @@ public interface NotesRepository {
 
     Single<Result<List<Note>>> getNotesByUser(String userId, String humanReadableName);
 
-    void removeNote(Note note);
+    Single<Result<String>> removeNote(Note note);
 
 }

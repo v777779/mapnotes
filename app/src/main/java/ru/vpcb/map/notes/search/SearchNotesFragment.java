@@ -193,6 +193,13 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     }
 
     @Override
+    public void displayRemoveNoteError() {
+        if (activity != null) {
+            Snackbar.make(rootView, R.string.remove_note_error, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void clearSearchResults() {
         adapter.clear();
     }
