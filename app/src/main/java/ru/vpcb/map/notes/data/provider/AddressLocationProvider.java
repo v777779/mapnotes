@@ -57,10 +57,6 @@ public class AddressLocationProvider implements LocationProvider {
         };
     }
 
-    public AddressLocationProvider(Context context) {
-        this(context, REQUEST_INTERVAL);
-    }
-
     @Override
     public void startLocationUpdates() {
         if (PermissionExt.checkLocationPermission(context)) {

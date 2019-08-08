@@ -9,7 +9,6 @@ import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IListener;
 import ru.vpcb.map.notes.model.AuthUser;
 import ru.vpcb.map.notes.model.Location;
@@ -17,8 +16,6 @@ import ru.vpcb.map.notes.model.Note;
 
 public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements AddNoteMvpPresenter {
 
-    // TODO by inject
-    private AppExecutors appExecutors;
     private UserRepository userRepository;
     private NotesRepository notesRepository;
     private LocationProvider locationProvider;
@@ -28,11 +25,9 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
     private Location lastLocation;
     private String uid;
 
-
-    public AddNotePresenter(AppExecutors appExecutors, UserRepository userRepository,
+    public AddNotePresenter(UserRepository userRepository,
                             NotesRepository notesRepository, LocationProvider locationProvider,
                             LocationFormatter locationFormatter) {
-        this.appExecutors = appExecutors;
         this.userRepository = userRepository;
         this.notesRepository = notesRepository;
         this.locationProvider = locationProvider;

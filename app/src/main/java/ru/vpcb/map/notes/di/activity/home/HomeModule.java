@@ -1,11 +1,16 @@
 package ru.vpcb.map.notes.di.activity.home;
 
 import android.app.Activity;
+import android.location.Geocoder;
 
 import dagger.Module;
 import dagger.Provides;
 import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
+import ru.vpcb.map.notes.add.AddNoteMvpPresenter;
+import ru.vpcb.map.notes.add.AddNotePresenter;
+import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
+import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
@@ -30,6 +35,12 @@ public class HomeModule {
 
     @Provides
     @ActivityScope
+    Activity provideActivity() {
+        return activity;
+    }
+
+    @Provides
+    @ActivityScope
     HomeMvpPresenter provideHomeMvpPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
         return new HomePresenter(appExecutors, userRepository);
     }
@@ -47,11 +58,7 @@ public class HomeModule {
     }
 
 
-    @Provides
-    @ActivityScope
-    LocationProvider provideAddressLocationProvider() {
-        return new AddressLocationProvider(activity, AddressLocationProvider.REQUEST_INTERVAL);
-    }
+
 
     @Provides
     @ActivityScope
@@ -63,9 +70,26 @@ public class HomeModule {
 
     @Provides
     @ActivityScope
-    Activity provideActivity() {
-        return activity;
+    LocationProvider provideAddressLocationProvider() {
+        return new AddressLocationProvider(activity, AddressLocationProvider.REQUEST_INTERVAL);
     }
+
+    @Provides
+    @ActivityScope
+    LocationFormatter provideLocationFormatter(Activity activity) {
+        return new FullAddressFormatter(new Geocoder(activity));
+    }
+
+    @Provides
+    @ActivityScope
+    AddNoteMvpPresenter provideAddNoteMvpPresenter(UserRepository userRepository,
+                                                   NotesRepository notesRepository,
+                                                   LocationProvider locationProvider,
+                                                   LocationFormatter locationFormatter) {
+        return new AddNotePresenter(userRepository, notesRepository,
+                locationProvider, locationFormatter);
+    }
+
 
     @Provides
     @ActivityScope

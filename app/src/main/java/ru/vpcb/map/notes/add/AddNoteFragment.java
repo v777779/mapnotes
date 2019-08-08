@@ -1,8 +1,8 @@
 package ru.vpcb.map.notes.add;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,67 +17,40 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import javax.inject.Inject;
 
+import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
-import ru.vpcb.map.notes.data.formatter.LocationFormatter;
-import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
-import ru.vpcb.map.notes.data.provider.LocationProvider;
-import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
-import ru.vpcb.map.notes.data.repository.FirebaseUserRepository;
-import ru.vpcb.map.notes.data.repository.NotesRepository;
-import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutors;
-import ru.vpcb.map.notes.executors.IAppExecutors;
+import ru.vpcb.map.notes.activity.IComponentFragment;
+import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
 
 import static ru.vpcb.map.notes.activity.home.HomeActivity.DISPLAY_LOCATION;
 import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;
 
-public class AddNoteFragment extends Fragment implements AddNoteView {
+public class AddNoteFragment extends Fragment implements AddNoteView, IComponentFragment {
 
-    // TODO by inject
     @Inject
-    IAppExecutors appExecutors;
+    AddNoteMvpPresenter presenter;
+    @Inject
+    Activity activity;
 
-    private AddNoteMvpPresenter presenter;
-    private AppExecutors oldAppExecutors;
-    private UserRepository userRepository;
-    private NotesRepository notesRepository;
-    private LocationProvider locationProvider;
-    private LocationFormatter locationFormatter;
-
-    private AppCompatActivity activity;
-    private View mRootView;
     private EditText note;
     private TextView currentLocation;
 
     @Override
     public void onAttach(Context context) {
+        setupComponent((Activity)context);
         super.onAttach(context);
-        activity = (AppCompatActivity) context;
-
-// TODO by inject
-        oldAppExecutors = null;
-        userRepository = new FirebaseUserRepository(appExecutors);
-        notesRepository = new FirebaseNotesRepository(appExecutors);
-        locationProvider = new AddressLocationProvider(activity);
-        locationFormatter = new FullAddressFormatter(new Geocoder(activity));
-
-        presenter = new AddNotePresenter(oldAppExecutors, userRepository, notesRepository,
-                locationProvider, locationFormatter);
     }
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_add_note, container, false);
+        View mRootView = inflater.inflate(R.layout.fragment_add_note, container, false);
 
         note = mRootView.findViewById(R.id.note);
         currentLocation = mRootView.findViewById(R.id.currentLocation);
@@ -170,5 +143,17 @@ public class AddNoteFragment extends Fragment implements AddNoteView {
         Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);                    // message for BroadCastReceiver
         broadcastManager.sendBroadcast(intent);
 
+    }
+
+    @Override
+    public void setupComponent(Activity activity) {
+        try {
+            if (activity == null) {
+                return;
+            }
+            MainApp.plus(activity).inject(this);
+        } catch (Exception e) {
+            FCManager.log(e);
+        }
     }
 }
