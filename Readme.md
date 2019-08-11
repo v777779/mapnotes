@@ -6,11 +6,11 @@ This is Java/RxJava2/Dagger2  clone of [MapNotes](https://github.com/AlexZhukovi
 
 An Android application which allows you to add/remove notes to the current location 
 
-![screen_001_short](doc\screen_001.png)
+![](doc/screen_001.png)
 
-![screen_002_short](doc\screen_002.png)
+![](doc/screen_002.png)
 
-![screen_002_short](doc\screen_003.png)
+![](doc/screen_003.png)
 
 
 
@@ -90,27 +90,27 @@ First of all you need Google account to work with [Firebase Console](https://con
 
 Open [Firebase Console](https://console.firebase.google.com/) and create Firebase project, see [documentaition](https://firebase.google.com/docs/android/setup) if necessary
 
-![](doc\screen_004.png) 
+![](doc/screen_004.png) 
 
 Check Setup Firebase Analytics and press "Create project"
 
-![](doc\screen_005.png)
+![](doc/screen_005.png)
 
-![](doc\screen_006.png)
+![](doc/screen_006.png)
 
 Open Firebase Project, go to Project Overview, press Add Android application
 
-![](doc\screen_007.png)
+![](doc/screen_007.png)
 
 To Register application we need package name and SHA-1 key
 
 Open Android Studio Gradle console, double click on app/Tasks/android/signingReport and find SHA-1 below
 
-![](doc\screen_008.png)
+![](doc/screen_008.png)
 
 Enter package name and SHA-1 key  and register application. 
 
-![](doc\screen_009.png)
+![](doc/screen_009.png)
 
 Download **google-services.json** file and place it  to **app/** folder of the application
 
@@ -118,7 +118,7 @@ Press Next button several times until Firebase Verification window opens.
 
 Build and Run application, wait until Firebase detects application.
 
-![](doc\screen_010.png)
+![](doc/screen_010.png)
 
 Firebase Project created and application successfully added
 
@@ -128,9 +128,9 @@ Firebase Project created and application successfully added
 
 Open  [Firebase Console](https://console.firebase.google.com/) , go to Authentication, open "Sign-in method" and enable Email/Password authentication
 
-![screen_010](doc\screen_011.png)
+![screen_010](doc/screen_011.png)
 
-![](doc\screen_012.png)
+![](doc/screen_012.png)
 
 Firebase Authentication setup finished
 
@@ -214,7 +214,7 @@ Open Firebase Project Authentication tab to look at the identified users
 
 Open Firebase Project Database tab to look at the entered notes and users records
 
-![environment](doc\screen_023.png)
+![environment](doc/screen_023.png)
 
 ## Setup Firebase Crashlytics
 
@@ -222,15 +222,15 @@ Firebase Crashlytics will track application crash events only.
 
 Open Firebase Project Crashlytics, see [documentation](https://firebase.google.com/docs/crashlytics?authuser=0) if necessary
 
-![environment](doc\screen_024.png)
+![environment](doc/screen_024.png)
 
 Press Next, then Build and Run Application. Wait until Crashlytics verification completed
 
-![environment](doc\screen_025.png)
+![environment](doc/screen_025.png)
 
 Firebase Crashlytics will track application crash only
 
-![environment](doc\screen_026.png)
+![environment](doc/screen_026.png)
 
 To check Crashlytics tracking ability place next code in to onCreate() method of SplashActivity.
 
@@ -246,7 +246,7 @@ Setup Crashlytics is done.
 
 Firebase Analytics sends in the application sends next information:
 
--  screen class names in all activities
+- screen class names in all activities
 - image and login events in SignIn and SignUp activities
 - location events in GoogleMapFragment.
 
@@ -258,7 +258,7 @@ Open Firebase Analytics Dashboard to look at long term statistics.
 
 Press on StreamView to get analytics within 30 minutes window.
 
-![environment](doc\screen_027.png)
+![environment](doc/screen_027.png)
 
 Firebase Analytics can be tested in Debug View mode, where analytics is shown immediately.
 
@@ -272,7 +272,7 @@ Build and run application. Move over screens, sign in, open notes.
 
 Open Firebase Project Analytics DebugView tab and look at the events in live mode.
 
-![debug](doc\screen_029.png) 
+![debug](doc/screen_029.png) 
 
 To Disable DebugView mode on the application side send next command in Terminal of Android Studio. 
 
