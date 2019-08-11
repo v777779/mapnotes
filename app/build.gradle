@@ -26,12 +26,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-//            shrinkResources  true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")                // system environment to resource
-        }
-        debug {
-            resValue("string", "google_maps_key", "$System.env.GOOGLE_MAPS_API_KEY")
         }
 
     }
