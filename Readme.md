@@ -31,7 +31,6 @@ An Android application which allows you to add/remove notes to the current locat
 
 
 
-
 # Features
 * Creating account/Login/ Log out, use email, password and user name
 
