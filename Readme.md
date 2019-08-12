@@ -71,5 +71,5 @@ Swipe note right or left to delete.
 
 ## Copyrights
 
-This project is java/rxJava2/dagger2 clone of [MapNotes](https://github.com/AlexZhukovich/MapNotes) project based on kotlin/coroutines/koin created by[Alex Zhukovich](https://github.com/AlexZhukovich/)
+This project is java/rxJava2/dagger2 clone of [MapNotes](https://github.com/AlexZhukovich/MapNotes) project based on kotlin/coroutines/koin created by [Alex Zhukovich](https://github.com/AlexZhukovich/)
 
