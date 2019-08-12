@@ -26,6 +26,7 @@ An Android application which allows you to add/remove notes to the current locat
 
 
 
+
 # Configuration
 * Configuration requires Firebase Project and Google Maps SDK, see [installation guide](installation_guide.md) for the details.
 
