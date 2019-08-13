@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">MapNotes</string>
+    <string name="title_activity_sign_in">Sign in</string>
+    <string name="title_activity_sign_up">Sign up</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_home">Map Notes</string>
+
+    <!--menu-->
+    <string name="title_home">Home</string>
+    <string name="title_login">Home</string>
+    <string name="title_maps">Maps</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <!--app-->
+    <!-- Navigation -->
+    <string name="nav_add_note_title">Add note</string>
+    <string name="nav_map_title">Map</string>
+    <string name="nav_search_notes_title">Search notes</string>
+
+    <!-- Add a note -->
+    <string name="add_note_button_text">Add</string>
+    <string name="add_note_hint">Note</string>
+
+    <!-- Search notes -->
+    <string name="search_hint">Search</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_users_category">Users</string>
+    <string name="search_notes_category">Notes</string>
+    <string-array name="search_options">
+        <item>@string/search_notes_category</item>
+        <item>@string/search_users_category</item>
+    </string-array>
+
+    <!-- PermissionExt -->
+    <string name="permission_explanation">We need location permission because we would like to save notes based on your location</string>
+    <string name="permission_grant_text">Grant</string>
+
+    <!-- No permission fragment -->
+    <string name="open_app_prefs">Open preferences</string>
+
+    <!-- Login screens -->
+    <string name="login_title">Login</string>
+    <string name="login_message">Save your memories with MapNotes.</string>
+    <string name="sign_in_title">Sign In</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="name_hint">Name</string>
+    <string name="email_hint">Email address</string>
+    <string name="password_hint">Password</string>
+    <string name="sign_in_button_text">Sign In</string>
+    <string name="sign_up_button_text">Sign Up</string>
+    <string name="login_button_text">Login</string>
+    <string name="create_account_text">Create an account</string>
+    <string name="error_email_should_be_valid">An email address should be valid</string>
+    <string name="error_password_should_not_be_empty">A password should not be empty</string>
+    <string name="error_name_should_not_be_empty">A name should not be empty</string>
+    <string name="error_name_not_changed">An error during changing user name</string>
+    <string name="error_account_cannot_be_created">Your account cannot be created</string>
+    <string name="error_user_cannot_be_authenticated">User cannot be authenticated</string>
+
+    <!-- Home screen -->
+    <string name="nav_sign_out_title">Sign Out</string>
+
+    <!-- Error and warnings -->
+    <string name="unknown_user">Unknown</string>
+    <string name="use_location_message">To continue, turn on device location.</string>
+    <string name="loading_notes_error">An error during loading notes.</string>
+    <string name="unknown_user_error">You are looking for unknown user.</string>
+    <string name="unknown_note_error">You are looking for unknown notes.</string>
+    <string name="remove_note_error">An error during removing note.</string>
+    <string name="no_internet_error">No Internet connection.</string>
+
+    <string name="update_services_message">Check Google Play Services</string>
+    <string name="remove_note_message">Remove \"%1$s \" note?</string>
+
+
+    <!--new -->
+    <string name="image_description">Image Layout Description</string>
+
+    <!--google_maps_api_key-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        YOUR_API_KEY
+    </string>
+
+</resources>

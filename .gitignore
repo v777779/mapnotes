@@ -4,11 +4,10 @@
 /gradle
 gradle*
 *.json
-
 /local.properties
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 
-app/src/main/res/values/strings.xml
+
