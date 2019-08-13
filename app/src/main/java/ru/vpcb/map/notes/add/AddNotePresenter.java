@@ -9,7 +9,7 @@ import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.model.AuthUser;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
@@ -61,9 +61,9 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
 
     @Override
     public void getCurrentLocation() {
-        locationProvider.addUpdatableLocationListener(new IListener<Location>() {
+        locationProvider.addUpdatableLocationListener(new IConsumer<Location>() {
             @Override
-            public void invoke(Location location) {
+            public void accept(Location location) {
                 if (view != null) view.displayCurrentLocation(locationFormatter.format(location));
                 lastLocation = location;
             }

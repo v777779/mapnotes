@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.ext.PermissionExt;
 import ru.vpcb.map.notes.model.Location;
 
@@ -23,8 +23,8 @@ public class AddressLocationProvider implements LocationProvider {
     private Context context;
     private long requestInterval;
 
-    private IListener<Location> updatableListener;
-    private IListener<Location> singleListener;
+    private IConsumer<Location> updatableListener;
+    private IConsumer<Location> singleListener;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
@@ -43,12 +43,12 @@ public class AddressLocationProvider implements LocationProvider {
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) return;
                 if (updatableListener != null)
-                    updatableListener.invoke(new Location(locationResult
+                    updatableListener.accept(new Location(locationResult
                             .getLastLocation().getLatitude(),
                             locationResult.getLastLocation().getLongitude()));
 
                 if (singleListener != null) {
-                    singleListener.invoke(new Location(
+                    singleListener.accept(new Location(
                             locationResult.getLastLocation().getLatitude(),
                             locationResult.getLastLocation().getLongitude()));
                     singleListener = null;
@@ -67,12 +67,12 @@ public class AddressLocationProvider implements LocationProvider {
     }
 
     @Override
-    public void addUpdatableLocationListener(IListener<Location> listener) {
+    public void addUpdatableLocationListener(IConsumer<Location> listener) {
         this.updatableListener = listener;
     }
 
     @Override
-    public void addSingleLocationListener(IListener<Location> listener) {
+    public void addSingleLocationListener(IConsumer<Location> listener) {
         this.singleListener = listener;
     }
 
@@ -94,10 +94,10 @@ public class AddressLocationProvider implements LocationProvider {
             @Override
             public void onComplete(@NonNull Task<android.location.Location> task) {
                 if (task.isSuccessful() && task.getResult() != null) {
-                    updatableListener.invoke(new Location(task.getResult().getLatitude(),
+                    updatableListener.accept(new Location(task.getResult().getLatitude(),
                             task.getResult().getLongitude()));
                     if (singleListener != null) {
-                        singleListener.invoke(new Location(task.getResult().getLatitude(),
+                        singleListener.accept(new Location(task.getResult().getLatitude(),
                                 task.getResult().getLongitude()));
                         singleListener = null;
                     }

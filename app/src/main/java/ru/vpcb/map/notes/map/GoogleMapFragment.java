@@ -31,7 +31,7 @@ import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.ext.PermissionExt;
 import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.manager.FCManager;
@@ -108,9 +108,9 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
         }
         if (locationProvider != null) {
             locationProvider.startLocationUpdates();
-            locationProvider.addUpdatableLocationListener(new IListener<Location>() {
+            locationProvider.addUpdatableLocationListener(new IConsumer<Location>() {
                 @Override
-                public void invoke(Location location) {
+                public void accept(Location location) {
                     presenter.handleLocationUpdate(isInteractionMode(), location);
                 }
             });

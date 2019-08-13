@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.model.Note;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
 
 
-    private IListener<Note> itemClick;
+    private IConsumer<Note> itemClick;
     private LatLonFormatter formatter;
 
     private TextView noteText;
@@ -22,7 +22,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView noteUser;
 
 
-    public NoteViewHolder(@NonNull View view, IListener<Note> itemClick, LatLonFormatter formatter) {
+    public NoteViewHolder(@NonNull View view, IConsumer<Note> itemClick, LatLonFormatter formatter) {
         super(view);
         this.itemClick = itemClick;
         this.formatter = formatter;
@@ -43,7 +43,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemClick.invoke(note);
+                    itemClick.accept(note);
 
                 }
             });

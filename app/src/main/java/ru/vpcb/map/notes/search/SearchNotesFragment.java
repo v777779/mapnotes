@@ -35,7 +35,7 @@ import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
@@ -84,9 +84,9 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
                 R.array.search_options,
                 android.R.layout.simple_dropdown_item_1line));
 
-        adapter = new NotesAdapter(coordinateFormatter, new IListener<Note>() {
+        adapter = new NotesAdapter(coordinateFormatter, new IConsumer<Note>() {
             @Override
-            public void invoke(Note note) {
+            public void accept(Note note) {
                 LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(activity);
                 Intent intent = new Intent(DISPLAY_LOCATION).putExtra(EXTRA_NOTE, note);  // message for BroadCastReceiver
                 broadcastManager.sendBroadcast(intent);

@@ -12,16 +12,16 @@ import java.util.List;
 
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
-import ru.vpcb.map.notes.executors.IListener;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.model.Note;
 
 public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     private LatLonFormatter formatter;
-    private IListener<Note> itemClick;
+    private IConsumer<Note> itemClick;
     private List<Note> notes;
 
-    public NotesAdapter(LatLonFormatter formatter, IListener<Note> itemClick) {
+    public NotesAdapter(LatLonFormatter formatter, IConsumer<Note> itemClick) {
         this.formatter = formatter;
         this.itemClick = itemClick;
         this.notes = new ArrayList<>();
