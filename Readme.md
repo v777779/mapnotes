@@ -61,9 +61,9 @@ Open Sign Up Screen. Enter name, email and password. Press "Sign Up" button
 
 Google Maps will open and show current location of the device.
 
-!Press "Add Note" button and enter "Google Plex" label of note and press "**ADD**" button
+Press "Add Note" button and enter "Google Plex" label of note and press "**ADD**" button
 
-!Location marker will appear on Map. Press "Search Notes" button. The list of notes will be displayed. 
+Location marker will appear on Map. Press "Search Notes" button. The list of notes will be displayed.
 
 Swipe note right or left to delete.
 
