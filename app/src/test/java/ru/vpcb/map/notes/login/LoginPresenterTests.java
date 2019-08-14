@@ -34,12 +34,7 @@ public class LoginPresenterTests {
 
     @Test
     public void verifyOpenSignInWithAttachedNonNullView() {
-        Mockito.doAnswer(new Answer() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                return null;
-            }
-        }).when(view).navigateToSignIn();
+        Mockito.doAnswer(invocation -> null).when(view).navigateToSignIn();
 
         presenter.onAttach(view);
         presenter.openSignIn();
