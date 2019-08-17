@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.map;
+package ru.vpcb.map.notes.fragments.map;
 
 
 import androidx.fragment.app.Fragment;

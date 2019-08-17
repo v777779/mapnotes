@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.add;
+package ru.vpcb.map.notes.fragments.add;
 
 import org.junit.Before;
 import org.junit.Test;

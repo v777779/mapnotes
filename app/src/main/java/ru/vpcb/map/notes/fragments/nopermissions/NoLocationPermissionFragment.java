@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.nopermissions;
+package ru.vpcb.map.notes.fragments.nopermissions;
 
 
 import android.app.Activity;

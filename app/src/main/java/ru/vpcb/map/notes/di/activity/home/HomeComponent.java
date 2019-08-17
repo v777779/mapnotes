@@ -2,10 +2,10 @@ package ru.vpcb.map.notes.di.activity.home;
 
 import dagger.Subcomponent;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
-import ru.vpcb.map.notes.add.AddNoteFragment;
+import ru.vpcb.map.notes.fragments.add.AddNoteFragment;
 import ru.vpcb.map.notes.di.activity.ActivityScope;
-import ru.vpcb.map.notes.map.GoogleMapFragment;
-import ru.vpcb.map.notes.search.SearchNotesFragment;
+import ru.vpcb.map.notes.fragments.map.GoogleMapFragment;
+import ru.vpcb.map.notes.fragments.search.SearchNotesFragment;
 
 @ActivityScope
 @Subcomponent(modules = HomeModule.class)

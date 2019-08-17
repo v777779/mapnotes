@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.search;
+package ru.vpcb.map.notes.fragments.search;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,7 +39,7 @@ import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
-import ru.vpcb.map.notes.search.adapter.NotesAdapter;
+import ru.vpcb.map.notes.fragments.search.adapter.NotesAdapter;
 
 import static ru.vpcb.map.notes.activity.home.HomeActivity.DISPLAY_LOCATION;
 import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;

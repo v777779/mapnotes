@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.search.adapter;
+package ru.vpcb.map.notes.fragments.search.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

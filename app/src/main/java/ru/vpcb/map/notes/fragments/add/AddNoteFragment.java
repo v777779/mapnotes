@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.add;
+package ru.vpcb.map.notes.fragments.add;
 
 import android.app.Activity;
 import android.content.Context;

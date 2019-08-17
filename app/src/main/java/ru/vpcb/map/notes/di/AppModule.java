@@ -8,7 +8,7 @@ import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
 import ru.vpcb.map.notes.data.repository.FirebaseUserRepository;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutor;
+import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 
 @Module
@@ -17,7 +17,7 @@ public class AppModule {
     @Provides
     @Singleton
     IAppExecutors provideAppExecutors() {
-        return new AppExecutor();
+        return new AppExecutors();
     }
 
     @Provides

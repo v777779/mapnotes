@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.search;
+package ru.vpcb.map.notes.fragments.search;
 
 import android.text.TextUtils;
 

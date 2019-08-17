@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.map;
+package ru.vpcb.map.notes.fragments.map;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
