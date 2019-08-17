@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.search.adapter;
+package ru.vpcb.map.notes.search.adapter;
 
 import android.view.View;
 import android.widget.TextView;

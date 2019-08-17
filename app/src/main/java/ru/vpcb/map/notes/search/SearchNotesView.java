@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.search;
+package ru.vpcb.map.notes.search;
 
 import ru.vpcb.map.notes.base.MvpView;
 import ru.vpcb.map.notes.model.Note;

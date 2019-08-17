@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.map;
+package ru.vpcb.map.notes.map;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -28,7 +28,7 @@ import javax.inject.Inject;
 
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.fragment.IComponentFragment;
+import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.executors.IConsumer;

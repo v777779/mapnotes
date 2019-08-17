@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.add;
+package ru.vpcb.map.notes.add;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.fragment.IComponentFragment;
+import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
 

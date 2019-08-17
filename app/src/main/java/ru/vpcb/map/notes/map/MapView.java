@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.map;
+package ru.vpcb.map.notes.map;
 
 import androidx.annotation.NonNull;
 

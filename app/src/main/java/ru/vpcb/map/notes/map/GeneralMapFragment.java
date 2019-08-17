@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.map;
+package ru.vpcb.map.notes.map;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

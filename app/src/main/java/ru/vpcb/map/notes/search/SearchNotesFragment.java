@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.fragment.search;
+package ru.vpcb.map.notes.search;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,7 +31,7 @@ import javax.inject.Inject;
 
 import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.fragment.IComponentFragment;
+import ru.vpcb.map.notes.activity.IComponentFragment;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.CoordinateFormatter;
 import ru.vpcb.map.notes.data.formatter.LatLonFormatter;
@@ -39,7 +39,7 @@ import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.ext.ValidationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 import ru.vpcb.map.notes.model.Note;
-import ru.vpcb.map.notes.fragment.search.adapter.NotesAdapter;
+import ru.vpcb.map.notes.search.adapter.NotesAdapter;
 
 import static ru.vpcb.map.notes.activity.home.HomeActivity.DISPLAY_LOCATION;
 import static ru.vpcb.map.notes.activity.home.HomeActivity.EXTRA_NOTE;

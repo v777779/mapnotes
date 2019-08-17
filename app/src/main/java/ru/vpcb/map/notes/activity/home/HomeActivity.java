@@ -26,15 +26,15 @@ import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.login.LoginActivity;
-import ru.vpcb.map.notes.fragment.add.AddNoteFragment;
+import ru.vpcb.map.notes.add.AddNoteFragment;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.ext.PermissionExt;
 import ru.vpcb.map.notes.manager.FAManager;
 import ru.vpcb.map.notes.manager.FCManager;
-import ru.vpcb.map.notes.fragment.map.MapFragment;
-import ru.vpcb.map.notes.fragment.nopermissions.NoLocationPermissionFragment;
-import ru.vpcb.map.notes.fragment.search.SearchNotesFragment;
+import ru.vpcb.map.notes.map.MapFragment;
+import ru.vpcb.map.notes.nopermissions.NoLocationPermissionFragment;
+import ru.vpcb.map.notes.search.SearchNotesFragment;
 
 public class HomeActivity extends BaseActivity implements HomeView {
     public static final String DISPLAY_LOCATION = "display_location";
