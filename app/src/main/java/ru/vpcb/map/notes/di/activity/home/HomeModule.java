@@ -7,8 +7,8 @@ import dagger.Module;
 import dagger.Provides;
 import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
-import ru.vpcb.map.notes.add.AddNoteMvpPresenter;
-import ru.vpcb.map.notes.add.AddNotePresenter;
+import ru.vpcb.map.notes.fragment.add.AddNoteMvpPresenter;
+import ru.vpcb.map.notes.fragment.add.AddNotePresenter;
 import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
 import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
@@ -18,12 +18,12 @@ import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.di.activity.ActivityScope;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.manager.FAManager;
-import ru.vpcb.map.notes.map.GeneralMapFragment;
-import ru.vpcb.map.notes.map.GoogleMapPresenter;
-import ru.vpcb.map.notes.map.MapFragment;
-import ru.vpcb.map.notes.map.MapMvpPresenter;
-import ru.vpcb.map.notes.search.SearchNotesMvpPresenter;
-import ru.vpcb.map.notes.search.SearchNotesPresenter;
+import ru.vpcb.map.notes.fragment.map.GeneralMapFragment;
+import ru.vpcb.map.notes.fragment.map.GoogleMapPresenter;
+import ru.vpcb.map.notes.fragment.map.MapFragment;
+import ru.vpcb.map.notes.fragment.map.MapMvpPresenter;
+import ru.vpcb.map.notes.fragment.search.SearchNotesMvpPresenter;
+import ru.vpcb.map.notes.fragment.search.SearchNotesPresenter;
 
 @Module
 public class HomeModule {

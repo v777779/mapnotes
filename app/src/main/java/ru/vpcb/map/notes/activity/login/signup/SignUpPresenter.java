@@ -44,11 +44,13 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
         if (view == null) return;
         if (email.isEmpty() || !ValidationExt.isValidEmail(email)) {
             view.displayEmailError();
-
+            return;
         } else if (password.isEmpty()) {
             view.displayPasswordError();
+            return;
         } else if (name.isEmpty()) {
             view.displayEmptyUserNameError();
+            return;
         }
 
         view.sendAnalytics(-1, email);
@@ -76,66 +78,6 @@ public class SignUpPresenter extends ScopedPresenter<SignUpView> implements Sign
     }
 
 
-// Alternative
 
-//        AppExecutors oldAppExecutors = new AppExecutors() {
-//            @Override
-//            public <T> void resume(Result<T> result) {
-//                if (result instanceof Result.Success) {
-//                    userRepository.changeUserName((AuthUser) result.getData(), name);
-//                    view.navigateToMapScreen();
-//                } else if (result instanceof Result.Error) {
-//                    view.displaySignUpError();
-//
-//                }
-//            }
-//        };
-//        userRepository.setAppExecutors(oldAppExecutors);
-//        Result<AuthUser> result = userRepository.signUp(email, password);
-
-
-//    public void signUp(String name, String email, String password) {
-//        if (view == null) return;
-//        if (email.isEmpty() || !ValidationExt.isValidEmail(email)) {
-//            view.displayEmailError();
-//
-//        } else if (password.isEmpty()) {
-//            view.displayPasswordError();
-//        } else if (name.isEmpty()) {
-//            view.displayEmptyUserNameError();
-//        }
-//
-//// TODO_ launch
-//        oldAppExecutors = new AppExecutors() {
-//            @Override
-//            public <T> void resume(Result<T> result) {
-//                if (result instanceof Result.Success) {
-//// TODO_ launch
-//                    oldAppExecutors = new AppExecutors() {
-//                        @Override
-//                        public <T> void resume(Result<T> result) {
-//                            if (result instanceof Result.Success) {
-//                                view.navigateToMapScreen();
-//                            }
-//                            if (result instanceof Result.Error) {
-//                                view.displaySignUpError();
-//                            }
-//                        }
-//                    };
-//                    userRepository.setAppExecutors(oldAppExecutors);
-//                    userRepository.changeUserName(((Result.Success<AuthUser>) result).getData(), name);
-//
-//
-//                } else if (result instanceof Result.Error) {
-//                    view.displaySignUpError();
-//
-//                }
-//            }
-//        };
-//
-//        userRepository.setAppExecutors(oldAppExecutors);
-//        Result<AuthUser> result = userRepository.signUp(email, password);
-//
-//    }
 }
 

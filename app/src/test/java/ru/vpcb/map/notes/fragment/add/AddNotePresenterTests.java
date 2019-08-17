@@ -1,12 +1,9 @@
-package ru.vpcb.map.notes.add;
-
-import com.google.firebase.firestore.auth.User;
+package ru.vpcb.map.notes.fragment.add;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -16,8 +13,6 @@ import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.executors.AppExecutor;
-import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;

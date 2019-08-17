@@ -197,35 +197,3 @@ public class FirebaseNotesRepository implements NotesRepository {
     }
 
 }
-
-// alternative
-//    public Observable<Result<Note>> getNote() {
-//        return Observable.<Result<Note>>create(emitter -> {
-//            database.getReference(notesPath)
-//                    .addListenerForSingleValueEvent(new ValueEventListener() {  // self removed
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                            if (emitter.isDisposed()) {
-//                                return;
-//                            }
-//                            if (dataSnapshot.exists()) {
-//                                for (DataSnapshot child : dataSnapshot.getChildren()) {
-//                                    Note note = child.getValue(Note.class);
-//                                    emitter.onNext(new Result.Success<>(note));
-//                                }
-//                                emitter.onComplete();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError databaseError) {
-//                            if (emitter.isDisposed()) {
-//                                return;
-//                            }
-//                            emitter.onNext(new Result.Error<>(databaseError.toException()));
-//                            emitter.onComplete();
-//                        }
-//                    });
-//        }).subscribeOn(Schedulers.io());
-//
-//    }

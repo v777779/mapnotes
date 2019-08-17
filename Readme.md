@@ -19,6 +19,7 @@ An Android application which allows you to add/remove notes to the current locat
 * Firebase Analytics
 * Google Maps
 * Service Location
+* Robolectric
 * Espresso
 * Java
 * RxJava2 

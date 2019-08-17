@@ -180,10 +180,4 @@ public class FirebaseUserRepository implements UserRepository {
     }
 }
 
-// Alternative
-//    @Override
-//    public void changeUserName(AuthUser user, String name) {
-//        DatabaseReference usersRef = database.getReference(usersPath);
-//        usersRef.child(user.getUid()).child(nameKey).setValue(name);
-//    }
 

@@ -42,7 +42,7 @@ public class FAManager {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-    // test!!! works
+
     public void logEventImage(String id, String name) {
         logEvent(id, name, Param.CONTENT_IMAGE);
     }
@@ -59,7 +59,7 @@ public class FAManager {
         logEvent(id, name, Param.CONTENT_AUDIO);
     }
 
-    // test!!! works
+
     public void logEventNote(Note note) {
         String s = String.format(Locale.ENGLISH, "lat:%.3f lon:%.3f",
                 note.getLatitude(), note.getLongitude());
@@ -69,7 +69,7 @@ public class FAManager {
         firebaseAnalytics.logEvent(Event.SET_NOTE, bundle);
     }
 
-    // test!!! works
+
     public void logEventLocation(Location location) {
         String s = String.format(Locale.ENGLISH, "lat:%.3f lon:%.3f",
                 location.getLatitude(), location.getLongitude());
@@ -78,7 +78,7 @@ public class FAManager {
         firebaseAnalytics.logEvent(Event.SET_LOCATION, bundle);
     }
 
-    // test!!! works
+
     public void logEventLogin(String name) {
         Bundle bundle = new Bundle();
         bundle.putString(Param.USER_NAME, name);
