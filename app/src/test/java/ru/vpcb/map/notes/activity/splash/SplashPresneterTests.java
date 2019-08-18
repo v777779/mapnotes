@@ -46,7 +46,6 @@ public class SplashPresneterTests {
     @Mock
     private SplashMvpPresenter presenter;
 
-
     @Before
     public void setUp() throws Exception {
 
@@ -269,7 +268,6 @@ public class SplashPresneterTests {
 
     }
 
-
     @Test
     public void startMapNotesWithUserNotAuthenticatedWithNullViewNavigateToLoginNotCalled() {
         Mockito.when(userRepository.getCurrentUser()).thenReturn(notAuthUser);
@@ -294,7 +292,6 @@ public class SplashPresneterTests {
         Mockito.verify(view, Mockito.times(0)).finishActivity();
 
     }
-
 
 // playMarketResults
 
@@ -364,7 +361,6 @@ public class SplashPresneterTests {
         Mockito.verify(view, Mockito.times(0)).navigateToLogin();
         Mockito.verify(view, Mockito.times(0)).finishActivity();
     }
-
 
     @Test
     public void playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithNonNullViewFinishActivityCalled() {
@@ -449,7 +445,6 @@ public class SplashPresneterTests {
         Mockito.verify(view, Mockito.times(0)).navigateToPlayMarket();
     }
 
-
 // onNegative
 
     @Test
@@ -476,7 +471,6 @@ public class SplashPresneterTests {
 
         Mockito.verify(view, Mockito.times(0)).finishActivity();
     }
-
 
     @After
     public void tearDown() throws Exception {
