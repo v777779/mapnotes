@@ -19,6 +19,4 @@ public interface SplashView extends MvpView {
 
     void navigateToPlayMarket();
 
-    boolean isAuthenticated();
-
 }

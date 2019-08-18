@@ -4,19 +4,23 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 
+import ru.vpcb.map.notes.data.Result;
+import ru.vpcb.map.notes.data.repository.UserRepository;
+import ru.vpcb.map.notes.executors.IAppExecutors;
+
 import static com.google.android.gms.common.ConnectionResult.SUCCESS;
 import static ru.vpcb.map.notes.activity.splash.SplashActivity.GPS_REQUEST_CODE;
 
 public class SplashPresenter implements SplashMvpPresenter {
+
     private SplashView view;
+    private IAppExecutors appExecutors;
+    private UserRepository userRepository;
 
 
-    private static class LazyHolder {
-        private static final SplashPresenter INSTANCE = new SplashPresenter();
-    }
-
-    public static SplashPresenter getInstance() {
-        return LazyHolder.INSTANCE;
+    public SplashPresenter(IAppExecutors appExecutors, UserRepository userRepository) {
+        this.appExecutors= appExecutors;
+        this.userRepository = userRepository;
     }
 
 
@@ -35,7 +39,7 @@ public class SplashPresenter implements SplashMvpPresenter {
         if (view == null) return;
         int code = view.isPlayServicesAvailable();
         if (code == ConnectionResult.SUCCESS) {
-            startMapNotes();
+            this.startMapNotes();
         }else {
             if (view.isInstalledPlayMarket()) {
                 view.getErrorDialog(code);          // play market
@@ -48,7 +52,7 @@ public class SplashPresenter implements SplashMvpPresenter {
     @Override
     public void startMapNotes() {
         if (view == null) return;
-        if (view.isAuthenticated()) {
+        if (userRepository.getCurrentUser() instanceof Result.Success) {
             view.navigateToHome();
         } else {
             view.navigateToLogin();
@@ -65,6 +69,8 @@ public class SplashPresenter implements SplashMvpPresenter {
             } else {
                 view.finishActivity();
             }
+        }else {
+            view.finishActivity();
         }
     }
 

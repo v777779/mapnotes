@@ -24,8 +24,6 @@ import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.activity.login.LoginActivity;
-import ru.vpcb.map.notes.data.Result;
-import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 
@@ -36,15 +34,11 @@ public class SplashActivity extends BaseActivity implements SplashView {
     public static int GPS_REQUEST_CODE = 20001;
 
     @Inject
-    UserRepository authRepository;
-
-    private SplashMvpPresenter presenter;
+    SplashMvpPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        presenter = SplashPresenter.getInstance();
 
     }
 
@@ -124,18 +118,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
     }
 
     @Override
-    public boolean isAuthenticated() {
-        return (authRepository.getCurrentUser() instanceof Result.Success);
-    }
-
-
-    @Override
     public boolean isInstalledPlayMarket() {
         PackageManager pm = getApplication().getPackageManager();
         List<PackageInfo> packages;
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             packages = getInstalledPackages();
-        }else {
+        } else {
             packages = matchInstalledPackages();
         }
         for (PackageInfo info : packages) {
@@ -148,6 +136,9 @@ public class SplashActivity extends BaseActivity implements SplashView {
         return false;
     }
 
+    /*
+
+     */
     @Override
     public int isPlayServicesAvailable() {
         return GoogleApiAvailability.getInstance()
@@ -161,17 +152,19 @@ public class SplashActivity extends BaseActivity implements SplashView {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (presenter != null) {
-                            presenter.onPositive();
-                        }
+                        navigateToPlayMarket();
+//                        if (presenter != null) {
+//                            presenter.onPositive();
+//                        }
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (presenter != null) {
-                            presenter.onNegative();
-                        }
+                        finishActivity();
+//                        if (presenter != null) {
+//                            presenter.onNegative();
+//                        }
                     }
                 }).create();
 
@@ -208,7 +201,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @RequiresApi(Build.VERSION_CODES.N)
     private List<PackageInfo> matchInstalledPackages() {
         PackageManager pm = getApplication().getPackageManager();
-       return pm.getInstalledPackages(
+        return pm.getInstalledPackages(
                 PackageManager.MATCH_UNINSTALLED_PACKAGES);
 
     }

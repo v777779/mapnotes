@@ -1,8 +1,6 @@
-package ru.vpcb.map.notes.login.signup;
+package ru.vpcb.map.notes.activity.login.signup;
 
 import android.security.keystore.UserNotAuthenticatedException;
-
-import com.google.firebase.database.DatabaseException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +16,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.vpcb.map.notes.MainApp;
-import ru.vpcb.map.notes.activity.login.signup.SignUpMvpPresenter;
-import ru.vpcb.map.notes.activity.login.signup.SignUpPresenter;
-import ru.vpcb.map.notes.activity.login.signup.SignUpView;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
@@ -32,7 +27,7 @@ import ru.vpcb.map.notes.model.AuthUser;
         application = MainApp.class
 )
 public class SignUIpPresenterTests {
-    private String authUserUID;
+
     private AuthUser authUser;
     private String correctUserName;
     private String emptyUserName;
@@ -57,7 +52,7 @@ public class SignUIpPresenterTests {
 
         MockitoAnnotations.initMocks(this);
 
-        authUserUID = "111111";
+        String authUserUID = "111111";
         authUser = new AuthUser(authUserUID);
         correctUserName = "TestUser";
         emptyUserName = "";

@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.login;
+package ru.vpcb.map.notes.activity.login;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +11,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import ru.vpcb.map.notes.MainApp;
-import ru.vpcb.map.notes.activity.login.LoginMvpPresenter;
-import ru.vpcb.map.notes.activity.login.LoginPresenter;
-import ru.vpcb.map.notes.activity.login.LoginView;
 
 @RunWith(RobolectricTestRunner.class)   // setup Robolectric  build.gradle, gradle.properties
 @Config(

@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.login.signin;
+package ru.vpcb.map.notes.activity.login.signin;
 
 import android.security.keystore.UserNotAuthenticatedException;
 
@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -18,8 +17,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.vpcb.map.notes.MainApp;
-import ru.vpcb.map.notes.activity.login.signin.SignInPresenter;
-import ru.vpcb.map.notes.activity.login.signin.SignInView;
 import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
