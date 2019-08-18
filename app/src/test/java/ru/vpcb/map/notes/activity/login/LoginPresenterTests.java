@@ -29,8 +29,10 @@ public class LoginPresenterTests {
         presenter = LoginPresenter.getInstance();
     }
 
+// openSignIn
+
     @Test
-    public void verifyOpenSignInWithAttachedNonNullView() {
+    public void openSignInWithNonNullViewNavigateToSignInCalled() {
         Mockito.doAnswer(invocation -> null).when(view).navigateToSignIn();
 
         presenter.onAttach(view);
@@ -40,7 +42,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void verifyOpenSignInWithAttachedNullView() {
+    public void openSignInWithNullViewNavigateToSignInNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -56,7 +58,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void verifyOpenSignInWithDetachedView() {
+    public void openSignInWithViewDetachedFromPresenterNavigateToSignInNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -71,8 +73,9 @@ public class LoginPresenterTests {
         Mockito.verify(view,Mockito.times(0)).navigateToSignIn();
     }
 
+// openSignUp
     @Test
-    public void verifyOpenSignUpWithAttachedNonNullView() {
+    public void openSignUpWithNonNullViewNavigateToSignUpCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -87,7 +90,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void verifyOpenSignUpWithAttachedNullView() {
+    public void openSignUpWithNullViewNavigateToSignUpNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -103,7 +106,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void verifyOpenSignUpWithDetachedView() {
+    public void openSignUpWithViewDetachedFromPresenterNavigateToSignUpNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {

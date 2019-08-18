@@ -30,9 +30,9 @@ import ru.vpcb.map.notes.model.AuthUser;
 public class SignInPresenterTests {
     private String authUserUID;
     private AuthUser authUser;
-    private String correctUserName;
-    private String incorrectUserName;
-    private String emptyUserName;
+    private String correctEmail;
+    private String incorrectEmail;
+    private String emptyEmail;
     private String correctPassword;
     private String incorrectPassword;
     private String emptyPassword;
@@ -53,9 +53,9 @@ public class SignInPresenterTests {
 
         authUserUID = "111111";
         authUser = new AuthUser(authUserUID);
-        correctUserName = "test@test.com";
-        incorrectUserName = "test";
-        emptyUserName = "";
+        correctEmail = "test@test.com";
+        incorrectEmail = "test";
+        emptyEmail = "";
         correctPassword = "password";
         incorrectPassword = "incorrect password";
         emptyPassword = "";
@@ -71,166 +71,170 @@ public class SignInPresenterTests {
 
     }
 
-    // correct login and incorrect password
+// correct email, password
+
     @Test
-    public void verifySingInWithCorrectLoginAndIncorrectPasswordNonNullViewAttachedToPresenter() {
-        Mockito.when(userRepository.signIn(correctUserName, incorrectPassword))
+    public void singInWithCorrectEmailPasswordWithNonNullViewNavigateToMapScreenCalled() {
+        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
+                .thenReturn(Single.just(new Result.Success<>(authUser)));
+
+        presenter.onAttach(view);
+        presenter.signIn(correctEmail, correctPassword);
+
+        Mockito.verify(view, Mockito.times(1)).navigateToMapScreen();
+    }
+
+    @Test
+    public void singInWithCorrectEmailPasswordWithNullViewNavigateToMapScreenNotCalled() {
+        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
+                .thenReturn(Single.just(new Result.Success<>(authUser)));
+        presenter.onAttach(null);
+        presenter.signIn(correctEmail, correctPassword);
+
+        Mockito.verify(view, Mockito.times(0)).navigateToMapScreen();
+    }
+
+    @Test
+    public void singInWithCorrectEmailPasswordWithViewDetachedFromPresenterNavigateToMapScreenNotCalled() {
+        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
+                .thenReturn(Single.just(new Result.Success<>(authUser)));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.signIn(correctEmail, correctPassword);
+
+        Mockito.verify(view, Mockito.times(0)).navigateToMapScreen();
+    }
+
+// empty email, empty password
+
+    @Test
+    public void singInWithEmptyEmailPasswordWithNonNullViewDisplayEmailErrorCalled() {
+
+        presenter.onAttach(view);
+        presenter.signIn(emptyEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(1)).displayEmailError();
+    }
+
+    @Test
+    public void singInWithEmptyEmailPasswordWithNullViewDisplayEmailErrorNotCalled() {
+
+        presenter.onAttach(null);
+        presenter.signIn(emptyEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayEmailError();
+    }
+
+    @Test
+    public void  singInWithEmptyEmailPasswordWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.signIn(emptyEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayEmailError();
+    }
+
+// incorrect email, empty password
+
+    @Test
+    public void singInWithIncorrectEmailEmptyPasswordWithNonNullViewDisplayEmailErrorCalled() {
+
+        presenter.onAttach(view);
+        presenter.signIn(incorrectEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(1)).displayEmailError();
+    }
+
+    @Test
+    public void singInWithIncorrectEmailEmptyPasswordWithNullViewDisplayEmailErrorNotCalled() {
+
+        presenter.onAttach(null);
+        presenter.signIn(incorrectEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayEmailError();
+    }
+
+    @Test
+    public void singInWithIncorrectEmailEmptyPasswordWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.signIn(incorrectEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayEmailError();
+    }
+
+// correct email, empty password
+
+    @Test
+    public void singInWithCorrectEmailEmptyPasswordWithNonNullViewDisplayPasswordErrorCalled() {
+
+        presenter.onAttach(view);
+        presenter.signIn(correctEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(1)).displayPasswordError();
+    }
+
+    @Test
+    public void singInWithCorrectEmailEmptyPasswordWithNullViewDisplayPasswordErrorNotCalled() {
+
+        presenter.onAttach(null);
+        presenter.signIn(correctEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayPasswordError();
+    }
+
+    @Test
+    public void  singInWithCorrectEmailEmptyPasswordWithViewDetachedFromPresenterDisplayPasswordErrorNotCalled() {
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.signIn(correctEmail, emptyPassword);
+
+        Mockito.verify(view, Mockito.times(0)).displayPasswordError();
+    }
+
+// correct email incorrect password
+
+    @Test
+    public void singInWithCorrectEmailIncorrectPasswordWithNonNullViewDisplaySignInErrorCalled() {
+        Mockito.when(userRepository.signIn(correctEmail, incorrectPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
         presenter.onAttach(view);
-        presenter.signIn(correctUserName, incorrectPassword);
+        presenter.signIn(correctEmail, incorrectPassword);
 
         Mockito.verify(view, Mockito.times(1)).displaySignInError();
 
     }
 
     @Test
-    public void verifySingInWithCorrectLoginAndIncorrectPasswordNullViewAttachedToPresenter() {
-        Mockito.when(userRepository.signIn(correctUserName, incorrectPassword))
+    public void singInWithCorrectEmailIncorrectPasswordWithNullViewDisplaySignInErrorNotCalled() {
+        Mockito.when(userRepository.signIn(correctEmail, incorrectPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
         presenter.onAttach(null);
-        presenter.signIn(correctUserName, incorrectPassword);
+        presenter.signIn(correctEmail, incorrectPassword);
 
         Mockito.verify(view, Mockito.times(0)).displaySignInError();
     }
 
     @Test
-    public void verifySingInWithCorrectLoginAndIncorrectPasswordViewDetachedToPresenter() {
-        Mockito.when(userRepository.signIn(correctUserName, incorrectPassword))
+    public void singInWithCorrectEmailIncorrectPasswordWithViewDetachedToPresenterDisplaySignInErrorNotCalled() {
+        Mockito.when(userRepository.signIn(correctEmail, incorrectPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
         presenter.onAttach(view);
         presenter.onDetach();
-        presenter.signIn(correctUserName, incorrectPassword);
+        presenter.signIn(correctEmail, incorrectPassword);
 
         Mockito.verify(view, Mockito.times(0)).displaySignInError();
     }
 
-// correct login and empty password
 
-    @Test
-    public void verifySingInWithCorrectLoginAndEmptyPasswordNonNullViewAttachedToPresenter() {
 
-        presenter.onAttach(view);
-        presenter.signIn(correctUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(1)).displayPasswordError();
-    }
-
-    @Test
-    public void verifySingInWithCorrectLoginAndEmptyPasswordNullViewAttachedToPresenter() {
-
-        presenter.onAttach(null);
-        presenter.signIn(correctUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayPasswordError();
-    }
-
-    @Test
-    public void verifySingInWithCorrectLoginAndEmptyPasswordViewDetachedFromPresenter() {
-
-        presenter.onAttach(view);
-        presenter.onDetach();
-        presenter.signIn(correctUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayPasswordError();
-    }
-
-// correct login and empty password
-
-    @Test
-    public void verifySingInWithCorrectLoginAndPasswordNonNullViewAttachedToPresenter() {
-        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
-                .thenReturn(Single.just(new Result.Success<>(authUser)));
-
-        presenter.onAttach(view);
-        presenter.signIn(correctUserName, correctPassword);
-
-        Mockito.verify(view, Mockito.times(1)).navigateToMapScreen();
-    }
-
-    @Test
-    public void verifySingInWithCorrectLoginAndPasswordNullViewAttachedToPresenter() {
-        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
-                .thenReturn(Single.just(new Result.Success<>(authUser)));
-        presenter.onAttach(null);
-        presenter.signIn(correctUserName, correctPassword);
-
-        Mockito.verify(view, Mockito.times(0)).navigateToMapScreen();
-    }
-
-    @Test
-    public void verifySingInWithCorrectLoginAndPasswordViewDetachedFromPresenter() {
-        Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
-                .thenReturn(Single.just(new Result.Success<>(authUser)));
-
-        presenter.onAttach(view);
-        presenter.onDetach();
-        presenter.signIn(correctUserName, correctPassword);
-
-        Mockito.verify(view, Mockito.times(0)).navigateToMapScreen();
-    }
-
-// incorrect login and empty password
-
-    @Test
-    public void verifySingInWithIncorrectLoginAndEmptyPasswordNonNullViewAttachedToPresenter() {
-
-        presenter.onAttach(view);
-        presenter.signIn(incorrectUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(1)).displayEmailError();
-    }
-
-    @Test
-    public void verifySingInWithIncorrectLoginAndEmptyPasswordNullViewAttachedToPresenter() {
-
-        presenter.onAttach(null);
-        presenter.signIn(incorrectUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayEmailError();
-    }
-
-    @Test
-    public void verifySingInWithIncorrectLoginAndEmptyPasswordViewDetachedFromPresenter() {
-
-        presenter.onAttach(view);
-        presenter.onDetach();
-        presenter.signIn(incorrectUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayEmailError();
-    }
-
-// empty login and incorrect password
-
-    @Test
-    public void verifySingInWithEmptyLoginAndPasswordNonNullViewAttachedToPresenter() {
-
-        presenter.onAttach(view);
-        presenter.signIn(emptyUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(1)).displayEmailError();
-    }
-
-    @Test
-    public void verifySingInWithEmptyLoginAndPasswordNullViewAttachedToPresenter() {
-
-        presenter.onAttach(null);
-        presenter.signIn(emptyUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayEmailError();
-    }
-
-    @Test
-    public void verifySingInWithEmptyLoginAndPasswordViewDetachedFromPresenter() {
-
-        presenter.onAttach(view);
-        presenter.onDetach();
-        presenter.signIn(emptyUserName, emptyPassword);
-
-        Mockito.verify(view, Mockito.times(0)).displayEmailError();
-    }
 
 
     @After

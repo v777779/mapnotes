@@ -85,9 +85,10 @@ public class SignUIpPresenterTests {
 
     }
 
-    // 0 correct all
+// 0 correct all
+
     @Test
-    public void verifySingUpWithCorrectEmailPasswordAndNameNonNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameWithNonNullViewNavigateToMapScreenCalled() {
         presenter.onAttach(view);
         presenter.signUp(correctUserName, correctEmail, correctPassword);
 
@@ -102,7 +103,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordAndNameNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameWithNullViewNavigateToMapScreenNotCalled() {
         presenter.onAttach(null);
         presenter.signUp(correctUserName, correctEmail, correctPassword);
 
@@ -117,7 +118,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordAndNameViewDetachedFromPresenter() {
+    public void singUpWithCorrectEmailPasswordNameWithViewDetachedFromPresenterNavigateToMapScreenNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signUp(correctUserName, correctEmail, correctPassword);
@@ -135,7 +136,7 @@ public class SignUIpPresenterTests {
 // 1 empty email correct password and name
 
     @Test
-    public void verifySingUpWithEmptyEmailCorrectPasswordAndNameNonNullViewAttachedToPresenter() {
+    public void singUpWithEmptyEmailCorrectPasswordNameWithNonNullViewDisplayEmailErrorCalled() {
         presenter.onAttach(view);
         presenter.signUp(correctUserName, emptyEmail, correctPassword);
 
@@ -143,7 +144,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithEmptyEmailCorrectPasswordAndNameNullViewAttachedToPresenter() {
+    public void singUpWithEmptyEmailCorrectPasswordNameWithNullViewDisplayEmailErrorNotCalled() {
         presenter.onAttach(null);
         presenter.signUp(correctUserName, emptyEmail, correctPassword);
 
@@ -152,19 +153,18 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithEmptyEmailCorrectPasswordAndNameViewDetachedFromPresenter() {
+    public void singUpWithEmptyEmailCorrectPasswordNameWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signUp(correctUserName, emptyEmail, correctPassword);
 
         Mockito.verify(view, Mockito.times(0)).displayEmailError();
-
     }
 
 // 2 incorrect email correct password and name
 
     @Test
-    public void verifySingUpWithIncorrectEmailCorrectPasswordAndNameNonNullViewAttachedToPresenter() {
+    public void singUpWithIncorrectEmailCorrectPasswordAndNameWithNonNullViewDisplayEmailErrorCalled() {
         presenter.onAttach(view);
         presenter.signUp(correctUserName, incorrectEmail, correctPassword);
 
@@ -173,7 +173,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithIncorrectEmailCorrectPasswordAndNameNullViewAttachedToPresenter() {
+    public void singUpWithIncorrectEmailCorrectPasswordAndNameWithNullViewDisplayEmailErrorNotCalled() {
         presenter.onAttach(null);
         presenter.signUp(correctUserName, incorrectEmail, correctPassword);
 
@@ -182,7 +182,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithIncorrectEmailCorrectPasswordAndNameViewDetachedFromPresenter() {
+    public void singUpWithIncorrectEmailCorrectPasswordAndNameWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signUp(correctUserName, incorrectEmail, correctPassword);
@@ -194,7 +194,7 @@ public class SignUIpPresenterTests {
 // 3 correct email empty password correct name
 
     @Test
-    public void verifySingUpWithCorrectEmailEmptyPasswordCorrectNameNonNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailEmptyPasswordCorrectNameWithNonNullViewDisplayPasswordErrorCalled() {
         presenter.onAttach(view);
         presenter.signUp(correctUserName, correctEmail, emptyPassword);
 
@@ -203,7 +203,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailEmptyPasswordCorrectNameNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailEmptyPasswordCorrectNameWithNullViewDisplayPasswordErrorNotCalled() {
         presenter.onAttach(null);
         presenter.signUp(correctUserName, correctEmail, emptyPassword);
 
@@ -212,7 +212,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailEmptyPasswordCorrectNameViewDetachedFromPresenter() {
+    public void singUpWithCorrectEmailEmptyPasswordCorrectNameWithViewDetachedFromPresenterDisplayPasswordErrorNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signUp(correctUserName, correctEmail, emptyPassword);
@@ -224,7 +224,7 @@ public class SignUIpPresenterTests {
 // 4 correct email and password, empty name
 
     @Test
-    public void verifySingUpWithCorrectEmailAndPasswordEmptyNameNonNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordEmptyNameWithNonNullViewDisplayEmptyUserNameErrorCalled() {
         presenter.onAttach(view);
         presenter.signUp(emptyUserName, correctEmail, correctPassword);
 
@@ -233,7 +233,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailAndPasswordEmptyNameNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordEmptyNameWithNullViewDisplayEmptyUserNameErrorNotCalled() {
         presenter.onAttach(null);
         presenter.signUp(emptyUserName, correctEmail, correctPassword);
 
@@ -242,7 +242,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailAndPasswordEmptyNameViewDetachedFromPresenter() {
+    public void singUpWithCorrectEmailPasswordEmptyNameWithViewDetachedFromPresenterDisplayEmptyUserNameErrorNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signUp(emptyUserName, correctEmail, correctPassword);
@@ -254,7 +254,7 @@ public class SignUIpPresenterTests {
 // 5 correct email, password, name, database error
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordNameDatabaseErrorNonNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithNonNullDisplayChangeUserNameErrorCalled() {
         Mockito.when(userRepository.changeUserName(authUser,correctUserName))
                 .thenReturn(Single.just(new Result.Error<>(new Exception())));
 
@@ -272,7 +272,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordNameDatabaseErrorNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithNullDisplayChangeUserNameErrorNotCalled() {
         Mockito.when(userRepository.changeUserName(authUser,correctUserName))
                 .thenReturn(Single.just(new Result.Error<>(new Exception())));
 
@@ -290,7 +290,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordNameDatabaseErrorViewDetachedFromPresenter() {
+    public void singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithViewDetachedFromPresenterDisplayChangeUserNameErrorNotCalled() {
         Mockito.when(userRepository.changeUserName(authUser,correctUserName))
                 .thenReturn(Single.just(new Result.Error<>(new Exception())));
 
@@ -308,11 +308,10 @@ public class SignUIpPresenterTests {
 
     }
 
-
-// 5 correct email password, name, server send error
+// 6 correct email password, name, server send error
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordNameServerSendErrorNonNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameSignUpResultErrorWithNonNullViewDisplaySignUpErrorCalled() {
         Mockito.when(userRepository.signUp(correctEmail, correctPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
@@ -324,7 +323,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordNameServerSendErrorNullViewAttachedToPresenter() {
+    public void singUpWithCorrectEmailPasswordNameSignUpResultErrorWithNullViewDisplaySignUpErrorNotCalled() {
         Mockito.when(userRepository.signUp(correctEmail, correctPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
@@ -336,7 +335,7 @@ public class SignUIpPresenterTests {
     }
 
     @Test
-    public void verifySingUpWithCorrectEmailPasswordAndNameServerSendErrorViewDetachedFromPresenter() {
+    public void singUpWithCorrectEmailPasswordNameSignUpResultErrorWithViewDetachedFromPresenterDisplaySignUpErrorNotCalled() {
         Mockito.when(userRepository.signUp(correctEmail, correctPassword))
                 .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
 
