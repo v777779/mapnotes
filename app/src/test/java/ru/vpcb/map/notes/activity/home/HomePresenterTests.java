@@ -7,7 +7,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -31,6 +33,9 @@ import ru.vpcb.map.notes.model.AuthUser;
         application = MainApp.class
 )
 public class HomePresenterTests {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     private Result<AuthUser> authUser;
     private Result.Error<AuthUser> notAuthUser;
@@ -202,41 +207,27 @@ public class HomePresenterTests {
     @Test
     public void handleNavigationItemClickUnknownResourceWithNonNullViewThrowIllegalArgumentException() {
         presenter.onAttach(view);
-        try {
-            presenter.handleNavigationItemClick(unknownResource);
-            Assert.fail(unknownResourceException);
-        } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Unknown itemId", e.getMessage());
-        } catch (Exception e) {
-            Assert.fail(unknownResourceException);
-        }
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Unknown itemId");
+        presenter.handleNavigationItemClick(unknownResource);
     }
+
 
     @Test
     public void handleNavigationItemClickUnknownResourceWithNullViewNotThrowIllegalArgumentExceptionReturnFalse() {
         presenter.onAttach(null);
-        try {
-            boolean isResult = presenter.handleNavigationItemClick(unknownResource);
-            Assert.assertFalse(isResult);
-        } catch (IllegalArgumentException e) {
-            Assert.fail();
-        } catch (Exception e) {
-            Assert.fail();
-        }
+
+        boolean isResult = presenter.handleNavigationItemClick(unknownResource);
+        Assert.assertFalse(isResult);
     }
 
     @Test
     public void handleNavigationItemClickUnknownResourceWithViewDetachedFromPresenterNotThrowIllegalArgumentExceptionReturnFalse() {
         presenter.onAttach(view);
         presenter.onDetach();
-        try {
             boolean isResult = presenter.handleNavigationItemClick(unknownResource);
             Assert.assertFalse(isResult);
-        } catch (IllegalArgumentException e) {
-            Assert.fail();
-        } catch (Exception e) {
-            Assert.fail();
-        }
     }
 
 // 4     showLocationPermissionRationale
@@ -370,3 +361,44 @@ public class HomePresenterTests {
 
     }
 }
+
+// alternative
+//    @Test
+//    public void handleNavigationItemClickUnknownResourceWithNonNullViewThrowIllegalArgumentException() {
+//        presenter.onAttach(view);
+//        try {
+//            presenter.handleNavigationItemClick(unknownResource);
+//            Assert.fail(unknownResourceException);
+//        } catch (IllegalArgumentException e) {
+//            Assert.assertEquals("Unknown itemId", e.getMessage());
+//        } catch (Exception e) {
+//            Assert.fail(unknownResourceException);
+//        }
+//    }
+//
+//    @Test
+//    public void handleNavigationItemClickUnknownResourceWithNullViewNotThrowIllegalArgumentExceptionReturnFalse() {
+//        presenter.onAttach(null);
+//        try {
+//            boolean isResult = presenter.handleNavigationItemClick(unknownResource);
+//            Assert.assertFalse(isResult);
+//        } catch (IllegalArgumentException e) {
+//            Assert.fail();
+//        } catch (Exception e) {
+//            Assert.fail();
+//        }
+//    }
+//
+//    @Test
+//    public void handleNavigationItemClickUnknownResourceWithViewDetachedFromPresenterNotThrowIllegalArgumentExceptionReturnFalse() {
+//        presenter.onAttach(view);
+//        presenter.onDetach();
+//        try {
+//            boolean isResult = presenter.handleNavigationItemClick(unknownResource);
+//            Assert.assertFalse(isResult);
+//        } catch (IllegalArgumentException e) {
+//            Assert.fail();
+//        } catch (Exception e) {
+//            Assert.fail();
+//        }
+//    }
