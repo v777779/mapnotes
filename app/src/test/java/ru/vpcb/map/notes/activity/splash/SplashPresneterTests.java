@@ -154,7 +154,7 @@ public class SplashPresneterTests {
 // start code cancelled market installed
 
     @Test
-    public void startWithCodeCancelledMarketInstalledNonNullViewGetErrorDialog() {
+    public void startWithCodeNotSuccessMarketInstalledNonNullViewGetErrorDialog() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
 
         presenter.onAttach(view);
@@ -165,7 +165,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithCodeCancelledMarketInstalledNullViewViewGetErrorDialogNotCalled() {
+    public void startWithCodeNotSuccessMarketInstalledNullViewViewGetErrorDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
 
         presenter.onAttach(null);
@@ -176,7 +176,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithCodeCancelledMarketInstalledWithViewDetachedFromPresenterViewGetErrorDialogNotCalled() {
+    public void startWithCodeNotSuccessMarketInstalledWithViewDetachedFromPresenterViewGetErrorDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
 
         presenter.onAttach(view);
@@ -188,7 +188,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithCodeCancelledMarketNotInstalledNonNullViewGetAlertDialog() {
+    public void startWithCodeNotSuccessMarketNotInstalledNonNullViewGetAlertDialog() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
         Mockito.when(view.isInstalledPlayMarket()).thenReturn(false);
 
@@ -200,7 +200,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithCodeCancelledMarketNotInstalledNullViewGetAlertDialogNotCalled() {
+    public void startWithCodeNotSuccessMarketNotInstalledNullViewGetAlertDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
         Mockito.when(view.isInstalledPlayMarket()).thenReturn(false);
 
@@ -212,7 +212,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithCodeCancelledMarketNotInstalledWithViewDetachedFromPresenterGetAlertDialogNotCalled() {
+    public void startWithCodeNotSuccessMarketNotInstalledWithViewDetachedFromPresenterGetAlertDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
         Mockito.when(view.isInstalledPlayMarket()).thenReturn(false);
 
