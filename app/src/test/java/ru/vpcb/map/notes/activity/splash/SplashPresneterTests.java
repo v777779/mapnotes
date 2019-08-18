@@ -43,7 +43,7 @@ public class SplashPresneterTests {
     private IAppExecutors appExecutors;
     @Mock
     private UserRepository userRepository;
-    @Mock
+
     private SplashMvpPresenter presenter;
 
     @Before
@@ -64,9 +64,9 @@ public class SplashPresneterTests {
         presenter = new SplashPresenter(appExecutors, userRepository);
 
         Mockito.when(appExecutors.ui()).then(
-                (Answer<Scheduler>) inv -> AndroidSchedulers.mainThread());
+                (Answer<Scheduler>) invocation -> AndroidSchedulers.mainThread());
         Mockito.when(appExecutors.net()).then(
-                (Answer<Scheduler>) inv -> AndroidSchedulers.mainThread());
+                (Answer<Scheduler>) invocation -> AndroidSchedulers.mainThread());
 
         Mockito.doAnswer(invocation -> null).when(view).navigateToHome();
         Mockito.doAnswer(invocation -> null).when(view).navigateToLogin();

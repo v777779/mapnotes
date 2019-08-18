@@ -66,9 +66,9 @@ public class SignUIpPresenterTests {
         presenter = new SignUpPresenter(appExecutors, userRepository);
 
         Mockito.when(appExecutors.ui()).then(
-                (Answer<Scheduler>) inv -> AndroidSchedulers.mainThread());
+                (Answer<Scheduler>) invocation -> AndroidSchedulers.mainThread());
         Mockito.when(appExecutors.net()).then(
-                (Answer<Scheduler>) inv -> AndroidSchedulers.mainThread());
+                (Answer<Scheduler>) invocation -> AndroidSchedulers.mainThread());
 
         Mockito.doAnswer(invocation -> null).when(view).displaySignUpError();
         Mockito.doAnswer(invocation -> null).when(view).displayEmptyUserNameError();
