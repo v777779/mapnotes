@@ -29,7 +29,7 @@ public class LoginPresenterTests {
         presenter = LoginPresenter.getInstance();
     }
 
-// openSignIn
+// 0    openSignIn
 
     @Test
     public void openSignInWithNonNullViewNavigateToSignInCalled() {
@@ -73,7 +73,7 @@ public class LoginPresenterTests {
         Mockito.verify(view,Mockito.times(0)).navigateToSignIn();
     }
 
-// openSignUp
+// 1    openSignUp
     @Test
     public void openSignUpWithNonNullViewNavigateToSignUpCalled() {
         Mockito.doAnswer(new Answer() {

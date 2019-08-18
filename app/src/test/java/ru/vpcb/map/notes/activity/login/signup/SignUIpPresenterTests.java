@@ -2,6 +2,7 @@ package ru.vpcb.map.notes.activity.login.signup;
 
 import android.security.keystore.UserNotAuthenticatedException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,7 +86,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 0 correct all
+// 0    correct email, password, name
 
     @Test
     public void singUpWithCorrectEmailPasswordNameWithNonNullViewNavigateToMapScreenCalled() {
@@ -133,7 +134,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 1 empty email correct password and name
+// 1    empty email correct password, name
 
     @Test
     public void singUpWithEmptyEmailCorrectPasswordNameWithNonNullViewDisplayEmailErrorCalled() {
@@ -161,7 +162,7 @@ public class SignUIpPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayEmailError();
     }
 
-// 2 incorrect email correct password and name
+// 2    incorrect email, correct password, name
 
     @Test
     public void singUpWithIncorrectEmailCorrectPasswordAndNameWithNonNullViewDisplayEmailErrorCalled() {
@@ -191,7 +192,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 3 correct email empty password correct name
+// 3    correct email, empty password, correct name
 
     @Test
     public void singUpWithCorrectEmailEmptyPasswordCorrectNameWithNonNullViewDisplayPasswordErrorCalled() {
@@ -221,7 +222,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 4 correct email and password, empty name
+// 4    correct email and password, empty name
 
     @Test
     public void singUpWithCorrectEmailPasswordEmptyNameWithNonNullViewDisplayEmptyUserNameErrorCalled() {
@@ -251,7 +252,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 5 correct email, password, name, database error
+// 5    correct email, password, name, database error
 
     @Test
     public void singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithNonNullDisplayChangeUserNameErrorCalled() {
@@ -308,7 +309,7 @@ public class SignUIpPresenterTests {
 
     }
 
-// 6 correct email password, name, server send error
+// 6    correct email password, name, server send error
 
     @Test
     public void singUpWithCorrectEmailPasswordNameSignUpResultErrorWithNonNullViewDisplaySignUpErrorCalled() {
@@ -347,5 +348,8 @@ public class SignUIpPresenterTests {
 
     }
 
+    @After
+    public void tearDown() throws Exception {
 
+    }
 }

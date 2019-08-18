@@ -71,7 +71,7 @@ public class SignInPresenterTests {
 
     }
 
-// correct email, password
+// 0    correct email, password
 
     @Test
     public void singInWithCorrectEmailPasswordWithNonNullViewNavigateToMapScreenCalled() {
@@ -106,7 +106,7 @@ public class SignInPresenterTests {
         Mockito.verify(view, Mockito.times(0)).navigateToMapScreen();
     }
 
-// empty email, empty password
+// 1    empty email, empty password
 
     @Test
     public void singInWithEmptyEmailPasswordWithNonNullViewDisplayEmailErrorCalled() {
@@ -136,7 +136,7 @@ public class SignInPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayEmailError();
     }
 
-// incorrect email, empty password
+// 2    incorrect email, empty password
 
     @Test
     public void singInWithIncorrectEmailEmptyPasswordWithNonNullViewDisplayEmailErrorCalled() {
@@ -166,7 +166,7 @@ public class SignInPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayEmailError();
     }
 
-// correct email, empty password
+// 3    correct email, empty password
 
     @Test
     public void singInWithCorrectEmailEmptyPasswordWithNonNullViewDisplayPasswordErrorCalled() {
@@ -196,7 +196,7 @@ public class SignInPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayPasswordError();
     }
 
-// correct email incorrect password
+// 4    correct email incorrect password
 
     @Test
     public void singInWithCorrectEmailIncorrectPasswordWithNonNullViewDisplaySignInErrorCalled() {
@@ -232,10 +232,6 @@ public class SignInPresenterTests {
 
         Mockito.verify(view, Mockito.times(0)).displaySignInError();
     }
-
-
-
-
 
     @After
     public void tearDown() throws Exception {
