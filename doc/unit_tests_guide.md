@@ -58,7 +58,7 @@ Tested Methods
 
 ### <u>start()</u>
 
-![1566237137909](C:\Users\V1\AppData\Roaming\Typora\typora-user-images\1566237137909.png)
+![](unit/splash_presenter_start.png)
 
 #### Test group 0	
 

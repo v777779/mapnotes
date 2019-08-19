@@ -20,6 +20,7 @@ An Android application which allows you to add/remove notes to the current locat
 * Google Maps
 * Service Location
 * Robolectric
+* Mockito
 * Espresso
 * Java
 * RxJava2 
@@ -67,6 +68,11 @@ Press "Add Note" button and enter "Google Plex" label of note and press "**ADD**
 Location marker will appear on Map. Press "Search Notes" button. The list of notes will be displayed.
 
 Swipe note right or left to delete.
+
+
+
+# Unit Tests
+* Unit tests based on Robolectric and Mockito frameworks added to application, see [unit tests guide](doc/unit_tests_guide.md) for the details.
 
 
 
