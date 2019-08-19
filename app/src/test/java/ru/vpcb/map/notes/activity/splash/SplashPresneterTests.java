@@ -104,7 +104,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedFromPresenterNavigateToHomeNotCalled() {
+    public void startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.start();
@@ -138,7 +138,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedFromPresenterNavigateToLoginNotCalled() {
+    public void startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled() {
         Mockito.when(userRepository.getCurrentUser()).thenReturn(notAuthUser);
 
         presenter.onAttach(view);
@@ -175,7 +175,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedFromPresenterViewGetErrorDialogNotCalled() {
+    public void startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetErrorDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
 
         presenter.onAttach(view);
@@ -213,7 +213,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedFromPresenterGetAlertDialogNotCalled() {
+    public void startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertDialogNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
         Mockito.when(view.isInstalledPlayMarket()).thenReturn(false);
 
@@ -248,7 +248,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startMapNotesWithUserAuthenticatedWithViewDetachedFromPresenterNavigateToHomeNotCalled() {
+    public void startMapNotesWithUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.startMapNotes();
@@ -285,7 +285,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void startMapNotesWithUserNotAuthenticatedWithViewDetachedFromPresenterNavigateToLoginNotCalled() {
+    public void startMapNotesWithUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled() {
         Mockito.when(userRepository.getCurrentUser()).thenReturn(notAuthUser);
 
         presenter.onAttach(view);
@@ -320,7 +320,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithViewDetachedFromPresenterNavigateToHomeNotCalled() {
+    public void playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToHomeNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.playMarketResults(gpsRequestCode);
@@ -357,7 +357,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithViewDetachedFromPresenterNavigateToLoginCalledNotCalled() {
+    public void playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToLoginCalledNotCalled() {
         Mockito.when(userRepository.getCurrentUser()).thenReturn(notAuthUser);
 
         presenter.onAttach(view);
@@ -391,7 +391,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithViewDetachedFromPresenterFinishActivityNotCalled() {
+    public void playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithViewDetachedFinishActivityNotCalled() {
         Mockito.when(view.isPlayServicesAvailable()).thenReturn(playServiceNotAvailableCode);
 
         presenter.onAttach(view);
@@ -420,7 +420,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void playMarketResultsWithNotGPSRequestCodeWithViewDetachedFromPresenterFinishActivityNotCalled() {
+    public void playMarketResultsWithNotGPSRequestCodeWithViewDetachedFinishActivityNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.playMarketResults(nonGPSRequestCode);
@@ -447,7 +447,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void onPositiveWithViewDetachedFromPresenterNavigateToPlayMarketNotCalled() {
+    public void onPositiveWithViewDetachedNavigateToPlayMarketNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.onPositive();
@@ -474,7 +474,7 @@ public class SplashPresneterTests {
     }
 
     @Test
-    public void onNegativeWithViewDetachedFromPresenterFinishActivityNotCalled() {
+    public void onNegativeWithViewDetachedFinishActivityNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.onNegative();

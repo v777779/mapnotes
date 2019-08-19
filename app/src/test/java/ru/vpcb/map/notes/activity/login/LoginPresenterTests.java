@@ -58,7 +58,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void openSignInWithViewDetachedFromPresenterNavigateToSignInNotCalled() {
+    public void openSignInWithViewDetachedNavigateToSignInNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -106,7 +106,7 @@ public class LoginPresenterTests {
     }
 
     @Test
-    public void openSignUpWithViewDetachedFromPresenterNavigateToSignUpNotCalled() {
+    public void openSignUpWithViewDetachedNavigateToSignUpNotCalled() {
         Mockito.doAnswer(new Answer() {
             @Override
             public Void answer(InvocationOnMock invocation) throws Throwable {

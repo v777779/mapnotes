@@ -95,7 +95,7 @@ public class SignInPresenterTests {
     }
 
     @Test
-    public void singInWithCorrectEmailPasswordWithViewDetachedFromPresenterNavigateToMapScreenNotCalled() {
+    public void singInWithCorrectEmailPasswordWithViewDetachedNavigateToMapScreenNotCalled() {
         Mockito.when(userRepository.signIn(Mockito.any(), Mockito.any()))
                 .thenReturn(Single.just(new Result.Success<>(authUser)));
 
@@ -127,7 +127,7 @@ public class SignInPresenterTests {
     }
 
     @Test
-    public void  singInWithEmptyEmailPasswordWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
+    public void  singInWithEmptyEmailPasswordWithViewDetachedDisplayEmailErrorNotCalled() {
 
         presenter.onAttach(view);
         presenter.onDetach();
@@ -157,7 +157,7 @@ public class SignInPresenterTests {
     }
 
     @Test
-    public void singInWithIncorrectEmailEmptyPasswordWithViewDetachedFromPresenterDisplayEmailErrorNotCalled() {
+    public void singInWithIncorrectEmailEmptyPasswordWithViewDetachedDisplayEmailErrorNotCalled() {
 
         presenter.onAttach(view);
         presenter.onDetach();
@@ -187,7 +187,7 @@ public class SignInPresenterTests {
     }
 
     @Test
-    public void  singInWithCorrectEmailEmptyPasswordWithViewDetachedFromPresenterDisplayPasswordErrorNotCalled() {
+    public void  singInWithCorrectEmailEmptyPasswordWithViewDetachedDisplayPasswordErrorNotCalled() {
 
         presenter.onAttach(view);
         presenter.onDetach();

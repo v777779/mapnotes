@@ -42,6 +42,7 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
     public void onAttach(@NonNull AddNoteView view) {
         super.onAttach(view);
         this.view = view;
+        if (view == null) return;
 
         locationProvider.startLocationUpdates();
         Result<AuthUser> userResult = userRepository.getCurrentUser();
@@ -64,7 +65,9 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
         locationProvider.addUpdatableLocationListener(new IConsumer<Location>() {
             @Override
             public void accept(Location location) {
-                if (view != null) view.displayCurrentLocation(locationFormatter.format(location));
+                if (view != null) {
+                    view.displayCurrentLocation(locationFormatter.format(location));
+                }
                 lastLocation = location;
             }
         });
@@ -88,7 +91,7 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
 // methods
 
     @VisibleForTesting
-    void updateLastLocation(Location location) {
+    public void updateLastLocation(Location location) {
         lastLocation = location;
     }
 

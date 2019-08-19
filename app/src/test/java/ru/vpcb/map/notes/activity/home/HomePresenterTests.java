@@ -114,7 +114,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void handleNavigationItemClickNavigationAddNoteWithViewDetachedFromPresenterDisplayAddNoteNotCalledReturnFalse() {
+    public void handleNavigationItemClickNavigationAddNoteWithViewDetachedDisplayAddNoteNotCalledReturnFalse() {
         presenter.onAttach(view);
         presenter.onDetach();
         boolean isResult = presenter.handleNavigationItemClick(R.id.navigation_add_note);
@@ -150,7 +150,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void handleNavigationItemClickNavigationMapWithViewDetachedFromPresenterUpdateNavigationStateNotCalledReturnFalse() {
+    public void handleNavigationItemClickNavigationMapWithViewDetachedUpdateNavigationStateNotCalledReturnFalse() {
         presenter.onAttach(view);
         presenter.onDetach();
         boolean isResult = presenter.handleNavigationItemClick(R.id.navigation_map);
@@ -189,7 +189,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void handleNavigationItemClickNavigationSearchNotesWithViewDetachedFromPresenterDisplaySearchNotesNotCalledReturnFalse() {
+    public void handleNavigationItemClickNavigationSearchNotesWithViewDetachedDisplaySearchNotesNotCalledReturnFalse() {
         presenter.onAttach(view);
         presenter.onDetach();
         boolean isResult = presenter.handleNavigationItemClick(R.id.navigation_search_notes);
@@ -223,7 +223,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void handleNavigationItemClickUnknownResourceWithViewDetachedFromPresenterNotThrowIllegalArgumentExceptionReturnFalse() {
+    public void handleNavigationItemClickUnknownResourceWithViewDetachedNotThrowIllegalArgumentExceptionReturnFalse() {
         presenter.onAttach(view);
         presenter.onDetach();
             boolean isResult = presenter.handleNavigationItemClick(unknownResource);
@@ -255,7 +255,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void showLocationPermissionRationaleWithViewDetachedFromPresenterShowPermissionExplanationSnackBarNotCalled() {
+    public void showLocationPermissionRationaleWithViewDetachedShowPermissionExplanationSnackBarNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.showLocationPermissionRationale();
@@ -285,7 +285,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void checkUserUserAuthenticatedWithViewDetachedFromPresenterNavigateToLoginScreenNotCalled() {
+    public void checkUserUserAuthenticatedWithViewDetachedNavigateToLoginScreenNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.checkUser();
@@ -314,7 +314,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void checkUserUserNotAuthenticatedWithViewDetachedFromPresenterNavigateToLoginScreenNotCalled() {
+    public void checkUserUserNotAuthenticatedWithViewDetachedNavigateToLoginScreenNotCalled() {
         Mockito.when(userRepository.getCurrentUser()).thenReturn(notAuthUser);
         presenter.onAttach(view);
         presenter.onDetach();
@@ -346,7 +346,7 @@ public class HomePresenterTests {
     }
 
     @Test
-    public void signOutWithViewDetachedFromPresenterSignOutNotCalled() {
+    public void signOutWithViewDetachedSignOutNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.signOut();
@@ -390,7 +390,7 @@ public class HomePresenterTests {
 //    }
 //
 //    @Test
-//    public void handleNavigationItemClickUnknownResourceWithViewDetachedFromPresenterNotThrowIllegalArgumentExceptionReturnFalse() {
+//    public void handleNavigationItemClickUnknownResourceWithViewDetachedNotThrowIllegalArgumentExceptionReturnFalse() {
 //        presenter.onAttach(view);
 //        presenter.onDetach();
 //        try {
