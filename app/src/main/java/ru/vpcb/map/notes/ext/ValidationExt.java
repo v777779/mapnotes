@@ -6,6 +6,7 @@ import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Patterns;
 
 import java.util.regex.Matcher;
@@ -14,6 +15,9 @@ import java.util.regex.Matcher;
 public class ValidationExt {
 
     public static boolean isValidEmail(String s) {
+        if(TextUtils.isEmpty(s)){
+            return false;
+        }
         Matcher matcher = Patterns.EMAIL_ADDRESS.matcher(s);
         return matcher.matches();
     }

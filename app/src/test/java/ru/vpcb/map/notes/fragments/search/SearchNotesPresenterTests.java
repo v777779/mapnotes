@@ -937,7 +937,6 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).refreshAdapter();
     }
 
-
     @After
     public void tearDown() throws Exception {
 
