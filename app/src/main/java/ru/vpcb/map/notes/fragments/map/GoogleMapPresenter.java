@@ -1,6 +1,7 @@
 package ru.vpcb.map.notes.fragments.map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.model.Location;
@@ -83,5 +84,12 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
             return;
         }
         view.exit();
+    }
+
+// testing
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void updateCurrentLocation(Location location){
+        this.currentLocation = location;
     }
 }

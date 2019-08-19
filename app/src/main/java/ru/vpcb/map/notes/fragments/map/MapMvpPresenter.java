@@ -1,6 +1,7 @@
 package ru.vpcb.map.notes.fragments.map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import ru.vpcb.map.notes.base.MvpPresenter;
 import ru.vpcb.map.notes.model.Location;
@@ -18,4 +19,7 @@ public interface MapMvpPresenter extends MvpPresenter<MapView> {
     void openSettings();
 
     void exit();
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    void updateCurrentLocation(Location location);
 }

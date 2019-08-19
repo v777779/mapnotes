@@ -1,7 +1,6 @@
 package ru.vpcb.map.notes.fragments.add;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import ru.vpcb.map.notes.base.ScopedPresenter;
 import ru.vpcb.map.notes.data.Result;
@@ -87,13 +86,5 @@ public class AddNotePresenter extends ScopedPresenter<AddNoteView> implements Ad
         notesRepository.addNote(note);
         view.displayCurrentLocation(note);
     }
-
-// methods
-
-    @VisibleForTesting
-    public void updateLastLocation(Location location) {
-        lastLocation = location;
-    }
-
 
 }
