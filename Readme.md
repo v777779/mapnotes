@@ -4,9 +4,9 @@
 
 An Android application which allows you to add/remove notes to the current location 
 
-![screen_001](doc/screen_020.png)
+![](doc/images/screen_020.png)
 
-![screen_002](doc/screen_021.png)
+![](doc/images/screen_021.png)
 
 
 
