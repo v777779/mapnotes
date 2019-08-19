@@ -180,6 +180,13 @@ public class SearchNotesFragment extends Fragment implements SearchNotesView, IC
     }
 
     @Override
+    public void displayDefaultUserNameError() {
+        if (activity != null) {
+            Snackbar.make(rootView, R.string.default_user_name_error, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public void clearSearchResults() {
         adapter.clear();
     }

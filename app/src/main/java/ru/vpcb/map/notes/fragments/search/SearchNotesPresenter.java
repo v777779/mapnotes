@@ -64,13 +64,17 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) {
             return;
         }
-        view.clearSearchResults();
 
         if (!view.isOnline()) {
             view.displayNoInternetError();
             return;
         }
+        if(TextUtils.isEmpty(defaultUserName)) {
+            view.displayDefaultUserNameError();
+            return;
+        }
 
+        view.clearSearchResults();
         view.showProgress(true);
         Single<Result<List<Note>>> notes = notesRepository
                 .getNotes()
@@ -80,7 +84,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                 .observeOn(appExecutors.ui())
                 .subscribe(result -> {
                     view.showProgress(false);
-                    if (result instanceof Result.Error) {
+                    if (result instanceof Result.Error || result.getData().isEmpty()) {
                         view.displayLoadingNotesError();
                     }
                     if (result instanceof Result.Success) {
@@ -203,7 +207,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                 .observeOn(appExecutors.net())
                 .flatMap((Function<Result<List<Note>>, SingleSource<Result<List<Note>>>>)
                         result -> {                                                                 // flatMap <R<List>> to Single<R<List>>
-                            if (result instanceof Result.Success) {
+                            if (result instanceof Result.Success && result.getData() != null) {
                                 // flatMap ordered <Note> to O<Note> ordered
                                 return Observable
                                         .fromIterable(result.getData())                             // Observable<Note>
@@ -215,7 +219,8 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                                                                 .toObservable()
                                                                 .observeOn(appExecutors.net()),
                                                         (n, s) -> {
-                                                            if (s instanceof Result.Success) {              // note, name-> note.set(name)
+                                                            if (s instanceof Result.Success &&
+                                                            !TextUtils.isEmpty(s.getData())) {              // note, name-> note.set(name)
                                                                 note.setUser(s.getData());
                                                             } else {
                                                                 note.setUser(defaultUserName);

@@ -33,20 +33,23 @@ import ru.vpcb.map.notes.model.Note;
 )
 public class SearchNotesPresenterTests {
 
-
-    private Result.Success<AuthUser> authUser;
-    private Result.Error<AuthUser> notAuthUser;
-    private String authUserUID;
-
-    private int noteCategoryInSearch;
-    private int userCategoryInSearch;
-    private String defaultUserName;
-    private String searchByNoteRequest;
-    private String searchByUserUIDRequest;
-    private List<Note> testNotes;
-    private Note testNote;
     private Result.Success<List<Note>> resultSuccessTestNotes;
     private Result.Error<List<Note>> resultErrorTestNotes;
+    private Result.Success<AuthUser> authUser;
+    private Result.Error<AuthUser> notAuthUser;
+    private List<Note> testNotes;
+    private List<String> testNames;
+    private Note testNote;
+    private String authUserUID;
+    private String authUserUID2;
+    private String authUserName;
+    private String authUserName2;
+    private String defaultUserName;
+    private String emptyUserName;
+    private String searchByNoteRequest;
+    private String searchByUserUIDRequest;
+    private int noteCategoryInSearch;
+    private int userCategoryInSearch;
 
 
     @Mock
@@ -65,7 +68,12 @@ public class SearchNotesPresenterTests {
 
         MockitoAnnotations.initMocks(this);
 
-        authUserUID = "111111";
+        authUserUID = "11111111";
+        authUserName = "Jacob";
+        authUserUID2 = "22222222";
+        authUserName2 = "Jenkins";
+        emptyUserName = "";
+
         authUser = new Result.Success<>(new AuthUser(authUserUID));
         notAuthUser = new Result.Error<>(new RuntimeException("Auth Error"));
 
@@ -75,13 +83,13 @@ public class SearchNotesPresenterTests {
         searchByNoteRequest = "test note";
         searchByUserUIDRequest = "22222222";
         testNotes = new ArrayList<>(Arrays.asList(
-                new Note(0, 0, "test note 1_1", "11111111"),
-                new Note(0, 0, "test note 2_1", "11111111"),
-                new Note(0, 0, "test note 1_2", "22222222"),
-                new Note(0, 0, "test note 2_2", "22222222"),
-                new Note(0, 0, "test note 3_2", "22222222")));
-        testNote = new Note(0,0, "test note", "11111111");
+                new Note(0, 0, "test note 1_1", authUserUID),
+                new Note(0, 0, "test note 2_1", authUserUID),
+                new Note(0, 0, "test note 1_2", authUserUID2),
+                new Note(0, 0, "test note 2_2", authUserUID2),
+                new Note(0, 0, "test note 3_2", authUserUID2)));
 
+        testNote = new Note(0, 0, "test note", authUserUID);
         resultSuccessTestNotes = new Result.Success<>(testNotes);
         resultErrorTestNotes = new Result.Error<>(new RuntimeException("get notes error"));
 
@@ -98,6 +106,7 @@ public class SearchNotesPresenterTests {
         Mockito.doAnswer(invocation -> null).when(view).displayUnknownNoteError();
         Mockito.doAnswer(invocation -> null).when(view).displayNoInternetError();
         Mockito.doAnswer(invocation -> null).when(view).displayRemoveNoteError();
+        Mockito.doAnswer(invocation -> null).when(view).displayDefaultUserNameError();
         Mockito.doAnswer(invocation -> null).when(view).clearSearchResults();
         Mockito.doAnswer(invocation -> null).when(view).showProgress(Mockito.anyBoolean());
         Mockito.doAnswer(invocation -> null).when(view).refreshAdapter();
@@ -109,12 +118,416 @@ public class SearchNotesPresenterTests {
         Mockito.when(notesRepository.getNotes())
                 .thenReturn(Single.just(resultSuccessTestNotes));
 
+        Mockito.when(userRepository.getHumanReadableName(authUserUID)).thenReturn(
+                Single.just(new Result.Success<>(authUserName)));
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(authUserName2)));
+    }
+
+// 0    getNotes   online, correct defaultUserName, correct humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoteCalled() {
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
     }
 
     @Test
-    public void getNotesOnlineNullDefaultUserNameWithNonNullView() {
+    public void getNotesOnlineDefaultUserNameWithNullViewDisplayNoteNotCalled() {
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
 
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
     }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameWithViewDetachedDisplayNoteNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 1    getNotes   not online, correct defaultUserName, correct humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoInternetErrorCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).displayNoInternetError();
+    }
+
+    @Test
+    public void getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithNullViewDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
+    @Test
+    public void getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
+// 2    getNotes   online, null defaultUserName, error humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(view);
+        presenter.getNotes(null);
+
+        Mockito.verify(view, Mockito.times(1)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNullViewDisplayDefaultUserNameErrorNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(null);
+        presenter.getNotes(null);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(null);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+// 3    getNotes   online, empty defaultUserName, error humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(view);
+        presenter.getNotes(emptyUserName);
+
+        Mockito.verify(view, Mockito.times(1)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(null);
+        presenter.getNotes(emptyUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Error<>(new NullPointerException("not found"))));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(emptyUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+// 4    getNotes   online, defaultUserName, null humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithNonNullViewDisplayNoteNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithViewDetachedDisplayNoteNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+
+// 5    getNotes   online, defaultUserName, empty humanReadableName, correct list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(emptyUserName)));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithNonNullViewDisplayNoteNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(emptyUserName)));
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithViewDetachedDisplayNoteNotCalled() {
+        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
+                Single.just(new Result.Success<>(emptyUserName)));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 6    getNotes   online, defaultUserName, humanReadableName, null list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithNonNullViewDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithViewDetachedDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(null)));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+// 7    getNotes   online, defaultUserName, humanReadableName, empty list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(new ArrayList<>())));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithNonNullViewDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(new ArrayList<>())));
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithViewDetachedDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(new ArrayList<>())));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+// 8    getNotes   online, defaultUserName, humanReadableName, error list<notes>
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(resultErrorTestNotes));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(resultErrorTestNotes));
+
+        presenter.onAttach(null);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+    @Test
+    public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithViewDetachedDisplayLoadingNotesErrorNotCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(resultErrorTestNotes));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
+    }
+
+// 9    searchNotes   online, defaultUserName, humanReadableName, error list<notes>
+
+    @Test
+    public void searchNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled() {
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(resultErrorTestNotes));
+
+        presenter.onAttach(view);
+        presenter.getNotes(defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).displayLoadingNotesError();
+    }
+
+
+
+
 
     @After
     public void tearDown() throws Exception {
