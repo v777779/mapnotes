@@ -31,27 +31,27 @@ First of all you need Google account to work with [Firebase Console](https://con
 
 Open [Firebase Console](https://console.firebase.google.com/) and create Firebase project, see [documentaition](https://firebase.google.com/docs/android/setup) if necessary
 
-![](doc/screen_004.png) 
+![](screen_004.png) 
 
 Check Setup Firebase Analytics and press "Create project"
 
-![](doc/screen_005.png)
+![](screen_005.png)
 
-![](doc/screen_006.png)
+![](screen_006.png)
 
 Open Firebase Project, go to Project Overview, press Add Android application
 
-![](doc/screen_007.png)
+![](screen_007.png)
 
 To Register application we need package name and SHA-1 key
 
 Open Android Studio Gradle console, double click on app/Tasks/android/signingReport and find SHA-1 below
 
-![](doc/screen_008.png)
+![](screen_008.png)
 
 Enter package name and SHA-1 key  and register application. 
 
-![](doc/screen_009.png)
+![](screen_009.png)
 
 Download **google-services.json** file and place it  to **app/** folder of the application
 
@@ -59,7 +59,7 @@ Press Next button several times until Firebase Verification window opens.
 
 Build and Run application, wait until Firebase detects application.
 
-![](doc/screen_010.png)
+![](screen_010.png)
 
 Firebase Project created and application successfully added
 
@@ -69,9 +69,9 @@ Firebase Project created and application successfully added
 
 Open  [Firebase Console](https://console.firebase.google.com/) , go to Authentication, open "Sign-in method" and enable Email/Password authentication
 
-![screen_011](doc/screen_011.png)
+![screen_011](screen_011.png)
 
-![](doc/screen_012.png)
+![](screen_012.png)
 
 Firebase Authentication setup finished
 
@@ -83,13 +83,13 @@ Open  [Firebase Console](https://console.firebase.google.com/) , go to Database,
 
 Click on "Create database", select "Test mode". This is demo application, so all users have full access to database. Press Enable to create Database
 
-![cloud](doc/screen_014.png)
+![cloud](screen_014.png)
 
 Press "Dismiss" button  to hide message. This is demo application, so all users have full access to database. Press Enable to create Database
 
-![cloud](doc/screen_015.png)Database created in Test mode. 
+![cloud](screen_015.png)Database created in Test mode. 
 
-![cloud](doc/screen_016.png)
+![cloud](screen_016.png)
 
 Setup Firebase Realtime Database is done
 
@@ -101,7 +101,7 @@ Open [Google Cloud Console](https://console.cloud.google.com/), use your Google 
 
 Select project that you have created in Firebase Console for Map Notes application and press "Open"
 
-![cloud](doc/screen_017.png)
+![cloud](screen_017.png)
 
 Open Navigation Menu, API& Services, Dashboard
 
@@ -109,13 +109,13 @@ Press "Enable APIs and Services", find Maps SDK for Android
 
 Open "Maps SDK for Android" and press Enable
 
-![key](doc/screen_018.png)
+![key](screen_018.png)
 
 Go to Navigation Menu, API& Services, Credentials
 
 Find "Android API Key" and copy it to the clipboard, this key will be used for Google Maps
 
-![key](doc/screen_019.png)
+![key](screen_019.png)
 
 Place this key to **strings.xml** file instead of "YOUR_API_KEY" words
 
@@ -137,11 +137,11 @@ Build and Run application. Open Sign Up Screen. Enter name, email and password. 
 
 Google Maps should open and show current location of the device.
 
-![key](doc/screen_020.png)
+![key](screen_020.png)
 
 Press Add Note button and enter "Google Plex" label of note and press "**ADD**" button
 
-![key](doc/screen_021.png)
+![key](screen_021.png)
 
 Location marker will appear on Map. Press "Search Notes" button. The list with note "Google Plex" will be displayed. Swipe left or right over note to delete.
 
@@ -151,11 +151,11 @@ At this moment application ready to work.
 
 Open Firebase Project Authentication tab to look at the identified users
 
-![key](doc/screen_022.png)
+![key](screen_022.png)
 
 Open Firebase Project Database tab to look at the entered notes and users records
 
-![environment](doc/screen_023.png)
+![environment](screen_023.png)
 
 ## Setup Firebase Crashlytics
 
@@ -163,15 +163,15 @@ Firebase Crashlytics will track application crash events only.
 
 Open Firebase Project Crashlytics, see [documentation](https://firebase.google.com/docs/crashlytics?authuser=0) if necessary
 
-![environment](doc/screen_024.png)
+![environment](screen_024.png)
 
 Press Next, then Build and Run Application. Wait until Crashlytics verification completed
 
-![environment](doc/screen_025.png)
+![environment](screen_025.png)
 
 Firebase Crashlytics will track application crash only
 
-![environment](doc/screen_026.png)
+![environment](screen_026.png)
 
 To check Crashlytics tracking ability place next code in to onCreate() method of SplashActivity.
 
@@ -199,7 +199,7 @@ Open Firebase Analytics Dashboard to look at long term statistics.
 
 Press on StreamView to get analytics within 30 minutes window.
 
-![environment](doc/screen_027.png)
+![environment](screen_027.png)
 
 Firebase Analytics can be tested in Debug View mode, where analytics is shown immediately.
 
@@ -213,7 +213,7 @@ Build and run application. Move over screens, sign in, open notes.
 
 Open Firebase Project Analytics DebugView tab and look at the events in live mode.
 
-![debug](doc/screen_029.png) 
+![debug](screen_029.png) 
 
 To Disable DebugView mode on the application side send next command in Terminal of Android Studio. 
 
