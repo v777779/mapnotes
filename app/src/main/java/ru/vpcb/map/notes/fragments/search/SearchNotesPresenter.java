@@ -34,7 +34,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
     private CompositeDisposable composite;
 
     public SearchNotesPresenter(IAppExecutors appExecutors, UserRepository userRepository,
-                         NotesRepository notesRepository) {
+                                NotesRepository notesRepository) {
         this.appExecutors = appExecutors;
         this.userRepository = userRepository;
         this.notesRepository = notesRepository;
@@ -69,7 +69,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             view.displayNoInternetError();
             return;
         }
-        if(TextUtils.isEmpty(defaultUserName)) {
+        if (TextUtils.isEmpty(defaultUserName)) {
             view.displayDefaultUserNameError();
             return;
         }
@@ -107,13 +107,12 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
             view.displayNoInternetError();
             return;
         }
-        if(TextUtils.isEmpty(defaultUserName)) {
+        if (TextUtils.isEmpty(defaultUserName)) {
             view.displayDefaultUserNameError();
             return;
         }
 
         view.clearSearchResults();
-
         if (TextUtils.isEmpty(text)) {
             getNotes(defaultUserName); // just reload all notes
             return;
@@ -154,7 +153,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                         }
                     }).observeOn(appExecutors.ui())
                     .subscribe(result -> {
-                        if (result instanceof Result.Error) {
+                        if (result instanceof Result.Error || result.getData().isEmpty()) {
                             view.displayUnknownUserError();
                         }
                         if (result instanceof Result.Success) {
@@ -178,6 +177,10 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         }
         if (!view.isOnline()) {
             view.displayNoInternetError();
+            return;
+        }
+        if (note == null) {
+            view.displayNoteDataError();
             return;
         }
         view.showProgress(true);
@@ -224,7 +227,7 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
                                                                 .observeOn(appExecutors.net()),
                                                         (n, s) -> {
                                                             if (s instanceof Result.Success &&
-                                                            !TextUtils.isEmpty(s.getData())) {              // note, name-> note.set(name)
+                                                                    !TextUtils.isEmpty(s.getData())) {              // note, name-> note.set(name)
                                                                 note.setUser(s.getData());
                                                             } else {
                                                                 note.setUser(defaultUserName);

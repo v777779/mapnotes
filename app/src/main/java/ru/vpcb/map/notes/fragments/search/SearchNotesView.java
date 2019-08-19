@@ -12,6 +12,8 @@ public interface SearchNotesView extends MvpView {
 
     void displayUnknownNoteError();
 
+    void displayNoteDataError();
+
     void displayNoInternetError();
 
     void displayRemoveNoteError();

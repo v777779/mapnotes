@@ -2,7 +2,9 @@ package ru.vpcb.map.notes.fragments.search;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -32,13 +34,16 @@ import ru.vpcb.map.notes.model.Note;
         application = MainApp.class
 )
 public class SearchNotesPresenterTests {
-
-    private Result.Success<List<Note>> resultSuccessTestNotes;
-    private Result.Error<List<Note>> resultErrorTestNotes;
-    private Result.Success<List<Note>> resultSearchByText;
-    private Result.Success<List<Note>> resultSearchByUID;
+    private Result.Success<List<Note>> resultGetNotesSuccess;
+    private Result.Error<List<Note>> resultGetNotesError;
+    private Result.Success<List<Note>> resultSearchByTextSuccess;
+    private Result.Success<List<Note>> resultSearchByUserSuccess;
     private Result.Success<AuthUser> authUser;
     private Result.Error<AuthUser> notAuthUser;
+    private Result.Success<String> resultRemoveNoteSuccess;
+    private Result.Error<String> resultRemoveNoteError;
+
+
     private List<Note> testNotes;
     private List<String> testNames;
     private Note testNote;
@@ -49,11 +54,14 @@ public class SearchNotesPresenterTests {
     private String defaultUserName;
     private String emptyUserName;
     private String searchByNoteRequest;
-    private String searchByUserUIDRequest;
-    private int noteCategoryInSearch;
-    private int userCategoryInSearch;
+    private String searchByUserRequest;
+    private int noteSearchCategory;
+    private int userSearchCategory;
+    private int unknownSearchCategory;
     private String searchEmptyRequest;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Mock
     private SearchNotesView view;
@@ -81,10 +89,14 @@ public class SearchNotesPresenterTests {
         authUser = new Result.Success<>(new AuthUser(authUserUID));
         notAuthUser = new Result.Error<>(new RuntimeException("Auth Error"));
 
-        noteCategoryInSearch = 0;
-        userCategoryInSearch = 1;
+        resultRemoveNoteSuccess = new Result.Success<>("success");
+        resultRemoveNoteError = new Result.Error<>(new RuntimeException("error"));
+
+        noteSearchCategory = 0;
+        userSearchCategory = 1;
+        unknownSearchCategory = -1;
         searchByNoteRequest = "test note";
-        searchByUserUIDRequest = "22222222";
+        searchByUserRequest = "Jenkins";
         searchEmptyRequest = "";
         testNotes = new ArrayList<>(Arrays.asList(
                 new Note(0, 0, "test note 1_1", authUserUID),
@@ -94,10 +106,10 @@ public class SearchNotesPresenterTests {
                 new Note(0, 0, "test type 3_2", authUserUID2)));
 
         testNote = new Note(0, 0, "test note", authUserUID);
-        resultSuccessTestNotes = new Result.Success<>(testNotes);
-        resultErrorTestNotes = new Result.Error<>(new RuntimeException("get notes error"));
-        resultSearchByText = new Result.Success<>(testNotes.subList(0,3));
-        resultSearchByUID = new Result.Success<>(testNotes.subList(2,5));
+        resultGetNotesSuccess = new Result.Success<>(testNotes);
+        resultGetNotesError = new Result.Error<>(new RuntimeException("get notes error"));
+        resultSearchByTextSuccess = new Result.Success<>(testNotes.subList(0, 3));
+        resultSearchByUserSuccess = new Result.Success<>(testNotes.subList(2, 5));
 
         presenter = new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
 
@@ -110,6 +122,7 @@ public class SearchNotesPresenterTests {
         Mockito.doAnswer(invocation -> null).when(view).displayLoadingNotesError();
         Mockito.doAnswer(invocation -> null).when(view).displayUnknownUserError();
         Mockito.doAnswer(invocation -> null).when(view).displayUnknownNoteError();
+        Mockito.doAnswer(invocation -> null).when(view).displayNoteDataError();
         Mockito.doAnswer(invocation -> null).when(view).displayNoInternetError();
         Mockito.doAnswer(invocation -> null).when(view).displayRemoveNoteError();
         Mockito.doAnswer(invocation -> null).when(view).displayDefaultUserNameError();
@@ -122,17 +135,20 @@ public class SearchNotesPresenterTests {
         Mockito.when(view.defaultUserName()).thenReturn(defaultUserName);
 
         Mockito.when(notesRepository.getNotes())
-                .thenReturn(Single.just(resultSuccessTestNotes));
+                .thenReturn(Single.just(resultGetNotesSuccess));
         Mockito.when(notesRepository.getNotesByNoteText(searchByNoteRequest))
-                .thenReturn(Single.just(resultSearchByText));
-        Mockito.when(notesRepository.getNotesByUser(searchByUserUIDRequest,authUserName2))
-                .thenReturn(Single.just(resultSearchByUID));
+                .thenReturn(Single.just(resultSearchByTextSuccess));
+        Mockito.when(notesRepository.getNotesByUser(authUserUID2, authUserName2))
+                .thenReturn(Single.just(resultSearchByUserSuccess));
+        Mockito.when(notesRepository.removeNote(testNote))
+                .thenReturn(Single.just(resultRemoveNoteSuccess));
 
         Mockito.when(userRepository.getHumanReadableName(authUserUID)).thenReturn(
                 Single.just(new Result.Success<>(authUserName)));
         Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
                 Single.just(new Result.Success<>(authUserName2)));
-
+        Mockito.when(userRepository.getUserIdFromHumanReadableName(authUserName2)).thenReturn(
+                Single.just(new Result.Success<>(authUserUID2)));
 
     }
 
@@ -215,9 +231,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(view);
         presenter.getNotes(null);
 
@@ -226,9 +239,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNullViewDisplayDefaultUserNameErrorNotCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(null);
         presenter.getNotes(null);
 
@@ -237,9 +247,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.getNotes(null);
@@ -251,9 +258,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(view);
         presenter.getNotes(emptyUserName);
 
@@ -262,9 +266,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorNotCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(null);
         presenter.getNotes(emptyUserName);
 
@@ -273,9 +274,6 @@ public class SearchNotesPresenterTests {
 
     @Test
     public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled() {
-        Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
-                Single.just(new Result.Error<>(new NullPointerException("not found"))));
-
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.getNotes(emptyUserName);
@@ -481,7 +479,7 @@ public class SearchNotesPresenterTests {
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled() {
         Mockito.when(notesRepository.getNotes())
-                .thenReturn(Single.just(resultErrorTestNotes));
+                .thenReturn(Single.just(resultGetNotesError));
 
         presenter.onAttach(view);
         presenter.getNotes(defaultUserName);
@@ -495,7 +493,7 @@ public class SearchNotesPresenterTests {
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorNotCalled() {
         Mockito.when(notesRepository.getNotes())
-                .thenReturn(Single.just(resultErrorTestNotes));
+                .thenReturn(Single.just(resultGetNotesError));
 
         presenter.onAttach(null);
         presenter.getNotes(defaultUserName);
@@ -509,7 +507,7 @@ public class SearchNotesPresenterTests {
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithViewDetachedDisplayLoadingNotesErrorNotCalled() {
         Mockito.when(notesRepository.getNotes())
-                .thenReturn(Single.just(resultErrorTestNotes));
+                .thenReturn(Single.just(resultGetNotesError));
 
         presenter.onAttach(view);
         presenter.onDetach();
@@ -521,93 +519,312 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
     }
 
-// 9    searchNotes   online, text, search notes category position, defaultUserName
+// 9    searchNotes   online, text, search notes category, defaultUserName
 
     @Test
-    public void searchNotesOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewDisplayNotesCalled() {
-
+    public void searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithNonNullViewDisplayNotesCalled() {
         presenter.onAttach(view);
-        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(1)).clearSearchResults();
-        for (Note note : resultSearchByText.getData()){
+        for (Note note : resultSearchByTextSuccess.getData()) {
             Mockito.verify(view, Mockito.times(1)).displayNote(note);
         }
     }
 
-// 10    searchNotes  not online, text, search notes category position, defaultUserName
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithNullViewDisplayNotesNotCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : resultSearchByTextSuccess.getData()) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
 
     @Test
-    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewDisplayNoInternetErrorCalled() {
+    public void searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithViewDetachedDisplayNotesNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : resultSearchByTextSuccess.getData()) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 10    searchNotes  not online, text, search notes category, defaultUserName
+
+    @Test
+    public void searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithNonNullViewDisplayNoInternetErrorCalled() {
         Mockito.when(view.isOnline()).thenReturn(false);
 
         presenter.onAttach(view);
-        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(1)).displayNoInternetError();
     }
 
     @Test
-    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNullViewDisplayNoInternetErrorNotCalled() {
+    public void searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithNullViewDisplayNoInternetErrorNotCalled() {
         Mockito.when(view.isOnline()).thenReturn(false);
 
         presenter.onAttach(null);
-        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
     }
 
     @Test
-    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithViewDetachedDisplayNoInternetErrorNotCalled() {
+    public void searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithViewDetachedDisplayNoInternetErrorNotCalled() {
         Mockito.when(view.isOnline()).thenReturn(false);
 
         presenter.onAttach(view);
         presenter.onDetach();
-        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+        presenter.searchNotes(searchByNoteRequest, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
     }
 
-// 11    searchNotes  online, null text, search notes category position, defaultUserName
+// 11    searchNotes  online, null text, search notes category, defaultUserName
 
     @Test
-    public void searchNotesOnlineNullTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewGetNotesCalled() {
-
+    public void searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithNonNullViewGetNotesCalled() {
         presenter.onAttach(view);
-        presenter.searchNotes(null,noteCategoryInSearch,defaultUserName);
+        presenter.searchNotes(null, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(2)).clearSearchResults();
-        for (Note note : testNotes){
+        for (Note note : testNotes) {
             Mockito.verify(view, Mockito.times(1)).displayNote(note);
         }
     }
 
-// 12    searchNotes  online, empty text, search notes category position, defaultUserName
+    @Test
+    public void searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithNullViewGetNotesNotCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(null, noteSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
 
     @Test
-    public void searchNotesOnlineEmptyTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewGetNotesCalled() {
-
+    public void searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithViewDetachedGetNotesNotCalled() {
         presenter.onAttach(view);
-        presenter.searchNotes(searchEmptyRequest,noteCategoryInSearch,defaultUserName);
+        presenter.onDetach();
+        presenter.searchNotes(null, noteSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 12    searchNotes  online, empty text, search notes category, defaultUserName
+
+    @Test
+    public void searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithNonNullViewGetNotesCalled() {
+        presenter.onAttach(view);
+        presenter.searchNotes(searchEmptyRequest, noteSearchCategory, defaultUserName);
 
         Mockito.verify(view, Mockito.times(2)).clearSearchResults();
-        for (Note note : testNotes){
+        for (Note note : testNotes) {
             Mockito.verify(view, Mockito.times(1)).displayNote(note);
         }
     }
 
-// 13   searchNotes  online, text, search user category position, defaultUserName
+    @Test
+    public void searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithNullViewGetNotesNotCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchEmptyRequest, noteSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
 
     @Test
-    public void searchNotesOnlineEmptyTextCategoryPositionSearchUserDefaultUserNameWithNonNullViewGetNotesCalled() {
-
+    public void searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithViewDetachedGetNotesNotCalled() {
         presenter.onAttach(view);
-        presenter.searchNotes(searchByUserUIDRequest,userCategoryInSearch,defaultUserName);
+        presenter.onDetach();
+        presenter.searchNotes(searchEmptyRequest, noteSearchCategory, defaultUserName);
 
-        Mockito.verify(view, Mockito.times(2)).clearSearchResults();
-        for (Note note : resultSearchByUID.getData()){
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : testNotes) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 13   searchNotes  online, text, search user category, defaultUserName
+
+    @Test
+    public void searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithNonNullViewDisplayNoteCalled() {
+        presenter.onAttach(view);
+        presenter.searchNotes(searchByUserRequest, userSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).clearSearchResults();
+        for (Note note : resultSearchByUserSuccess.getData()) {
             Mockito.verify(view, Mockito.times(1)).displayNote(note);
         }
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithNullViewDisplayNoteNotCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByUserRequest, userSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : resultSearchByUserSuccess.getData()) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithViewDetachedDisplayNoteNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByUserRequest, userSearchCategory, defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).clearSearchResults();
+        for (Note note : resultSearchByUserSuccess.getData()) {
+            Mockito.verify(view, Mockito.times(0)).displayNote(note);
+        }
+    }
+
+// 14   searchNotes  online, text, unknown category, defaultUserName
+
+    @Test
+    public void searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithNonNullViewThrowException() {
+        presenter.onAttach(view);
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Incorrect ID of category");
+
+        presenter.searchNotes(searchByUserRequest, unknownSearchCategory, defaultUserName);
+    }
+
+    @Test
+    public void searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithNullViewNotThrowException() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByUserRequest, unknownSearchCategory, defaultUserName);
+
+    }
+
+    @Test
+    public void searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithViewDetachedNotThrowException() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByUserRequest, unknownSearchCategory, defaultUserName);
+    }
+
+// 15    searchNotes  online, text, search notes category, null defaultUserName
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithNonNullViewDisplayDefaultUserNameErrorCalled() {
+        presenter.onAttach(view);
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, null);
+
+        Mockito.verify(view, Mockito.times(1)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithNullViewDisplayDefaultUserNameErrorCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, null);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithViewDetachedDisplayDefaultUserNameErrorCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, null);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+// 16    searchNotes  online, text, search notes category, empty defaultUserName
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithNonNullViewDisplayDefaultUserNameErrorCalled() {
+        presenter.onAttach(view);
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, emptyUserName);
+
+        Mockito.verify(view, Mockito.times(1)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithNullViewDisplayDefaultUserNameErrorNotCalled() {
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, emptyUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+    @Test
+    public void searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithViewDetachedDisplayDefaultUserNameErrorNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByUserRequest, noteSearchCategory, emptyUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
+    }
+
+// 17    onPositive  online, note, remove note success
+
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteSuccessWithNonNullViewRefreshFragmentCalled() {
+
+        presenter.onAttach(view);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).refreshFragment();
+    }
+
+// 18    onPositive  not online, note, remove note success
+
+    @Test
+    public void onPositiveNotOnlineNoteRemoveNoteSuccessWithNonNullViewDisplayNoInternetErrorCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(1)).displayNoInternetError();
+    }
+
+// 19    onPositive  online, null note, remove note success
+
+    @Test
+    public void onPositiveOnlineNullNoteRemoveNoteSuccessWithNonNullViewDisplayNoteDataErrorCalled() {
+        presenter.onAttach(view);
+        presenter.onPositive(null);
+
+        Mockito.verify(view, Mockito.times(1)).displayNoteDataError();
+    }
+
+// 20   onPositive  online, note, remove note error
+
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteErrorWithNonNullViewDisplayRemoveNoteErrorCalled() {
+        Mockito.when(notesRepository.removeNote(testNote))
+                .thenReturn(Single.just(resultRemoveNoteError));
+
+        presenter.onAttach(view);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(1)).showProgress(true);
+        Mockito.verify(view, Mockito.times(1)).showProgress(false);
+        Mockito.verify(view, Mockito.times(1)).displayRemoveNoteError();
+        Mockito.verify(view, Mockito.times(1)).refreshAdapter();
     }
 
 
