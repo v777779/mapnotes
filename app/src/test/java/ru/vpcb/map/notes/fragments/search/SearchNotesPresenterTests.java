@@ -35,6 +35,8 @@ public class SearchNotesPresenterTests {
 
     private Result.Success<List<Note>> resultSuccessTestNotes;
     private Result.Error<List<Note>> resultErrorTestNotes;
+    private Result.Success<List<Note>> resultSearchByText;
+    private Result.Success<List<Note>> resultSearchByUID;
     private Result.Success<AuthUser> authUser;
     private Result.Error<AuthUser> notAuthUser;
     private List<Note> testNotes;
@@ -50,6 +52,7 @@ public class SearchNotesPresenterTests {
     private String searchByUserUIDRequest;
     private int noteCategoryInSearch;
     private int userCategoryInSearch;
+    private String searchEmptyRequest;
 
 
     @Mock
@@ -73,25 +76,28 @@ public class SearchNotesPresenterTests {
         authUserUID2 = "22222222";
         authUserName2 = "Jenkins";
         emptyUserName = "";
+        defaultUserName = "Unknown";
 
         authUser = new Result.Success<>(new AuthUser(authUserUID));
         notAuthUser = new Result.Error<>(new RuntimeException("Auth Error"));
 
         noteCategoryInSearch = 0;
         userCategoryInSearch = 1;
-        defaultUserName = "Unknown";
         searchByNoteRequest = "test note";
         searchByUserUIDRequest = "22222222";
+        searchEmptyRequest = "";
         testNotes = new ArrayList<>(Arrays.asList(
                 new Note(0, 0, "test note 1_1", authUserUID),
                 new Note(0, 0, "test note 2_1", authUserUID),
                 new Note(0, 0, "test note 1_2", authUserUID2),
-                new Note(0, 0, "test note 2_2", authUserUID2),
-                new Note(0, 0, "test note 3_2", authUserUID2)));
+                new Note(0, 0, "test type 2_2", authUserUID2),
+                new Note(0, 0, "test type 3_2", authUserUID2)));
 
         testNote = new Note(0, 0, "test note", authUserUID);
         resultSuccessTestNotes = new Result.Success<>(testNotes);
         resultErrorTestNotes = new Result.Error<>(new RuntimeException("get notes error"));
+        resultSearchByText = new Result.Success<>(testNotes.subList(0,3));
+        resultSearchByUID = new Result.Success<>(testNotes.subList(2,5));
 
         presenter = new SearchNotesPresenter(appExecutors, userRepository, notesRepository);
 
@@ -117,11 +123,17 @@ public class SearchNotesPresenterTests {
 
         Mockito.when(notesRepository.getNotes())
                 .thenReturn(Single.just(resultSuccessTestNotes));
+        Mockito.when(notesRepository.getNotesByNoteText(searchByNoteRequest))
+                .thenReturn(Single.just(resultSearchByText));
+        Mockito.when(notesRepository.getNotesByUser(searchByUserUIDRequest,authUserName2))
+                .thenReturn(Single.just(resultSearchByUID));
 
         Mockito.when(userRepository.getHumanReadableName(authUserUID)).thenReturn(
                 Single.just(new Result.Success<>(authUserName)));
         Mockito.when(userRepository.getHumanReadableName(authUserUID2)).thenReturn(
                 Single.just(new Result.Success<>(authUserName2)));
+
+
     }
 
 // 0    getNotes   online, correct defaultUserName, correct humanReadableName, correct list<notes>
@@ -509,23 +521,94 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
     }
 
-// 9    searchNotes   online, defaultUserName, humanReadableName, error list<notes>
+// 9    searchNotes   online, text, search notes category position, defaultUserName
 
     @Test
-    public void searchNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled() {
-        Mockito.when(notesRepository.getNotes())
-                .thenReturn(Single.just(resultErrorTestNotes));
+    public void searchNotesOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewDisplayNotesCalled() {
 
         presenter.onAttach(view);
-        presenter.getNotes(defaultUserName);
+        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
 
         Mockito.verify(view, Mockito.times(1)).clearSearchResults();
-        Mockito.verify(view, Mockito.times(1)).showProgress(true);
-        Mockito.verify(view, Mockito.times(1)).showProgress(false);
-        Mockito.verify(view, Mockito.times(1)).displayLoadingNotesError();
+        for (Note note : resultSearchByText.getData()){
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
     }
 
+// 10    searchNotes  not online, text, search notes category position, defaultUserName
 
+    @Test
+    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewDisplayNoInternetErrorCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(1)).displayNoInternetError();
+    }
+
+    @Test
+    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithNullViewDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(null);
+        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
+    @Test
+    public void searchNotesNotOnlineTextCategoryPositionSearchNotesDefaultUserNameWithViewDetachedDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.searchNotes(searchByNoteRequest,noteCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
+// 11    searchNotes  online, null text, search notes category position, defaultUserName
+
+    @Test
+    public void searchNotesOnlineNullTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewGetNotesCalled() {
+
+        presenter.onAttach(view);
+        presenter.searchNotes(null,noteCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(2)).clearSearchResults();
+        for (Note note : testNotes){
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
+    }
+
+// 12    searchNotes  online, empty text, search notes category position, defaultUserName
+
+    @Test
+    public void searchNotesOnlineEmptyTextCategoryPositionSearchNotesDefaultUserNameWithNonNullViewGetNotesCalled() {
+
+        presenter.onAttach(view);
+        presenter.searchNotes(searchEmptyRequest,noteCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(2)).clearSearchResults();
+        for (Note note : testNotes){
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
+    }
+
+// 13   searchNotes  online, text, search user category position, defaultUserName
+
+    @Test
+    public void searchNotesOnlineEmptyTextCategoryPositionSearchUserDefaultUserNameWithNonNullViewGetNotesCalled() {
+
+        presenter.onAttach(view);
+        presenter.searchNotes(searchByUserUIDRequest,userCategoryInSearch,defaultUserName);
+
+        Mockito.verify(view, Mockito.times(2)).clearSearchResults();
+        for (Note note : resultSearchByUID.getData()){
+            Mockito.verify(view, Mockito.times(1)).displayNote(note);
+        }
+    }
 
 
 

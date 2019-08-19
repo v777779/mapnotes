@@ -103,14 +103,18 @@ public class SearchNotesPresenter extends ScopedPresenter<SearchNotesView>
         if (view == null) {
             return;
         }
-
         if (!view.isOnline()) {
             view.displayNoInternetError();
             return;
         }
+        if(TextUtils.isEmpty(defaultUserName)) {
+            view.displayDefaultUserNameError();
+            return;
+        }
 
         view.clearSearchResults();
-        if (text.isEmpty()) {
+
+        if (TextUtils.isEmpty(text)) {
             getNotes(defaultUserName); // just reload all notes
             return;
         }
