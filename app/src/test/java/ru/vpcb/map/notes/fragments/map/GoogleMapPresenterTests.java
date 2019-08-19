@@ -24,7 +24,7 @@ public class GoogleMapPresenterTests {
     private Location currentLocation;
     private Location newLocation;
     private Note testNote;
-    String authUserId;
+    String authUserUID;
     String testNoteText;
 
     @Mock
@@ -40,9 +40,9 @@ public class GoogleMapPresenterTests {
         currentLocation = new Location(-33.8688, 151.2093);
         newLocation = new Location(-37.4220, -122.0840);
         testNoteText = "test note";
-        authUserId = "111111";
+        authUserUID = "111111";
         testNote = new Note(currentLocation.getLatitude(), currentLocation.getLongitude(),
-                testNoteText, authUserId);
+                testNoteText, authUserUID);
 
         presenter = new GoogleMapPresenter();
 
