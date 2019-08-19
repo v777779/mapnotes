@@ -22,15 +22,17 @@ An Android application which allows you to add/remove notes to the current locat
 * Robolectric
 * Mockito
 * Espresso
-* Java
 * RxJava2 
 * Dagger2
 
 
 
 
+
 # Configuration
 * Configuration requires Firebase Project and Google Maps SDK, see [installation guide](doc/installation_guide.md) for the details.
+
+
 
 
 
@@ -53,6 +55,8 @@ An Android application which allows you to add/remove notes to the current locat
 
   
 
+
+
 # Get Started
 
 Setup Firebase Project and Google Maps SDK for Android according to [installation guide](doc/installation_guide)
@@ -71,8 +75,12 @@ Swipe note right or left to delete.
 
 
 
+
+
 # Unit Tests
-* Unit tests based on Robolectric and Mockito frameworks added to application, see [unit tests guide](doc/unit_tests_guide.md) for the details.
+Unit tests based on Robolectric and Mockito frameworks added to application, see [unit tests guide](doc/unit_tests_guide.md) for the details.
+
+
 
 
 
