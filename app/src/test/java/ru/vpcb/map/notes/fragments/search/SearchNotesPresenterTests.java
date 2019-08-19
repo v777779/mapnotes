@@ -25,7 +25,6 @@ import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.model.AuthUser;
 import ru.vpcb.map.notes.model.Note;
 
 @RunWith(RobolectricTestRunner.class)   // setup Robolectric  build.gradle, gradle.properties
@@ -38,14 +37,11 @@ public class SearchNotesPresenterTests {
     private Result.Error<List<Note>> resultGetNotesError;
     private Result.Success<List<Note>> resultSearchByTextSuccess;
     private Result.Success<List<Note>> resultSearchByUserSuccess;
-    private Result.Success<AuthUser> authUser;
-    private Result.Error<AuthUser> notAuthUser;
     private Result.Success<String> resultRemoveNoteSuccess;
     private Result.Error<String> resultRemoveNoteError;
 
 
     private List<Note> testNotes;
-    private List<String> testNames;
     private Note testNote;
     private String authUserUID;
     private String authUserUID2;
@@ -85,9 +81,6 @@ public class SearchNotesPresenterTests {
         authUserName2 = "Jenkins";
         emptyUserName = "";
         defaultUserName = "Unknown";
-
-        authUser = new Result.Success<>(new AuthUser(authUserUID));
-        notAuthUser = new Result.Error<>(new RuntimeException("Auth Error"));
 
         resultRemoveNoteSuccess = new Result.Success<>("success");
         resultRemoveNoteError = new Result.Error<>(new RuntimeException("error"));
@@ -152,7 +145,7 @@ public class SearchNotesPresenterTests {
 
     }
 
-// 0    getNotes   online, correct defaultUserName, correct humanReadableName, correct list<notes>
+// 0    getNotes   online, correct defaultUserName, correct humanReadableName, correct List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoteCalled() {
@@ -194,7 +187,7 @@ public class SearchNotesPresenterTests {
         }
     }
 
-// 1    getNotes   not online, correct defaultUserName, correct humanReadableName, correct list<notes>
+// 1    getNotes   not online, correct defaultUserName, correct humanReadableName, correct List<Note>
 
     @Test
     public void getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoInternetErrorCalled() {
@@ -227,7 +220,7 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
     }
 
-// 2    getNotes   online, null defaultUserName, error humanReadableName, correct list<notes>
+// 2    getNotes   online, null defaultUserName, error humanReadableName, correct List<Note>
 
     @Test
     public void getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
@@ -254,7 +247,7 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
     }
 
-// 3    getNotes   online, empty defaultUserName, error humanReadableName, correct list<notes>
+// 3    getNotes   online, empty defaultUserName, error humanReadableName, correct List<Note>
 
     @Test
     public void getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled() {
@@ -281,7 +274,7 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayDefaultUserNameError();
     }
 
-// 4    getNotes   online, defaultUserName, null humanReadableName, correct list<notes>
+// 4    getNotes   online, defaultUserName, null humanReadableName, correct List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled() {
@@ -333,7 +326,7 @@ public class SearchNotesPresenterTests {
     }
 
 
-// 5    getNotes   online, defaultUserName, empty humanReadableName, correct list<notes>
+// 5    getNotes   online, defaultUserName, empty humanReadableName, correct List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled() {
@@ -384,7 +377,7 @@ public class SearchNotesPresenterTests {
         }
     }
 
-// 6    getNotes   online, defaultUserName, humanReadableName, null list<notes>
+// 6    getNotes   online, defaultUserName, humanReadableName, null List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled() {
@@ -429,7 +422,7 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
     }
 
-// 7    getNotes   online, defaultUserName, humanReadableName, empty list<notes>
+// 7    getNotes   online, defaultUserName, humanReadableName, empty List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled() {
@@ -474,7 +467,7 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(0)).displayLoadingNotesError();
     }
 
-// 8    getNotes   online, defaultUserName, humanReadableName, error list<notes>
+// 8    getNotes   online, defaultUserName, humanReadableName, error List<Note>
 
     @Test
     public void getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled() {
@@ -789,6 +782,29 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(1)).refreshFragment();
     }
 
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteSuccessWithNullViewRefreshFragmentNotCalled() {
+
+        presenter.onAttach(null);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).refreshFragment();
+    }
+
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteSuccessWithViewDetachedRefreshFragmentNotCalled() {
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).refreshFragment();
+    }
+
 // 18    onPositive  not online, note, remove note success
 
     @Test
@@ -801,6 +817,27 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(1)).displayNoInternetError();
     }
 
+    @Test
+    public void onPositiveNotOnlineNoteRemoveNoteSuccessWithNullViewDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(null);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
+    @Test
+    public void onPositiveNotOnlineNoteRemoveNoteSuccessWithViewDetachedDisplayNoInternetErrorNotCalled() {
+        Mockito.when(view.isOnline()).thenReturn(false);
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoInternetError();
+    }
+
 // 19    onPositive  online, null note, remove note success
 
     @Test
@@ -809,6 +846,23 @@ public class SearchNotesPresenterTests {
         presenter.onPositive(null);
 
         Mockito.verify(view, Mockito.times(1)).displayNoteDataError();
+    }
+
+    @Test
+    public void onPositiveOnlineNullNoteRemoveNoteSuccessWithNullViewDisplayNoteDataErrorNotCalled() {
+        presenter.onAttach(null);
+        presenter.onPositive(null);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoteDataError();
+    }
+
+    @Test
+    public void onPositiveOnlineNullNoteRemoveNoteSuccessWithViewDetachedDisplayNoteDataErrorNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.onPositive(null);
+
+        Mockito.verify(view, Mockito.times(0)).displayNoteDataError();
     }
 
 // 20   onPositive  online, note, remove note error
@@ -827,6 +881,61 @@ public class SearchNotesPresenterTests {
         Mockito.verify(view, Mockito.times(1)).refreshAdapter();
     }
 
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteErrorWithNullViewDisplayRemoveNoteErrorNotCalled() {
+        Mockito.when(notesRepository.removeNote(testNote))
+                .thenReturn(Single.just(resultRemoveNoteError));
+
+        presenter.onAttach(null);
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayRemoveNoteError();
+        Mockito.verify(view, Mockito.times(0)).refreshAdapter();
+    }
+
+    @Test
+    public void onPositiveOnlineNoteRemoveNoteErrorWithViewDetachedDisplayRemoveNoteErrorNotCalled() {
+        Mockito.when(notesRepository.removeNote(testNote))
+                .thenReturn(Single.just(resultRemoveNoteError));
+
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.onPositive(testNote);
+
+        Mockito.verify(view, Mockito.times(0)).showProgress(true);
+        Mockito.verify(view, Mockito.times(0)).showProgress(false);
+        Mockito.verify(view, Mockito.times(0)).displayRemoveNoteError();
+        Mockito.verify(view, Mockito.times(0)).refreshAdapter();
+    }
+
+// 21   onNegative
+
+    @Test
+    public void onNegativeWithNonNullViewRefreshAdapterCalled() {
+        presenter.onAttach(view);
+        presenter.onNegative();
+
+        Mockito.verify(view, Mockito.times(1)).refreshAdapter();
+    }
+
+    @Test
+    public void onNegativeWithNullViewRefreshAdapterNotCalled() {
+        presenter.onAttach(null);
+        presenter.onNegative();
+
+        Mockito.verify(view, Mockito.times(0)).refreshAdapter();
+    }
+
+    @Test
+    public void onNegativeWithViewDetachedRefreshAdapterNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.onNegative();
+
+        Mockito.verify(view, Mockito.times(0)).refreshAdapter();
+    }
 
 
     @After
