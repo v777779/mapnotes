@@ -21,5 +21,8 @@ public interface MapMvpPresenter extends MvpPresenter<MapView> {
     void exit();
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    void updateCurrentLocation(Location location);
+    void setCurrentLocation(Location location);
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    Location getCurrentLocation();
 }

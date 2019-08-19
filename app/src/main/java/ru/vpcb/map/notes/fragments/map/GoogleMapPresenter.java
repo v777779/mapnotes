@@ -36,7 +36,6 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
         if (!isInteractionMode) {
             view.animateCamera(currentLocation);
             view.sendAnalytics(currentLocation);
-
         }
     }
 
@@ -89,7 +88,12 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
 // testing
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    public void updateCurrentLocation(Location location){
+    public void setCurrentLocation(Location location){
         this.currentLocation = location;
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public Location getCurrentLocation(){
+        return currentLocation;
     }
 }
