@@ -10,7 +10,11 @@ Tested Methods
 
 ### <u>start()</u>
 
+
+
 ![](unit/splash_presenter_start.png)
+
+
 
 #### Test group 0	
 
@@ -32,6 +36,8 @@ startWithPlayServicesAvailableUserAuthenticatedNullViewStartNavigateToHomeNotCal
 startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
 ```
 
+
+
 #### Test group 1
 
  ![](unit/c.png)
@@ -51,6 +57,8 @@ startWithPlayServicesAvailableUserNotAuthenticatedNullViewNavigateToLoginNotCall
 ```
 startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled
 ```
+
+
 
 #### Test group 2
 
@@ -72,6 +80,8 @@ startWithPlayServicesNotAvailablePlayMarketInstalledNullViewViewGetErrorDialogNo
 startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetErrorDialogNotCalled
 ```
 
+
+
 #### Test group 3
 
 ![](unit/e.png) 
@@ -92,9 +102,15 @@ startWithPlayServicesNotAvailablePlayMarketNotInstalledNullViewGetAlertDialogNot
 startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertDialogNotCalled
 ```
 
+
+
 ### <u>startmapNotes()</u>
 
+
+
 ![](unit/splash_presenter_start_map_notes.png)
+
+
 
 #### Test group 4
 
@@ -141,6 +157,8 @@ startMapNotesWithUserNotAuthenticatedWithNullViewNavigateToLoginNotCalled
 
 
 ### <u>playMarketResults()</u>
+
+
 
 ![](unit/splash_presenter_play_market_results.png)
 
@@ -231,7 +249,10 @@ playMarketResultsWithNotGPSRequestCodeWithViewDetachedFinishActivityNotCalled
 ```
 
 
+
 ### <u>onPositive()</u>
+
+
 
 ![](unit/splash_presenter_on_positive.png)
 
@@ -261,7 +282,11 @@ onPositiveWithViewDetachedNavigateToPlayMarketNotCalled
 
 ### <u>onNegative()</u>
 
+
+
 ![](unit/splash_presenter_on_negative.png)
+
+
 
 #### Test group 11
 
@@ -282,86 +307,4 @@ onNegativeWithNullViewFinishActivityNotCalled
 ```
 onNegativeWithViewDetachedFinishActivityNotCalled
 ```
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-#### Test group 8
-
-branch	C
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-![](unit/a.png) 
-
-
-
-
-
-
-
-
-
-
-
-
 

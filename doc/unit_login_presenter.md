@@ -9,6 +9,8 @@ Tested Methods
 
 ### <u>openSignIn()</u>
 
+
+
 ![](unit/login_presenter_open_sign_in.png) 
 
 
@@ -36,6 +38,8 @@ openSignInWithViewDetachedNavigateToSignInNotCalled
 
 
 ### <u>openSignUp()</u>
+
+
 
 ![](unit/login_presenter_open_sign_up.png) 
 

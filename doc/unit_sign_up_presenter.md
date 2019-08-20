@@ -8,7 +8,11 @@ Tested Methods
 
 ### <u>signUp()</u>
 
+
+
 ![](unit/sign_in_presenter_sign_up.png)
+
+
 
 
 
