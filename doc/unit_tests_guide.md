@@ -103,37 +103,35 @@ See [source](../app/src/test/java/ru/vpcb/map/notes/activity/home/HomePresenterT
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- getCurrentLocation()
+- addNote()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_add_note_presenter_doc](unit_add_note_presenter.md) for the description.
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/add/AddNotePresenterTests.java) for test methods and  [add_note_presenter_tests](unit_add_note_presenter.md) for the description.
 
 #### GoogleMapPresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- handleInteractionMode()
+- handleMapNote()
+- handleLocationUpdate()
+- checkEnableGpsLocation()
+- openSettings()
+- exit()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_google_map_presenter_doc](unit_google_map_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/map/GoogleMapPresenterTests.java) for test methods and  [google_map_presenter_tests](unit_google_map_presenter.md) for the description.
 
 #### SearchNotesPresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
+- getNotes()
+- searchNotes()
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_search_notes_presenter](unit_search_notes_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/search/SearchNotesPresenterTests.java) for test methods and  [search_notes_presenter_tests](unit_search_notes_presenter.md) for the description.
 
 
 
@@ -143,25 +141,17 @@ See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresen
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- isValidEmail()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_validation_ext](unit_validation_ext.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/ext/ValidationExtTests.java) for test methods and  [validation_ext_tests](unit_validation_ext.md) for the description.
 
 #### CoordinateFormatter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- format()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_coordinate_formatter](unit_coordinate_formatter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/data/formatter/CoordinateFormatterTests.java) for test methods and  [coordinate_formatter_tests](unit_coordinate_formatter.md) for the description.
 
 
 
