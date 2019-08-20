@@ -1,6 +1,6 @@
 ## HomePresenter Unit Tests
 
-Tested Methods
+#### Tested Methods
 
 
 -  handleNavigationItemClick()

@@ -1,6 +1,6 @@
 ## SplashPresenter Unit Tests
 
-Tested Methods
+#### Tested Methods
 
 -  start()
 - startMapNotes()
