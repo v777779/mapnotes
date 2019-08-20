@@ -6,7 +6,7 @@ An Android application which allows you to add/remove notes to the current locat
 
 <img src="doc/images/screen_020.png" alt="drawing" width="800"/> 
 
-<pre></pre>
+
 <img src="doc/images/screen_021.png" alt="drawing" width="800"/> 
 
 
