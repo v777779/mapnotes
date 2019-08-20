@@ -2,223 +2,96 @@
 
 Tested Methods
 
+-  onAttach()
 -  getCurrentLocation()
 -  addNote()
+-  onDetach()
 
 ---
 
-### <u>start()</u>
+### <u>onAttach()</u>
 
-![](unit/splash_presenter_start.png)
+![](unit/add_note_presenter_on_attach.png)
 
 #### Test group 0	
 
 ![](unit/b.png)  branch B
 
 ```
-
+onAttachWithNonNullViewStartLocationUpdatesCalled
 ```
 
 ![](unit/a.png)	branch A 	view == null
 
 ```
-
+onAttachWithNullViewStartLocationUpdatesNotCalled
 ```
 
-![](unit/a.png)	branch A	view detached from presenter
 
-```
+### <u>getCurrentLocation()</u>
 
-```
+![](unit/add_note_presenter_get_current_location.png)
 
 #### Test group 1
 
- ![](unit/c.png)
-
+![](unit/b.png) 
 ```
-
+getCurrentLocationWithNonNullViewDisplayCurrentLocationCalled
 ```
-
 ![](unit/a.png) 
-
 ```
-
+getCurrentLocationWithNullViewDisplayCurrentLocationNotCalled
 ```
-
 ![](unit/a.png) 
-
 ```
-
+getCurrentLocationWithViewDetachedDisplayCurrentLocationCalled
 ```
+### <u>addNote()</u>
+
+![](unit/add_note_presenter_add_note.png)
+
 
 #### Test group 2
 
-![](unit/d.png) 
-
+![](unit/b.png) 
 ```
-
+addNoteUserAuthenticatedWithNonNullViewAddNoteCalled
 ```
-
 ![](unit/a.png) 
-
 ```
-
+addNoteUserAuthenticatedWithNullViewAddNoteNotCalled
 ```
-
-![](unit/a.png)  
-
+![](unit/a.png) 
 ```
-
+addNoteUserAuthenticatedWithViewDetachedAddNoteNotCalled
 ```
 
 #### Test group 3
 
-![](unit/e.png) 
+![](unit/c.png) 
 ```
-
-```
-![](unit/a.png) 
-```
-
+addNoteUserNotAuthenticatedWithNonNullViewAddNoteNotCalled
 ```
 ![](unit/a.png) 
 ```
-
+addNoteUserNotAuthenticatedWithNullViewAddNoteNotCalled
 ```
+![](unit/a.png) 
+```
+addNoteUserNotAuthenticatedWithViewDetachedAddNoteNotCalled
+```
+### <u>onDetach()</u>
+
+![](unit/add_note_presenter_on_detach.png)
 
 #### Test group 4
 
-![](unit/e.png) 
+![](unit/b.png) 
 ```
-
-```
-![](unit/a.png) 
-```
-
+onDetachWithNonNullViewStartLocationUpdatesCalled
 ```
 ![](unit/a.png) 
 ```
-
+onDettachWithNullViewStartLocationUpdatesNotCalled
 ```
-
-#### Test group 5
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 6
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 7
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 8
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 9
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 10
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 11
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 12
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
 

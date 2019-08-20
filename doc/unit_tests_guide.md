@@ -103,8 +103,10 @@ See [source](../app/src/test/java/ru/vpcb/map/notes/activity/home/HomePresenterT
 
 Tested Methods
 
+- onAttach()
 - getCurrentLocation()
 - addNote()
+- onDetach()
 
 
 See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/add/AddNotePresenterTests.java) for test methods and  [add_note_presenter_tests](unit_add_note_presenter.md) for the description.

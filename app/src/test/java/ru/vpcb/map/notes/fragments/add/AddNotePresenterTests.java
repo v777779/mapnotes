@@ -1,9 +1,13 @@
 package ru.vpcb.map.notes.fragments.add;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -20,7 +24,9 @@ import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
+import ru.vpcb.map.notes.executors.IConsumer;
 import ru.vpcb.map.notes.model.AuthUser;
+import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
 @RunWith(RobolectricTestRunner.class)   // setup Robolectric  build.gradle, gradle.properties
@@ -32,6 +38,10 @@ public class AddNotePresenterTests {
     private String testNoteText;
     private Result.Success<AuthUser> authUser;
     private Result.Error<AuthUser> notAuthUser;
+
+    private IConsumer<Location> listener;
+    private Location currentLocation;
+    private String currentLocationString;
 
     @Mock
     private AddNoteView view;
@@ -46,6 +56,9 @@ public class AddNotePresenterTests {
     @Mock
     private LocationFormatter locationFormatter;
 
+    @Captor
+    ArgumentCaptor<IConsumer<Location>> captor;
+
     private AddNoteMvpPresenter presenter;
 
     @Before
@@ -56,6 +69,9 @@ public class AddNotePresenterTests {
         testNoteText = "test note";
         authUser = new Result.Success<>(new AuthUser(authUserUID));
         notAuthUser = new Result.Error<>(new RuntimeException("Auth Error"));
+
+        currentLocation = new Location(-33.8688, 151.2093);
+        currentLocationString = "-33.8688, 151.2093";
 
         presenter = new AddNotePresenter(userRepository, notesRepository, locationProvider,
                 locationFormatter);
@@ -69,8 +85,14 @@ public class AddNotePresenterTests {
         Mockito.doAnswer(invocation -> null).when(view).hideKeyboard();
         Mockito.doAnswer(invocation -> null).when(locationProvider).startLocationUpdates();
         Mockito.doAnswer(invocation -> null).when(locationProvider).stopLocationUpdates();
+        Mockito.doNothing().when(locationProvider)
+                .addUpdatableLocationListener(ArgumentMatchers.any());
+
         Mockito.doAnswer(invocation -> null).when(notesRepository).addNote(Mockito.any());
         Mockito.when(userRepository.getCurrentUser()).thenReturn(authUser);
+
+        Mockito.when(locationFormatter.format(currentLocation)).thenReturn(currentLocationString);
+
     }
 
 // 0    onAttach
@@ -94,21 +116,65 @@ public class AddNotePresenterTests {
 // 1    getCurrentLocation
 
     @Test
-    public void getCurrentLocationWithNonNullViewAddUpdatableLocationListenerCalled() {
+    public void getCurrentLocationWithNonNullViewDisplayCurrentLocationCalled() {
+// capture arguments support
+//        Mockito.doNothing().when(locationProvider).addUpdatableLocationListener(ArgumentMatchers.any());
+//        Mockito.when(locationFormatter.format(currentLocation)).thenReturn(currentLocationString);
+
         presenter.onAttach(view);
         presenter.getCurrentLocation();
+// capture arguments
+        Mockito.verify(locationProvider).addUpdatableLocationListener(captor.capture());
+        listener = captor.getValue();
+        listener.accept(currentLocation);
 
         Mockito.verify(locationProvider, Mockito.times(1))
                 .addUpdatableLocationListener(Mockito.any());
+        Mockito.verify(locationFormatter, Mockito.times(1))
+                .format(currentLocation);
+        Mockito.verify(view, Mockito.times(1))
+                .displayCurrentLocation(currentLocationString);
+
+        Assert.assertEquals(currentLocation,presenter.getLastLocation());
     }
 
     @Test
-    public void getCurrentLocationWithNullViewAddUpdatableLocationListenerCalled() {
-        presenter.onAttach(view);
+    public void getCurrentLocationWithNullViewDisplayCurrentLocationNotCalled() {
+        presenter.onAttach(null);
         presenter.getCurrentLocation();
+
+        Mockito.verify(locationProvider).addUpdatableLocationListener(captor.capture());
+        listener = captor.getValue();
+        listener.accept(currentLocation);
 
         Mockito.verify(locationProvider, Mockito.times(1))
                 .addUpdatableLocationListener(Mockito.any());
+        Mockito.verify(locationFormatter, Mockito.times(0))
+                .format(currentLocation);
+        Mockito.verify(view, Mockito.times(0))
+                .displayCurrentLocation(currentLocationString);
+
+        Assert.assertEquals(currentLocation,presenter.getLastLocation());
+    }
+
+    @Test
+    public void getCurrentLocationWithViewDetachedDisplayCurrentLocationCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.getCurrentLocation();
+
+        Mockito.verify(locationProvider).addUpdatableLocationListener(captor.capture());
+        listener = captor.getValue();
+        listener.accept(currentLocation);
+
+        Mockito.verify(locationProvider, Mockito.times(1))
+                .addUpdatableLocationListener(Mockito.any());
+        Mockito.verify(locationFormatter, Mockito.times(0))
+                .format(currentLocation);
+        Mockito.verify(view, Mockito.times(0))
+                .displayCurrentLocation(currentLocationString);
+
+        Assert.assertEquals(currentLocation,presenter.getLastLocation());
     }
 
 // 2    addNote     user authenticated
