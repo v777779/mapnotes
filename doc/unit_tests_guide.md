@@ -4,9 +4,7 @@ Unit tests used for local testing on JVM to verify that the login of individual 
 
 Unit tests  written for activity presenters, fragment presenters, and user classes.
 
-Methods in unit tests have comments with group /method number, method name and condition
-
-Test method names include tested method name, input parameters and output result descriptions
+Test method names include tested method name, state of input parameters and output result description
 
 For example:
 
@@ -24,29 +22,31 @@ startWithPlayServicesAvailableUserNotAuthenticatedNonNullViewNavigateToLoginCall
 
 - result		       		navigateToLogin() method called
 
-Tested Activity Presenters:  
+#### Tested Activity Presenters:  
 
-- SplashPresenter, LoginPresenter,SignInPresenter, SignUpPresenter, HomePresenter
+- SplashPresenter, LoginPresenter, SignInPresenter, SignUpPresenter, HomePresenter
 - Every method tested with  three variants  of view that represents AppCompatActivity
   - view is non null
   - view is null
   - view is non null but detached from presenters
 
-Tested Fragment Presenters:
+#### Tested Fragment Presenters:
 
-- AddNotePresenter, GoogleMapPresenter, SearchNotesPresenter
+- AddNotePresenter,  GoogleMapPresenter,  SearchNotesPresenter
 - Every method tested with  three variants of view, that represents Fragment Activity
   - view is non null
   - view is null
   - view is non null but detached from presenters
 
-Tested user classes:
+#### Tested user classes:
 
 - ValidationExt, CoordinateFormatter
 
 
 
-## SplashPresenter
+## Activity Presenter Tests
+
+#### SplashPresenter Tests
 
 Tested Methods
 
@@ -56,138 +56,129 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-### <u>start()</u>
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
-![](unit/splash_presenter_start.png)
+#### LoginPresenter Tests
 
-#### Test group 0	
+Tested Methods
 
-branch	B
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
 
-```
-startWithPlayServicesAvailableUserAuthenticatedNonNullViewNavigateToHomeCalled
-```
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
-branch	A	view == null
+#### SignInPresenter Tests
 
-```
-startWithPlayServicesAvailableUserAuthenticatedNullViewStartNavigateToHomeNotCalled
-```
+Tested Methods
 
-branch	A	view detached from presenter
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
 
-```
-startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
-```
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
-#### Test group 1
+#### SignUpPresenter Tests
 
-branch	C
+Tested Methods
 
-```
-startWithPlayServicesAvailableUserNotAuthenticatedNonNullViewNavigateToLoginCalled
-```
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
 
-branch	A
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
-```
-startWithPlayServicesAvailableUserNotAuthenticatedNullViewNavigateToLoginNotCalled
-```
+#### HomePresenter Tests
 
-branch	A
+Tested Methods
 
-```
-startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled
-```
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
 
-#### Test group 2
-
-branch	D
-
-```
-startWithPlayServicesNotAvailablePlayMarketInstalledNonNullViewGetErrorDialog
-```
-
-branch 	A
-
-```
-startWithPlayServicesNotAvailablePlayMarketInstalledNullViewViewGetErrorDialogNotCalled
-```
-
-branch 	A
-
-```
-startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetErrorDialogNotCalled
-```
-
-#### Test group 3
-
-branch	E
-
-```
-startWithPlayServicesNotAvailablePlayMarketNotInstalledNonNullViewGetAlertDialog
-```
-
-branch 	A
-
-```
-startWithPlayServicesNotAvailablePlayMarketNotInstalledNullViewGetAlertDialogNotCalled
-```
-
-branch 	A
-
-```
-startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertDialogNotCalled
-```
-
-### <u>startmapNotes()</u>
-
-TBD
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
 
 
-#### Test group 4
+## Fragment Presenters Tests
 
-branch	B
+#### AddNotePresenter Tests
 
-branch 	A
+Tested Methods
 
-branch 	A
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+
+#### GoogleMapPresenter Tests
+
+Tested Methods
+
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+
+#### SearchNotesPresenter Tests
+
+Tested Methods
+
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
 
 
-#### Test group 5
+## User Classes Tests
 
-branch	C
+#### ValidationExt Tests
 
-branch 	A
+Tested Methods
 
-branch 	A
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+
+#### CoordinateFormatter Tests
+
+Tested Methods
+
+- start()
+- startMapNotes()
+- playMarketResults()
+- onPositive()
+- onNegative()
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
 
 
 
-#### Test group 6
-
-branch	D
-
-branch 	A
-
-branch 	A
 
 
 
-#### Test group 7
 
-branch	E
 
-branch 	A
 
-branch 	A
-
-#### Test group 8
-
-branch	C
-
-branch 	A
-
-branch 	A

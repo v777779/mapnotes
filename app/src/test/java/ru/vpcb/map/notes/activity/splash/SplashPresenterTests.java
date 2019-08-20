@@ -28,7 +28,7 @@ import ru.vpcb.map.notes.model.AuthUser;
         sdk = 28,
         application = MainApp.class
 )
-public class SplashPresneterTests {
+public class SplashPresenterTests {
 
     private Result<AuthUser> authUser;
     private Result.Error<AuthUser> notAuthUser;
