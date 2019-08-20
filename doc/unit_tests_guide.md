@@ -119,7 +119,7 @@ Tested Methods
 - handleMapNote()
 - handleLocationUpdate()
 - checkEnableGpsLocation()
-- openSettings()
+- open Settings()
 - exit()
 
 See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/map/GoogleMapPresenterTests.java) for test methods and  [google_map_presenter_tests](unit_google_map_presenter.md) for the description.

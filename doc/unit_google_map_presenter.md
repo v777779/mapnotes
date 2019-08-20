@@ -2,36 +2,37 @@
 
 #### Tested Methods
 
--  start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+-  handleInteractionMode()
+-  handleMapNote()
+-  handleLocationUpdate()
+-  checkEnableGpsLocation()
+-  openSettings()
+-  exit()
 
 ---
 
-### <u>start()</u>
+### <u>handleInteractionMode()</u>
 
-![](unit/splash_presenter_start.png)
+![](unit/google_map_presenter_handle_interaction_mode.png)
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](unit/b.png)	branch B
 
 ```
-
+handleInteractionModeInteractionModeWithNonNullViewAnimateCameraNotCalled
 ```
 
 ![](unit/a.png)	branch A 	view == null
 
 ```
-
+handleInteractionModeInteractionModeWithNullViewAnimateCameraNotCalled
 ```
 
 ![](unit/a.png)	branch A	view detached from presenter
 
 ```
-
+handleInteractionModeInteractionModeWithViewDetachedAnimateCameraNotCalled
 ```
 
 #### Test group 1
@@ -39,189 +40,216 @@
  ![](unit/c.png)
 
 ```
-
+handleInteractionModeNotInteractionModeWithNonNullViewAnimateCameraCalled
 ```
 
 ![](unit/a.png) 
 
 ```
+handleInteractionModeNotInteractionModeWithNullViewAnimateCameraNotCalled
+```
 
+![](unit/a.png) 
+```
+handleInteractionModeNotInteractionModeWithViewDetachedAnimateCameraNotCalled
+```
+
+
+### <u>handleMapNote()</u>
+
+![](unit/google_map_presenter_handle_map_note.png)
+
+#### Test group 2	
+
+![](unit/b.png)  
+
+```
+handleMapNoteWithNonNullViewDisplayNoteOnMapCalled
+```
+
+![](unit/a.png)	
+
+```
+handleMapNoteWithNullViewDisplayNoteOnMapNotCalled
+```
+
+![](unit/a.png)	
+
+```
+handleMapNoteWithViewDetachedDisplayNoteOnMapNotCalled
+```
+
+
+### <u>handleLocationUpdate()</u>
+
+![](unit/google_map_presenter_handle_location_update.png)
+
+#### Test group 3	
+
+![](unit/b.png)  
+
+```
+handleLocationUpdateNotInteractionModeNewLocationNotEqualsToCurrentWithNonNullViewAnimateCameraCalled
+```
+
+![](unit/a.png)	
+
+```
+handleLocationUpdateNotInteractionModeNewLocationNotEqualsToCurrentWithNullViewAnimateCameraNotCalled
+```
+
+![](unit/a.png)	
+
+```
+handleLocationUpdateNotInteractionModeNewLocationNotEqualsToCurrentWithViewDetachedAnimateCameraNotCalled
+```
+
+#### Test group 4
+
+ ![](unit/c.png)
+
+```
+handleLocationUpdateNotInteractionModeNewLocationEqualsToCurrentWithNonNullViewAnimateCameraNotCalled
 ```
 
 ![](unit/a.png) 
 
 ```
-
+handleLocationUpdateNotInteractionModeNewLocationEqualsToCurrentWithNullViewAnimateCameraNotCalled
 ```
 
-#### Test group 2
+![](unit/a.png) 
+```
+handleLocationUpdateNotInteractionModeNewLocationEqualsToCurrentWithViewDetachedAnimateCameraNotCalled
+```
+
+#### Test group 5
 
 ![](unit/d.png) 
 
 ```
-
+handleLocationUpdateInteractionModeNewLocationNotEqualsToCurrentWithNonNullViewAnimateCameraNotCalled
 ```
 
 ![](unit/a.png) 
 
 ```
-
+handleLocationUpdateInteractionModeNewLocationNotEqualsToCurrentWithNullViewAnimateCameraNotCalled
 ```
 
 ![](unit/a.png)  
 
 ```
-
-```
-
-#### Test group 3
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 4
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-
-#### Test group 5
-
-![](unit/e.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
-```
-![](unit/a.png) 
-```
-
+handleLocationUpdateInteractionModeNewLocationNotEqualsToCurrentWithViewDetachedAnimateCameraNotCalled
 ```
 
 #### Test group 6
 
 ![](unit/e.png) 
 ```
-
+handleLocationUpdateInteractionModeNewLocationEqualsToCurrentWithNonNullViewAnimateCameraNotCalled
 ```
 ![](unit/a.png) 
 ```
-
+handleLocationUpdateInteractionModeNewLocationEqualsToCurrentWithNullViewAnimateCameraNotCalled
 ```
 ![](unit/a.png) 
 ```
-
+handleLocationUpdateInteractionModeNewLocationEqualsToCurrentWithViewDetachedAnimateCameraNotCalled
 ```
 
-#### Test group 7
 
-![](unit/e.png) 
-```
+### <u>checkEnableGpsLocation()</u>
+
+![](unit/google_map_presenter_check_enable_gps_location.png)
+
+#### Test group 7	
+
+![](unit/b.png)  
 
 ```
-![](unit/a.png) 
+checkEnableGpsLocationLocationAvailableWithNonNullViewShowLocationAlertDialogNotCalled
 ```
 
+![](unit/a.png)	
+
 ```
-![](unit/a.png) 
+checkEnableGpsLocationLocationAvailableWithNullViewShowLocationAlertDialogNotCalled
 ```
 
+![](unit/a.png)	
+
+```
+checkEnableGpsLocationLocationAvailableWithViewDetachedShowLocationAlertDialogNotCalled
 ```
 
 #### Test group 8
 
-![](unit/e.png) 
-```
+ ![](unit/c.png)
 
 ```
+checkEnableGpsLocationLocationNotAvailableWithNonNullViewShowLocationAlertDialogCalled
+```
+
+![](unit/a.png) 
+
+```
+checkEnableGpsLocationLocationNotAvailableWithNullViewShowLocationAlertDialogNotCalled
+```
+
 ![](unit/a.png) 
 ```
-
-```
-![](unit/a.png) 
+checkEnableGpsLocationLocationNotAvailableWithViewDetachedShowLocationAlertDialogNotCalled
 ```
 
-```
 
-#### Test group 9
+### <u>openSettings()</u>
 
-![](unit/e.png) 
-```
+![](unit/google_map_presenter_open_settings.png)
 
-```
-![](unit/a.png) 
-```
+#### Test group 9	
+
+![](unit/b.png)  
 
 ```
-![](unit/a.png) 
+openSettingsWithNonNullViewOpenSettingsCalled
 ```
 
-```
-
-#### Test group 10
-
-![](unit/e.png) 
-```
+![](unit/a.png)	
 
 ```
-![](unit/a.png) 
+openSettingsWithNullViewOpenSettingsNotCalled
 ```
 
-```
-![](unit/a.png) 
-```
+![](unit/a.png)	
 
 ```
-
-#### Test group 11
-
-![](unit/e.png) 
+openSettingsWithViewDetachedOpenSettingsNotCalled
 ```
 
-```
-![](unit/a.png) 
-```
+
+### <u>exit()</u>
+
+![](unit/google_map_presenter_exit.png)
+
+#### Test group 10	
+
+![](unit/b.png)  branch B
 
 ```
-![](unit/a.png) 
+exitWithNonNullViewExitCalled
 ```
 
-```
-
-#### Test group 12
-
-![](unit/e.png) 
-```
+![](unit/a.png)	branch A 	view == null
 
 ```
-![](unit/a.png) 
+exitWithNullViewExitNotCalled
 ```
 
-```
-![](unit/a.png) 
-```
+![](unit/a.png)	branch A	view detached from presenter
 
+```
+exitWithViewDetachedExitCalled
 ```
 
 

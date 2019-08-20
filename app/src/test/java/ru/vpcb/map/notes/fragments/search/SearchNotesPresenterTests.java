@@ -161,7 +161,7 @@ public class SearchNotesPresenterTests {
     }
 
     @Test
-    public void getNotesOnlineDefaultUserNameWithNullViewDisplayNoteNotCalled() {
+    public void getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithNullViewDisplayNoteNotCalled() {
         presenter.onAttach(null);
         presenter.getNotes(defaultUserName);
 
@@ -174,7 +174,7 @@ public class SearchNotesPresenterTests {
     }
 
     @Test
-    public void getNotesOnlineDefaultUserNameWithViewDetachedDisplayNoteNotCalled() {
+    public void getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDisplayNoteNotCalled() {
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.getNotes(defaultUserName);
