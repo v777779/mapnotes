@@ -8,13 +8,7 @@ Tested Methods
 
 ### <u>signUp()</u>
 
-
-
 ![](unit/sign_in_presenter_sign_up.png)
-
-
-
-
 
 #### Test group 0	
 
@@ -36,8 +30,6 @@ singUpWithCorrectEmailPasswordNameWithNullViewNavigateToMapScreenNotCalled
 singUpWithCorrectEmailPasswordNameWithViewDetachedNavigateToMapScreenNotCalled
 ```
 
-
-
 #### Test group 1
 
  ![](unit/c.png)
@@ -58,8 +50,6 @@ singUpWithEmptyEmailCorrectPasswordNameWithNullViewDisplayEmailErrorNotCalled
 singUpWithEmptyEmailCorrectPasswordNameWithViewDetachedDisplayEmailErrorNotCalled
 ```
 
-
-
 #### Test group 2
 
 ![](unit/d.png) 
@@ -79,8 +69,6 @@ singUpWithIncorrectEmailCorrectPasswordAndNameWithNullViewDisplayEmailErrorNotCa
 singUpWithIncorrectEmailCorrectPasswordAndNameWithViewDetachedDisplayEmailErrorNotCalled
 ```
 
-
-
 #### Test group 3
 
 ![](unit/e.png) 
@@ -95,8 +83,6 @@ singUpWithCorrectEmailEmptyPasswordCorrectNameWithNullViewDisplayPasswordErrorNo
 ```
 singUpWithCorrectEmailEmptyPasswordCorrectNameWithViewDetachedDisplayPasswordErrorNotCalled
 ```
-
-
 
 #### Test group 4
 
@@ -113,8 +99,6 @@ singUpWithCorrectEmailPasswordEmptyNameWithNullViewDisplayEmptyUserNameErrorNotC
 singUpWithCorrectEmailPasswordEmptyNameWithViewDetachedDisplayEmptyUserNameErrorNotCalled
 ```
 
-
-
 #### Test group 5
 
 ![](unit/g.png) 
@@ -129,8 +113,6 @@ singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithNullDisplayChange
 ```
 singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithViewDetachedDisplayChangeUserNameErrorNotCalled
 ```
-
-
 
 #### Test group 6
 

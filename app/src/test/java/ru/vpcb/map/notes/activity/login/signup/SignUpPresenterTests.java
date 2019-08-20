@@ -27,7 +27,7 @@ import ru.vpcb.map.notes.model.AuthUser;
         sdk = 28,
         application = MainApp.class
 )
-public class SignUIpPresenterTests {
+public class SignUpPresenterTests {
 
     private AuthUser authUser;
     private String correctUserName;

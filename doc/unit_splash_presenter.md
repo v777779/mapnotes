@@ -10,11 +10,7 @@ Tested Methods
 
 ### <u>start()</u>
 
-
-
 ![](unit/splash_presenter_start.png)
-
-
 
 #### Test group 0	
 
@@ -36,8 +32,6 @@ startWithPlayServicesAvailableUserAuthenticatedNullViewStartNavigateToHomeNotCal
 startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
 ```
 
-
-
 #### Test group 1
 
  ![](unit/c.png)
@@ -58,8 +52,6 @@ startWithPlayServicesAvailableUserNotAuthenticatedNullViewNavigateToLoginNotCall
 startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled
 ```
 
-
-
 #### Test group 2
 
 ![](unit/d.png) 
@@ -79,8 +71,6 @@ startWithPlayServicesNotAvailablePlayMarketInstalledNullViewViewGetErrorDialogNo
 ```
 startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetErrorDialogNotCalled
 ```
-
-
 
 #### Test group 3
 
@@ -110,8 +100,6 @@ startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertD
 
 ![](unit/splash_presenter_start_map_notes.png)
 
-
-
 #### Test group 4
 
 ![](unit/b.png) 
@@ -131,8 +119,6 @@ startMapNotesWithUserAuthenticatedWithNullViewNavigateToHomeNotCalled
 ```
 startMapNotesWithUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
 ```
-
-
 
 #### Test group 5
 
@@ -182,8 +168,6 @@ playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithNull
 playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToHomeNotCalled
 ```
 
-
-
 #### Test group 7
 
 ![](unit/c.png) 
@@ -204,8 +188,6 @@ playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithN
 playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToLoginCalledNotCalled
 ```
 
-
-
 #### Test group 8
 
 ![](unit/d.png) 
@@ -225,8 +207,6 @@ playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithNullViewFinishActi
 ```
 playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithViewDetachedFinishActivityNotCalled
 ```
-
-
 
 #### Test group 9
 
@@ -256,8 +236,6 @@ playMarketResultsWithNotGPSRequestCodeWithViewDetachedFinishActivityNotCalled
 
 ![](unit/splash_presenter_on_positive.png)
 
-
-
 #### Test group 10
 
 ![](unit/b.png) 
@@ -285,8 +263,6 @@ onPositiveWithViewDetachedNavigateToPlayMarketNotCalled
 
 
 ![](unit/splash_presenter_on_negative.png)
-
-
 
 #### Test group 11
 

@@ -85,7 +85,7 @@ public class HomePresenterTests {
         Mockito.doAnswer(invocation -> null).when(view).navigateToLoginScreen();
     }
 
-// 0     handleNavigationItemClickNavigation    item is navigation add node button
+// 0     handleNavigationItemClick    item is navigation add node button
 
     @Test
     public void handleNavigationItemClickNavigationAddNoteWithNonNullViewDisplayAddNoteCalledReturnTrue() {
@@ -266,7 +266,39 @@ public class HomePresenterTests {
                 .hideContentWhichRequirePermissions();
     }
 
-// 5     checkUser    user authenticated
+
+// 5    showLocationRequirePermissions()
+
+    @Test
+    public void showLocationRequirePermissionsWithNonNullViewShowContentWhichRequirePermissionsCalled() {
+        presenter.onAttach(view);
+        presenter.showLocationRequirePermissions();
+
+        Mockito.verify(view, Mockito.times(1))
+                .showContentWhichRequirePermissions();
+    }
+
+    @Test
+    public void showLocationRequirePermissionsWithNullViewShowContentWhichRequirePermissionsNotCalled() {
+        presenter.onAttach(null);
+        presenter.showLocationRequirePermissions();
+
+        Mockito.verify(view, Mockito.times(0))
+                .showContentWhichRequirePermissions();
+    }
+
+    @Test
+    public void showLocationRequirePermissionsWithViewDetachedShowContentWhichRequirePermissionsNotCalled() {
+        presenter.onAttach(view);
+        presenter.onDetach();
+        presenter.showLocationRequirePermissions();
+
+        Mockito.verify(view, Mockito.times(0))
+                .showContentWhichRequirePermissions();
+    }
+
+
+// 6     checkUser    user authenticated
 
     @Test
     public void checkUserUserAuthenticatedWithNonNullViewNavigateToLoginScreenNotCalled() {
@@ -293,7 +325,7 @@ public class HomePresenterTests {
         Mockito.verify(view, Mockito.times(0)).navigateToLoginScreen();
     }
 
-// 6    checkUser    user not authenticated
+// 7    checkUser    user not authenticated
 
     @Test
     public void checkUserUserNotAuthenticatedWithNonNullViewNavigateToLoginScreenCalled() {
@@ -323,7 +355,7 @@ public class HomePresenterTests {
         Mockito.verify(view, Mockito.times(0)).navigateToLoginScreen();
     }
 
-// 7    signOut
+// 8    signOut
 
     @Test
     public void signOutWithNonNullViewSignOutCalled() {

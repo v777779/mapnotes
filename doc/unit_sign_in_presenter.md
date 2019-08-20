@@ -8,11 +8,7 @@ Tested Methods
 
 ### <u>signIn()</u>
 
-
-
 ![](unit/sign_in_presenter_sign_in.png)
-
-
 
 #### Test group 0	
 
@@ -34,8 +30,6 @@ singInWithCorrectEmailPasswordWithNullViewNavigateToMapScreenNotCalled
 singInWithCorrectEmailPasswordWithViewDetachedNavigateToMapScreenNotCalled
 ```
 
-
-
 #### Test group 1
 
  ![](unit/c.png)
@@ -55,8 +49,6 @@ singInWithEmptyEmailPasswordWithNullViewDisplayEmailErrorNotCalled
 ```
 singInWithEmptyEmailPasswordWithViewDetachedDisplayEmailErrorNotCalled
 ```
-
-
 
 #### Test group 2
 
@@ -78,8 +70,6 @@ singInWithIncorrectEmailEmptyPasswordWithNullViewDisplayEmailErrorNotCalled
 singInWithIncorrectEmailEmptyPasswordWithViewDetachedDisplayEmailErrorNotCalled
 ```
 
-
-
 #### Test group 3
 
 ![](unit/e.png) 
@@ -99,8 +89,6 @@ singInWithCorrectEmailEmptyPasswordWithNullViewDisplayPasswordErrorNotCalled
 ```
 singInWithCorrectEmailEmptyPasswordWithViewDetachedDisplayPasswordErrorNotCalled
 ```
-
-
 
 #### Test group 4
 

@@ -56,7 +56,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_splash_presenter](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_tests](unit_splash_presenter.md) for the description.
 
 #### LoginPresenter Tests
 
@@ -64,14 +64,16 @@ Tested Methods
 
 - openSignIn()
 - openSignup()
-- See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/LoginPresenterTests.java) for test methods and  [unit_login_presenter](unit_login_presenter.md) for the description.
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/LoginPresenterTests.java) for test methods and  [login_presenter_tests](unit_login_presenter.md) for the description.
 
 #### SignInPresenter Tests
 
 Tested Methods
 
 - signIn()
-- See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signin/SIgnInPresenterTests.java) for test methods and  [unit_sign_in_presenter](unit_sign_in_presenter.md) for the description.
+
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signin/SIgnInPresenterTests.java) for test methods and  [sign_in_presenter_tests](unit_sign_in_presenter.md) for the description.
 
 #### SignUpPresenter Tests
 
@@ -79,19 +81,19 @@ Tested Methods
 
 - signUp()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signup/SignUpPresenterTests.java) for test methods and  [unit_sign_up_presenter](unit_sign_up_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signup/SignUpPresenterTests.java) for test methods and  [sign_up_presenter_tests](unit_sign_up_presenter.md) for the description.
 
 #### HomePresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- handleNavigationItemClick()
+- showLocationPermissionRationale()
+- showLocationRequirePermissions()
+- checkUser()
+- signOut()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit home_presenter_doc](unit_home_presenter_.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/home/HomePresenterTests.java) for test methods and  [home_presenter_tests](unit_home_presenter.md) for the description.
 
 
 
