@@ -293,7 +293,7 @@ public class SignUIpPresenterTests {
     @Test
     public void singUpWithCorrectEmailPasswordNameChangeUserNameResultErrorWithViewDetachedDisplayChangeUserNameErrorNotCalled() {
         Mockito.when(userRepository.changeUserName(authUser,correctUserName))
-                .thenReturn(Single.just(new Result.Error<>(new Exception())));
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
 
         presenter.onAttach(view);
         presenter.onDetach();
@@ -314,7 +314,7 @@ public class SignUIpPresenterTests {
     @Test
     public void singUpWithCorrectEmailPasswordNameSignUpResultErrorWithNonNullViewDisplaySignUpErrorCalled() {
         Mockito.when(userRepository.signUp(correctEmail, correctPassword))
-                .thenReturn(Single.just(new Result.Error<>(new UserNotAuthenticatedException())));
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
 
         presenter.onAttach(view);
         presenter.signUp(correctUserName, correctEmail, correctPassword);

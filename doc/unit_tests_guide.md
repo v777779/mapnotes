@@ -56,43 +56,30 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_splash_presenter](unit_splash_presenter.md) for the description.
 
 #### LoginPresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
-
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+- openSignIn()
+- openSignup()
+- See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/LoginPresenterTests.java) for test methods and  [unit_login_presenter](unit_login_presenter.md) for the description.
 
 #### SignInPresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
-
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+- signIn()
+- See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signin/SIgnInPresenterTests.java) for test methods and  [unit_sign_in_presenter](unit_sign_in_presenter.md) for the description.
 
 #### SignUpPresenter Tests
 
 Tested Methods
 
-- start()
-- startMapNotes()
-- playMarketResults()
-- onPositive()
-- onNegative()
+- signUp()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/login/signup/SignUpPresenterTests.java) for test methods and  [unit_sign_up_presenter](unit_sign_up_presenter.md) for the description.
 
 #### HomePresenter Tests
 
@@ -104,7 +91,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit home_presenter_doc](unit_home_presenter_.md) for the description.
 
 
 
@@ -120,7 +107,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_add_note_presenter_doc](unit_add_note_presenter.md) for the description.
 
 #### GoogleMapPresenter Tests
 
@@ -132,7 +119,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_google_map_presenter_doc](unit_google_map_presenter.md) for the description.
 
 #### SearchNotesPresenter Tests
 
@@ -144,7 +131,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_search_notes_presenter](unit_search_notes_presenter.md) for the description.
 
 
 
@@ -160,7 +147,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_validation_ext](unit_validation_ext.md) for the description.
 
 #### CoordinateFormatter Tests
 
@@ -172,7 +159,7 @@ Tested Methods
 - onPositive()
 - onNegative()
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [splash_presenter_doc](unit_splash_presenter.md) for the description.
+See [source](../app/src/test/java/ru/vpcb/map/notes/activity/splash/SplashPresenterTests.java) for test methods and  [unit_coordinate_formatter](unit_coordinate_formatter.md) for the description.
 
 
 
