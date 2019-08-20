@@ -8,6 +8,8 @@
 - onPositive()
 - onNegative()
 
+---
+
 ### <u>start()</u>
 
 ![](unit/splash_presenter_start.png)

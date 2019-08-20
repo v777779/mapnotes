@@ -9,7 +9,7 @@
 -  checkUser()
 -  signOut()
 
-
+---
 
 ### <u>handleNavigationItemClick()</u>
 

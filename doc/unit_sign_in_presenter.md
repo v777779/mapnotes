@@ -4,7 +4,7 @@
 
 -  signIn()
 
-
+---
 
 ### <u>signIn()</u>
 

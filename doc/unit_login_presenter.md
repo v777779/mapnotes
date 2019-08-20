@@ -5,7 +5,7 @@
 -  openSignIn()
 - openSignUp()
 
-
+---
 
 ### <u>openSignIn()</u>
 

@@ -4,7 +4,7 @@
 
 -  signUp()
 
-
+---
 
 ### <u>signUp()</u>
 
