@@ -1,4 +1,4 @@
-## SplashPresenter Unit Tests
+## GoogleMapPresenter Unit Tests
 
 #### Tested Methods
 
