@@ -2,7 +2,7 @@
 
 Unit tests used for local testing on JVM to verify that the login of individual units is correct.
 
-Unit tests  written for activity presenters, fragment presenters, and user classes.
+Unit tests  have been written for activity presenters, fragment presenters, and user classes.
 
 Test method names include tested method name, state of input parameters and output result description
 
