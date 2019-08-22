@@ -9,23 +9,23 @@
 
 ### <u>openSignIn()</u>
 
-![](unit/login_presenter_open_sign_in.png) 
+![](images/login_presenter_open_sign_in.png) 
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](images/b.png)  branch B
 
 ```
 openSignInWithNonNullViewNavigateToSignInCalled
 ```
 
-![](unit/a.png)	branch A 	view == null
+![](images/a.png)	branch A 	view == null
 
 ```
 openSignInWithNullViewNavigateToSignInNotCalled
 ```
 
-![](unit/a.png)	branch A	view detached from presenter
+![](images/a.png)	branch A	view detached from presenter
 
 ```
 openSignInWithViewDetachedNavigateToSignInNotCalled
@@ -35,23 +35,23 @@ openSignInWithViewDetachedNavigateToSignInNotCalled
 
 ### <u>openSignUp()</u>
 
-![](unit/login_presenter_open_sign_up.png) 
+![](images/login_presenter_open_sign_up.png) 
 
 #### Test group 1
 
- ![](unit/b.png)
+ ![](images/b.png)
 
 ```
 openSignUpWithNonNullViewNavigateToSignUpCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 openSignUpWithNullViewNavigateToSignUpNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 openSignUpWithViewDetachedNavigateToSignUpNotCalled

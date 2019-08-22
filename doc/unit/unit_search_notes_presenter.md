@@ -11,23 +11,23 @@
 
 ### <u>getNotes()</u>
 
-![](unit/search_notes_presenter_get_notes.png)
+![](images/search_notes_presenter_get_notes.png)
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](images/b.png)  branch B
 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoteCalled
 ```
 
-![](unit/a.png)	branch A 	view == null
+![](images/a.png)	branch A 	view == null
 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithNullViewDisplayNoteNotCalled
 ```
 
-![](unit/a.png)	branch A	view detached from presenter
+![](images/a.png)	branch A	view detached from presenter
 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDisplayNoteNotCalled
@@ -35,19 +35,19 @@ getNotesOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDisplayNo
 
 #### Test group 1
 
- ![](unit/c.png)
+ ![](images/c.png)
 
 ```
 getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithNonNullViewDisplayNoInternetErrorCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithNullViewDisplayNoInternetErrorNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDisplayNoInternetErrorNotCalled
@@ -55,19 +55,19 @@ getNotesNotOnlineDefaultUserNameHumanReadableNameListNotesWithViewDetachedDispla
 
 #### Test group 2
 
-![](unit/d.png) 
+![](images/d.png) 
 
 ```
 getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithNullViewDisplayDefaultUserNameErrorNotCalled
 ```
 
-![](unit/a.png)  
+![](images/a.png)  
 
 ```
 getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled
@@ -75,289 +75,289 @@ getNotesOnlineNullDefaultUserNameErrorHumanReadableNameListNotesWithViewDetached
 
 #### Test group 3
 
-![](unit/e.png) 
+![](images/e.png) 
 ```
 getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithNonNullViewDisplayDefaultUserNameErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineEmptyDefaultUserNameErrorHumanReadableNameListNotesWithViewDetachedDisplayDefaultUserNameErrorNotCalled
 ```
 
 #### Test group 4
 
-![](unit/f.png) 
+![](images/f.png) 
 ```
 getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithNonNullViewDisplayNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameNullHumanReadableNameResultSuccessWithViewDetachedDisplayNoteNotCalled
 ```
 
 #### Test group 5
 
-![](unit/g.png) 
+![](images/g.png) 
 ```
 getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithNonNullViewDisplayNoteCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithNonNullViewDisplayNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameEmptyHumanReadableNameResultSuccessWithViewDetachedDisplayNoteNotCalled
 ```
 
 #### Test group 6
 
-![](unit/h.png) 
+![](images/h.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithNonNullViewDisplayLoadingNotesErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameNullResultSuccessWithViewDetachedDisplayLoadingNotesErrorNotCalled
 ```
 
 #### Test group 7
 
-![](unit/k.png) 
+![](images/k.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithNonNullViewDisplayLoadingNotesErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithNonNullViewDisplayLoadingNotesErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithViewDetachedDisplayLoadingNotesErrorNotCalled
 ```
 
 #### Test group 8
 
-![](unit/l.png) 
+![](images/l.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithNonNullViewDisplayLoadingNotesErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameResultErrorWithViewDetachedDisplayLoadingNotesErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getNotesOnlineDefaultUserNameHumanReadableNameEmptyResultSuccessWithViewDetachedDisplayLoadingNotesErrorNotCalled
 ```
 
 ### <u>searchNotes()</u>
 
-![](unit/search_notes_presenter_search_notes.png)
+![](images/search_notes_presenter_search_notes.png)
 
 #### Test group 9
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithNonNullViewDisplayNotesCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithNullViewDisplayNotesNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryDefaultUserNameWithViewDetachedDisplayNotesNotCalled
 ```
 #### Test group 10
 
-![](unit/c.png) 
+![](images/c.png) 
 ```
 searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithNonNullViewDisplayNoInternetErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithNullViewDisplayNoInternetErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesNotOnlineTextSearchNotesCategoryDefaultUserNameWithViewDetachedDisplayNoInternetErrorNotCalled
 ```
 #### Test group 11
 
-![](unit/d.png) 
+![](images/d.png) 
 ```
 searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithNonNullViewGetNotesCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithNullViewGetNotesNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineNullTextSearchNotesCategoryDefaultUserNameWithViewDetachedGetNotesNotCalled
 ```
 #### Test group 12
 
-![](unit/e.png) 
+![](images/e.png) 
 ```
 searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithNonNullViewGetNotesCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithNullViewGetNotesNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineEmptyTextSearchNotesCategoryDefaultUserNameWithViewDetachedGetNotesNotCalled
 ```
 #### Test group 13
 
-![](unit/f.png) 
+![](images/f.png) 
 ```
 searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithNonNullViewDisplayNoteCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithNullViewDisplayNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchUserCategoryDefaultUserNameWithViewDetachedDisplayNoteNotCalled
 ```
 #### Test group 14
 
-![](unit/g.png) 
+![](images/g.png) 
 ```
 searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithNonNullViewThrowException
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithNullViewNotThrowException
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextUnknownCategorySearchUserDefaultUserNameWithViewDetachedNotThrowException
 ```
 #### Test group 15
 
-![](unit/h.png) 
+![](images/h.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithNonNullViewDisplayDefaultUserNameErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithNullViewDisplayDefaultUserNameErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryNullDefaultUserNameWithViewDetachedDisplayDefaultUserNameErrorCalled
 ```
 #### Test group 16
 
-![](unit/k.png) 
+![](images/k.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithNonNullViewDisplayDefaultUserNameErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithNullViewDisplayDefaultUserNameErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 searchNotesOnlineTextSearchNotesCategoryEmptyDefaultUserNameWithViewDetachedDisplayDefaultUserNameErrorNotCalled
 ```
 
 ### <u>onPositive()</u>
 
-![](unit/search_notes_presenter_on_positive.png)
+![](images/search_notes_presenter_on_positive.png)
 
 #### Test group 17
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 onPositiveOnlineNoteRemoveNoteSuccessWithNonNullViewRefreshFragmentCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNoteRemoveNoteSuccessWithNullViewRefreshFragmentNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNoteRemoveNoteSuccessWithViewDetachedRefreshFragmentNotCalled
 ```
 #### Test group 18
 
-![](unit/c.png) 
+![](images/c.png) 
 ```
 onPositiveNotOnlineNoteRemoveNoteSuccessWithNonNullViewDisplayNoInternetErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveNotOnlineNoteRemoveNoteSuccessWithNullViewDisplayNoInternetErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveNotOnlineNoteRemoveNoteSuccessWithViewDetachedDisplayNoInternetErrorNotCalled
 ```
 
 #### Test group 19
 
-![](unit/d.png) 
+![](images/d.png) 
 ```
 onPositiveOnlineNullNoteRemoveNoteSuccessWithNonNullViewDisplayNoteDataErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNullNoteRemoveNoteSuccessWithNullViewDisplayNoteDataErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNullNoteRemoveNoteSuccessWithViewDetachedDisplayNoteDataErrorNotCalled
 ```
 
 #### Test group 20
 
-![](unit/e.png) 
+![](images/e.png) 
 ```
 onPositiveOnlineNoteRemoveNoteErrorWithNonNullViewDisplayRemoveNoteErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNoteRemoveNoteErrorWithNullViewDisplayRemoveNoteErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onPositiveOnlineNoteRemoveNoteErrorWithViewDetachedDisplayRemoveNoteErrorNotCalled
 ```
 
 ### <u>onNegative()</u>
 
-![](unit/search_notes_presenter_on_pnegative.png)
+![](images/search_notes_presenter_on_pnegative.png)
 
 #### Test group 21
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 onNegativeWithNonNullViewRefreshAdapterCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onNegativeWithNullViewRefreshAdapterNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onNegativeWithViewDetachedRefreshAdapterNotCalled
 ```

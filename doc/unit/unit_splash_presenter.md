@@ -12,23 +12,23 @@
 
 ### <u>start()</u>
 
-![](unit/splash_presenter_start.png)
+![](images/splash_presenter_start.png)
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](images/b.png)  branch B
 
 ```
 startWithPlayServicesAvailableUserAuthenticatedNonNullViewNavigateToHomeCalled
 ```
 
-![](unit/a.png)	branch A 	view == null
+![](images/a.png)	branch A 	view == null
 
 ```
 startWithPlayServicesAvailableUserAuthenticatedNullViewStartNavigateToHomeNotCalled
 ```
 
-![](unit/a.png)	branch A	view detached from presenter
+![](images/a.png)	branch A	view detached from presenter
 
 ```
 startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
@@ -36,19 +36,19 @@ startWithPlayServicesAvailableUserAuthenticatedWithViewDetachedNavigateToHomeNot
 
 #### Test group 1
 
- ![](unit/c.png)
+ ![](images/c.png)
 
 ```
 startWithPlayServicesAvailableUserNotAuthenticatedNonNullViewNavigateToLoginCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startWithPlayServicesAvailableUserNotAuthenticatedNullViewNavigateToLoginNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLoginNotCalled
@@ -56,19 +56,19 @@ startWithPlayServicesAvailableUserNotAuthenticatedWithViewDetachedNavigateToLogi
 
 #### Test group 2
 
-![](unit/d.png) 
+![](images/d.png) 
 
 ```
 startWithPlayServicesNotAvailablePlayMarketInstalledNonNullViewGetErrorDialog
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startWithPlayServicesNotAvailablePlayMarketInstalledNullViewViewGetErrorDialogNotCalled
 ```
 
-![](unit/a.png)  
+![](images/a.png)  
 
 ```
 startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetErrorDialogNotCalled
@@ -76,19 +76,19 @@ startWithPlayServicesNotAvailablePlayMarketInstalledWithViewDetachedViewGetError
 
 #### Test group 3
 
-![](unit/e.png) 
+![](images/e.png) 
 
 ```
 startWithPlayServicesNotAvailablePlayMarketNotInstalledNonNullViewGetAlertDialog
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startWithPlayServicesNotAvailablePlayMarketNotInstalledNullViewGetAlertDialogNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertDialogNotCalled
@@ -100,23 +100,23 @@ startWithPlayServicesNotAvailablePlayMarketNotInstalledWithViewDetachedGetAlertD
 
 
 
-![](unit/splash_presenter_start_map_notes.png)
+![](images/splash_presenter_start_map_notes.png)
 
 #### Test group 4
 
-![](unit/b.png) 
+![](images/b.png) 
 
 ```
 startMapNotesWithUserAuthenticatedWithNonNullViewNavigateToHomeCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startMapNotesWithUserAuthenticatedWithNullViewNavigateToHomeNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startMapNotesWithUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
@@ -124,19 +124,19 @@ startMapNotesWithUserAuthenticatedWithViewDetachedNavigateToHomeNotCalled
 
 #### Test group 5
 
-![](unit/c.png) 
+![](images/c.png) 
 
 ```
 startMapNotesWithUserNotAuthenticatedWithNonNullViewNavigateToLoginCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 startMapNotesWithUserNotAuthenticatedWithNonNullViewNavigateToLoginCalled
 ```
 
-  ![](unit/a.png) 
+  ![](images/a.png) 
 
 ```
 startMapNotesWithUserNotAuthenticatedWithNullViewNavigateToLoginNotCalled
@@ -148,23 +148,23 @@ startMapNotesWithUserNotAuthenticatedWithNullViewNavigateToLoginNotCalled
 
 
 
-![](unit/splash_presenter_play_market_results.png)
+![](images/splash_presenter_play_market_results.png)
 
 #### Test group 6
 
-![](unit/b.png) 
+![](images/b.png) 
 
 ```
 playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithNonNullViewNavigateToHomeCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithNullViewNavigateToHomeNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToHomeNotCalled
@@ -172,19 +172,19 @@ playMarketResultsWithGPSRequestCodeUserAuthenticatedPlayServiceAvailableWithView
 
 #### Test group 7
 
-![](unit/c.png) 
+![](images/c.png) 
 
 ```
 playMarketResultsWithRequestGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithNonNullViewNavigateToLoginCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithNullViewNavigateToLoginCalledNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithViewDetachedNavigateToLoginCalledNotCalled
@@ -192,19 +192,19 @@ playMarketResultsWithGPSRequestCodeUserNotAuthenticatedPlayServiceAvailableWithV
 
 #### Test group 8
 
-![](unit/d.png) 
+![](images/d.png) 
 
 ```
 playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithNonNullViewFinishActivityCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithNullViewFinishActivityNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithViewDetachedFinishActivityNotCalled
@@ -212,19 +212,19 @@ playMarketResultsWithGPSRequestCodePlayServiceNotAvailableWithViewDetachedFinish
 
 #### Test group 9
 
-![](unit/e.png) 
+![](images/e.png) 
 
 ```
 playMarketResultsWithNotGPSRequestCodeWithNonNullViewFinishActivityCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithNotGPSRequestCodeWithNullViewFinishActivityNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 playMarketResultsWithNotGPSRequestCodeWithViewDetachedFinishActivityNotCalled
@@ -236,23 +236,23 @@ playMarketResultsWithNotGPSRequestCodeWithViewDetachedFinishActivityNotCalled
 
 
 
-![](unit/splash_presenter_on_positive.png)
+![](images/splash_presenter_on_positive.png)
 
 #### Test group 10
 
-![](unit/b.png) 
+![](images/b.png) 
 
 ```
 onPositiveWithNonNullViewNavigateToPlayMarketCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 onPositiveWithNullViewNavigateToPlayMarketNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 onPositiveWithViewDetachedNavigateToPlayMarketNotCalled
@@ -264,23 +264,23 @@ onPositiveWithViewDetachedNavigateToPlayMarketNotCalled
 
 
 
-![](unit/splash_presenter_on_negative.png)
+![](images/splash_presenter_on_negative.png)
 
 #### Test group 11
 
-![](unit/b.png) 
+![](images/b.png) 
 
 ```
 onNegativeWithNonNullViewFinishActivityCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 onNegativeWithNullViewFinishActivityNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 onNegativeWithViewDetachedFinishActivityNotCalled

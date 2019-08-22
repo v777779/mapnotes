@@ -11,17 +11,17 @@ Tested Methods
 
 ### <u>onAttach()</u>
 
-![](unit/add_note_presenter_on_attach.png)
+![](images/add_note_presenter_on_attach.png)
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](images/b.png)  branch B
 
 ```
 onAttachWithNonNullViewStartLocationUpdatesCalled
 ```
 
-![](unit/a.png)	branch A 	view == null
+![](images/a.png)	branch A 	view == null
 
 ```
 onAttachWithNullViewStartLocationUpdatesNotCalled
@@ -30,67 +30,67 @@ onAttachWithNullViewStartLocationUpdatesNotCalled
 
 ### <u>getCurrentLocation()</u>
 
-![](unit/add_note_presenter_get_current_location.png)
+![](images/add_note_presenter_get_current_location.png)
 
 #### Test group 1
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 getCurrentLocationWithNonNullViewDisplayCurrentLocationCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getCurrentLocationWithNullViewDisplayCurrentLocationNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 getCurrentLocationWithViewDetachedDisplayCurrentLocationCalled
 ```
 ### <u>addNote()</u>
 
-![](unit/add_note_presenter_add_note.png)
+![](images/add_note_presenter_add_note.png)
 
 
 #### Test group 2
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 addNoteUserAuthenticatedWithNonNullViewAddNoteCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 addNoteUserAuthenticatedWithNullViewAddNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 addNoteUserAuthenticatedWithViewDetachedAddNoteNotCalled
 ```
 
 #### Test group 3
 
-![](unit/c.png) 
+![](images/c.png) 
 ```
 addNoteUserNotAuthenticatedWithNonNullViewAddNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 addNoteUserNotAuthenticatedWithNullViewAddNoteNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 addNoteUserNotAuthenticatedWithViewDetachedAddNoteNotCalled
 ```
 ### <u>onDetach()</u>
 
-![](unit/add_note_presenter_on_detach.png)
+![](images/add_note_presenter_on_detach.png)
 
 #### Test group 4
 
-![](unit/b.png) 
+![](images/b.png) 
 ```
 onDetachWithNonNullViewStartLocationUpdatesCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 onDettachWithNullViewStartLocationUpdatesNotCalled
 ```

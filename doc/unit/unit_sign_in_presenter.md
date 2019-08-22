@@ -8,23 +8,23 @@
 
 ### <u>signIn()</u>
 
-![](unit/sign_in_presenter_sign_in.png)
+![](images/sign_in_presenter_sign_in.png)
 
 #### Test group 0	
 
-![](unit/b.png)  branch B
+![](images/b.png)  branch B
 
 ```
 singInWithCorrectEmailPasswordWithNonNullViewNavigateToMapScreenCalled
 ```
 
-![](unit/a.png)	branch A 	view == null
+![](images/a.png)	branch A 	view == null
 
 ```
 singInWithCorrectEmailPasswordWithNullViewNavigateToMapScreenNotCalled
 ```
 
-![](unit/a.png)	branch A	view detached from presenter
+![](images/a.png)	branch A	view detached from presenter
 
 ```
 singInWithCorrectEmailPasswordWithViewDetachedNavigateToMapScreenNotCalled
@@ -32,19 +32,19 @@ singInWithCorrectEmailPasswordWithViewDetachedNavigateToMapScreenNotCalled
 
 #### Test group 1
 
- ![](unit/c.png)
+ ![](images/c.png)
 
 ```
 singInWithEmptyEmailPasswordWithNonNullViewDisplayEmailErrorCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 singInWithEmptyEmailPasswordWithNullViewDisplayEmailErrorNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 singInWithEmptyEmailPasswordWithViewDetachedDisplayEmailErrorNotCalled
@@ -52,19 +52,19 @@ singInWithEmptyEmailPasswordWithViewDetachedDisplayEmailErrorNotCalled
 
 #### Test group 2
 
-![](unit/d.png) 
+![](images/d.png) 
 
 ```
 singInWithIncorrectEmailEmptyPasswordWithNonNullViewDisplayEmailErrorCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 singInWithIncorrectEmailEmptyPasswordWithNullViewDisplayEmailErrorNotCalled
 ```
 
-![](unit/a.png)  
+![](images/a.png)  
 
 ```
 singInWithIncorrectEmailEmptyPasswordWithViewDetachedDisplayEmailErrorNotCalled
@@ -72,19 +72,19 @@ singInWithIncorrectEmailEmptyPasswordWithViewDetachedDisplayEmailErrorNotCalled
 
 #### Test group 3
 
-![](unit/e.png) 
+![](images/e.png) 
 
 ```
 singInWithCorrectEmailEmptyPasswordWithNonNullViewDisplayPasswordErrorCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 singInWithCorrectEmailEmptyPasswordWithNullViewDisplayPasswordErrorNotCalled
 ```
 
-![](unit/a.png) 
+![](images/a.png) 
 
 ```
 singInWithCorrectEmailEmptyPasswordWithViewDetachedDisplayPasswordErrorNotCalled
@@ -92,15 +92,15 @@ singInWithCorrectEmailEmptyPasswordWithViewDetachedDisplayPasswordErrorNotCalled
 
 #### Test group 4
 
-![](unit/f.png) 
+![](images/f.png) 
 ```
 singInWithCorrectEmailIncorrectPasswordWithNonNullViewDisplaySignInErrorCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 singInWithCorrectEmailIncorrectPasswordWithNullViewDisplaySignInErrorNotCalled
 ```
-![](unit/a.png) 
+![](images/a.png) 
 ```
 singInWithCorrectEmailIncorrectPasswordWithViewDetachedToPresenterDisplaySignInErrorNotCalled
 ```

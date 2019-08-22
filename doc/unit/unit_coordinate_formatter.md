@@ -8,9 +8,9 @@
 
 ### <u>format()</u>
 
-![](unit/coordinate_formatter_format.png)
+![](images/coordinate_formatter_format.png)
 
-![](unit/a.png)  branch A	arbitrary  input
+![](images/a.png)  branch A	arbitrary  input
 
 ```
 formatInputFormattedOutput

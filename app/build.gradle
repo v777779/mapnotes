@@ -31,6 +31,7 @@ android {
     testOptions {
         // robolectric
         unitTests.includeAndroidResources = true
+        unitTests.returnDefaultValues = true        // for mockito exception "method not mocked"
     }
 
     compileOptions {
@@ -61,7 +62,7 @@ dependencies {
     androidTestImplementation 'org.mockito:mockito-android:2.27.0'
 // robolectric
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation "org.robolectric:robolectric:4.2"
+    testImplementation "org.robolectric:robolectric:4.2.1"
 // dagger2 test
     testImplementation 'com.google.dagger:dagger:2.23.2'
     testAnnotationProcessor 'com.google.dagger:dagger-compiler:2.23.2'
