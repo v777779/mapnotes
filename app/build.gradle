@@ -66,6 +66,8 @@ dependencies {
 // dagger2 test
     testImplementation 'com.google.dagger:dagger:2.23.2'
     testAnnotationProcessor 'com.google.dagger:dagger-compiler:2.23.2'
+// truth
+    testImplementation "com.google.truth:truth:1.0"
 
 // multidex
     implementation 'androidx.multidex:multidex:2.0.1'

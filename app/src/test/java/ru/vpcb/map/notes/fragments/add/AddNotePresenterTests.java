@@ -1,7 +1,8 @@
 package ru.vpcb.map.notes.fragments.add;
 
+import com.google.common.truth.Truth;
+
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -98,7 +99,7 @@ public class AddNotePresenterTests {
 // 0    onAttach
 
     @Test
-    public void onAttachWithNonNullViewStartLocationUpdatesCalled() {
+    public void onAttachWithNonNullViewShouldExecuteStartLocationUpdates() {
         presenter.onAttach(view);
 
         Mockito.verify(locationProvider, Mockito.times(1))
@@ -106,7 +107,7 @@ public class AddNotePresenterTests {
     }
 
     @Test
-    public void onAttachWithNullViewStartLocationUpdatesNotCalled() {
+    public void onAttachWithNullViewShouldNotExecuteLocationUpdates() {
         presenter.onAttach(null);
 
         Mockito.verify(locationProvider, Mockito.times(0))
@@ -116,7 +117,7 @@ public class AddNotePresenterTests {
 // 1    getCurrentLocation
 
     @Test
-    public void getCurrentLocationWithNonNullViewDisplayCurrentLocationCalled() {
+    public void getCurrentLocationWithNonNullViewShouldExecuteDisplayCurrentLocation() {
 // capture arguments support
 //        Mockito.doNothing().when(locationProvider).addUpdatableLocationListener(ArgumentMatchers.any());
 //        Mockito.when(locationFormatter.format(currentLocation)).thenReturn(currentLocationString);
@@ -135,7 +136,7 @@ public class AddNotePresenterTests {
         Mockito.verify(view, Mockito.times(1))
                 .displayCurrentLocation(currentLocationString);
 
-        Assert.assertEquals(currentLocation,presenter.getLastLocation());
+        Truth.assertThat(currentLocation).isEqualTo(presenter.getLastLocation());
     }
 
     @Test
@@ -154,7 +155,7 @@ public class AddNotePresenterTests {
         Mockito.verify(view, Mockito.times(0))
                 .displayCurrentLocation(currentLocationString);
 
-        Assert.assertEquals(currentLocation,presenter.getLastLocation());
+        Truth.assertThat(currentLocation).isEqualTo(presenter.getLastLocation());
     }
 
     @Test
@@ -174,7 +175,7 @@ public class AddNotePresenterTests {
         Mockito.verify(view, Mockito.times(0))
                 .displayCurrentLocation(currentLocationString);
 
-        Assert.assertEquals(currentLocation,presenter.getLastLocation());
+        Truth.assertThat(currentLocation).isEqualTo(presenter.getLastLocation());
     }
 
 // 2    addNote     user authenticated
