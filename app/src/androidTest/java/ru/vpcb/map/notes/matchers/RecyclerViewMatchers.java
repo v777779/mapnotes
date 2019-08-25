@@ -1,76 +1,94 @@
 package ru.vpcb.map.notes.matchers;
 
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.matcher.BoundedMatcher;
+
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Locale;
+
+import ru.vpcb.map.notes.R;
+import ru.vpcb.map.notes.fragments.search.adapter.NoteViewHolder;
 
 public class RecyclerViewMatchers {
 
     public static Matcher<View> withItemCount(int count) {
 
-        return null;
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                RecyclerView recyclerView = (RecyclerView) item;
+                RecyclerView.Adapter adapter = recyclerView.getAdapter();
+                return (adapter != null && adapter.getItemCount() == count);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format(Locale.ENGLISH,
+                        "RecyclerView should have %d items", count));
+            }
+        };
     }
 
-//    fun withItemCount(count: Int): Matcher<View> {
-//        return object : TypeSafeMatcher<View>() {
-//            override fun matchesSafely(view: View): Boolean {
-//                val recyclerView = view as RecyclerView
-//                val adapter = recyclerView.adapter
-//                return adapter?.itemCount == count
-//            }
-//
-//            override fun describeTo(description: Description) {
-//                description.appendText("RecyclerView should have $count items")
-//            }
-//        }
-//    }
 
     public static Matcher<View> atPosition(int position, Matcher<View> itemMatcher) {
 
-        return null;
+        if (itemMatcher == null) return null;
+        return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format(Locale.ENGLISH,
+                        "has item at position: %d ", position));
+                itemMatcher.describeTo(description);
+            }
+
+            @Override
+            protected boolean matchesSafely(RecyclerView item) {
+                RecyclerView.ViewHolder viewHolder = item.findViewHolderForAdapterPosition(position);
+                if (viewHolder == null) {
+                    return false;
+                }
+                return itemMatcher.matches(viewHolder.itemView);
+            }
+        };
     }
 
-//
-//    fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View> {
-//        checkNotNull(itemMatcher)
-//        return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
-//            override fun describeTo(description: Description) {
-//                description.appendText("has item at position $position: ")
-//                itemMatcher.describeTo(description)
-//            }
-//
-//            override fun matchesSafely(view: RecyclerView): Boolean {
-//                val viewHolder = view.findViewHolderForAdapterPosition(position)
-//                        ?: return false
-//                return itemMatcher.matches(viewHolder.itemView)
-//            }
-//        }
-//    }
 
     public static Matcher<View> withItemText(String text) {
 
-        return null;
-    }
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                RecyclerView recyclerView = (RecyclerView) item;
+                RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
-//    fun withItemText(text: String): Matcher<View> {
-//        return object : TypeSafeMatcher<View>() {
-//            override fun matchesSafely(view: View): Boolean {
-//                val recyclerView = view as RecyclerView
-//                val adapter = recyclerView.adapter
-//                val itemCount = adapter?.itemCount!!
-//                for (pos in 0..itemCount) {
-//                    val viewHolder = recyclerView.findViewHolderForAdapterPosition(pos) as NoteViewHolder
-//                    val noteTextView = viewHolder.itemView.findViewById<TextView>(R.id.noteText)
-//                    if (noteTextView.text.toString() == text) {
-//                        return true
-//                    }
-//                }
-//                return false
-//            }
-//
-//            override fun describeTo(description: Description) {
-//                description.appendText("RecyclerView should have item with text: $text")
-//            }
-//        }
-//    }
+                int itemCount = (adapter == null) ? 0 : adapter.getItemCount();
+                for (int pos = 0; pos < itemCount; pos++) {
+
+                    RecyclerView.ViewHolder viewHolder = recyclerView
+                            .findViewHolderForAdapterPosition(pos);
+                    if (!(viewHolder instanceof NoteViewHolder)) {
+                        continue;
+                    }
+                    TextView noteTextView = viewHolder.itemView.findViewById(R.id.noteText);
+                    if (noteTextView != null && noteTextView.getText().toString().equals(text)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(
+                        String.format("RecyclerView should have item with text: %s",text));
+            }
+        };
+    }
 }

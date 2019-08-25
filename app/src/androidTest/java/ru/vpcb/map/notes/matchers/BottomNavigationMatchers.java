@@ -1,75 +1,82 @@
 package ru.vpcb.map.notes.matchers;
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+
+import java.util.Locale;
 
 public class BottomNavigationMatchers {
 
     public static Matcher<View> hasCheckedItem(int itemId) {
-        return null;
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                BottomNavigationView bottomNavigationView = (BottomNavigationView) item;
+                Menu menu = bottomNavigationView.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem menuItem = menu.getItem(i);
+                    if (menuItem.isChecked()) {
+                        return menuItem.getItemId() == itemId;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format(Locale.ENGLISH,
+                        "BottomNavigationView should have checked item with id: %d", itemId));
+            }
+        };
     }
 
     public static Matcher<View> withItemCount(int count) {
-        return null;
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                BottomNavigationView bottomNavigationView = (BottomNavigationView) item;
+                Menu menu = bottomNavigationView.getMenu();
+                return menu.size() == count;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format(Locale.ENGLISH,
+                        "BottomNavigationView should have %d item", count));
+
+            }
+        };
     }
 
     public static Matcher<View> hasItemTitle(String text) {
-        return null;
-    }
+        return new TypeSafeMatcher<View>() {
+            @Override
+            protected boolean matchesSafely(View item) {
+                BottomNavigationView bottomNavigationView = (BottomNavigationView) item;
+                Menu menu = bottomNavigationView.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem menuItem = menu.getItem(i);
+                    if (menuItem == null || menuItem.getTitle() == null) continue;
+                    if (menuItem.getTitle().toString().contains(text)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 
-//    fun hasCheckedItem(itemId: Int): Matcher<View> {
-//        return object : TypeSafeMatcher<View>() {
-//            override fun matchesSafely(view: View): Boolean {
-//                val bottomNavigationView = view as BottomNavigationView
-//                val menu = bottomNavigationView.menu
-//                for (i in 0 until menu.size()) {
-//                    val item = menu.getItem(i)
-//                    if (item.isChecked) {
-//                        return item.itemId == itemId
-//                    }
-//                }
-//                return false
-//            }
-//
-//            override fun describeTo(description: Description) {
-//                description.appendText("BottomNavigationView should have checked item with id: $itemId")
-//            }
-//        }
-//    }
-//
-//    fun withItemCount(count: Int): Matcher<View> {
-//        return object : TypeSafeMatcher<View>() {
-//            override fun matchesSafely(view: View): Boolean {
-//                val bottomNavigationView = view as BottomNavigationView
-//                val menu = bottomNavigationView.menu
-//                return menu.size() == count
-//            }
-//
-//            override fun describeTo(description: Description) {
-//                description.appendText("BottomNavigationView should have $count item")
-//            }
-//        }
-//    }
-//
-//    fun hasItemTitle(text: String): Matcher<View> {
-//        return object : TypeSafeMatcher<View>() {
-//            override fun matchesSafely(view: View): Boolean {
-//                val bottomNavigationView = view as BottomNavigationView
-//                val menu = bottomNavigationView.menu
-//                for (i in 0 until menu.size()) {
-//                    val item = menu.getItem(i)
-//                    if (item.title.contains(text)) {
-//                        return true
-//                    }
-//                }
-//                return false
-//            }
-//
-//            override fun describeTo(description: Description) {
-//                description.appendText("BottomNavigationView should have item with text: $text")
-//            }
-//        }
-//    }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText(String.format(
+                        "BottomNavigationView should have item with text: %s", text));
+            }
+        };
+    }
 
 }
