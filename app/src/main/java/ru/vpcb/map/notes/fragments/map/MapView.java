@@ -12,8 +12,6 @@ public interface MapView extends MvpView {
 
     void displayNoteOnMap(Note note);
 
-    boolean isLocationAvailable();
-
     void showLocationAlertDialog();
 
     void openSettings();

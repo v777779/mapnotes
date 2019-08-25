@@ -4,16 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import ru.vpcb.map.notes.base.ScopedPresenter;
+import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
 public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapMvpPresenter {
     private MapView view;
     private Location currentLocation;
+    private LocationProvider locationProvider;
 
-    public GoogleMapPresenter() {
+    public GoogleMapPresenter(LocationProvider locationProvider) {
+        this.locationProvider = locationProvider;
         this.view = null;
         this.currentLocation = null;
+
     }
 
     @Override
@@ -65,7 +69,7 @@ public class GoogleMapPresenter extends ScopedPresenter<MapView> implements MapM
         if (view == null) {
             return;
         }
-        if (!view.isLocationAvailable()) {
+        if (!locationProvider.isLocationAvailable()) {
             view.showLocationAlertDialog();
         }
     }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.LocationManager;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
@@ -179,31 +178,6 @@ public class GoogleMapFragment extends SupportMapFragment implements MapView, On
                 }
             });
         }
-    }
-
-    @Override
-    public boolean isLocationAvailable() {
-        boolean isGpsEnabled = false;
-        boolean isNetworkEnabled = false;
-
-        if (activity == null) {
-            return false;
-        }
-
-        LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager == null) {
-            return false;
-        }
-
-        try {
-            isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        } catch (Exception e) {
-            //
-        }
-        return isGpsEnabled || isNetworkEnabled;
-
     }
 
     @Override
