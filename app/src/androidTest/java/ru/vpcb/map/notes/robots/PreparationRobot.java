@@ -2,15 +2,23 @@ package ru.vpcb.map.notes.robots;
 
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Single;
 import ru.vpcb.map.notes.MockTest;
+import ru.vpcb.map.notes.data.Result;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
+import ru.vpcb.map.notes.data.repository.NotesRepository;
+import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.model.AuthUser;
+import ru.vpcb.map.notes.model.Note;
 
 public class PreparationRobot {
-    private  MockTest scope;
+    private MockTest scope;
     private AuthUser authUser;
 
-    public static PreparationRobot prepare(MockTest scope){
+    public static PreparationRobot prepare(MockTest scope) {
         return new PreparationRobot(scope);
     }
 
@@ -33,84 +41,111 @@ public class PreparationRobot {
         mockLocationProvider(false);
     }
 
+    public void mockSignUpError() {
+        UserRepository userRepository = scope.getUserRepository();
 
-
-    fun mockSignUpError() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.signUp(any(), any()) } returns Result.Error(Exception("SignUp error"))
+        Mockito.when(userRepository.signUp(Mockito.any(), Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException("SignUp error"))));
     }
 
-    fun mockSuccessfulSignUp(name: String, email: String, password: String) {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.changeUserName(authUser, name) } answers { nothing }
-        coEvery { userRepository.signUp(email, password) } returns Result.Success(authUser)
+    public void mockSignUpSuccess(String name, String email, String password) {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.doAnswer(invocation -> null).when(userRepository).changeUserName(authUser, name);
+        Mockito.when(userRepository.signUp(email, password))
+                .thenReturn(Single.just(new Result.Success<>(authUser)));
     }
 
-    fun mockNoAuthorizedUser() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.getCurrentUser() } returns Result.Error(RuntimeException())
+    public void mockNoAuthorizedUser() {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getCurrentUser())
+                .thenReturn(new Result.Error<>(new RuntimeException()));
     }
 
-    fun mockAuthorizedUser() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.getCurrentUser() } returns Result.Success(authUser)
+    public void mockAuthorizedUser() {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getCurrentUser())
+                .thenReturn(new Result.Success<>(authUser));
     }
 
-    fun mockUserSignOut() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.signOut() } answers { nothing }
+
+    public void mockUserSignOut() {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.doAnswer(invocation -> null).when(userRepository).signOut();
     }
 
-    fun mockSuccessfulSignIn(email: String, password: String) {
-        val userRepository = scope.userRepository
-        val authUser = AuthUser("111111")
-        coEvery { userRepository.signIn(email, password) } returns Result.Success(authUser)
-        coEvery { userRepository.getCurrentUser() } returns Result.Success(authUser)
+
+    public void mockSignInSuccess( String email, String password) {
+        UserRepository userRepository = scope.getUserRepository();
+
+        Mockito.when(userRepository.signIn(email, password))
+                .thenReturn(Single.just(new Result.Success<>(authUser)));
+        Mockito.when(userRepository.getCurrentUser())
+                .thenReturn(new Result.Success<>(authUser));
     }
 
-    fun mockUnsuccessfulSignInWithException() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.signIn(any(), any()) } returns Result.Error(Exception("SignIn error"))
+    public void mockSignInErrorWithException() {
+        UserRepository userRepository = scope.getUserRepository();
+
+        Mockito.when(userRepository.signIn(Mockito.anyString(),Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException("Signin error"))));
     }
 
-    fun mockSearchUserId(userId: String) {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Success(userId)
+
+    public void mockSearchUserId( String userId) {
+        UserRepository userRepository = scope.getUserRepository();
+
+        Mockito.when(userRepository.getUserIdFromHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Success<>(userId)));
     }
 
-    fun mockErrorDuringLoadingUserNames() {
-        val userRepository = scope.userRepository
-        coEvery { userRepository.getUserIdFromHumanReadableName(any()) } returns Result.Error(RuntimeException())
+    public void mockErrorDuringLoadingUserNames() {
+        UserRepository userRepository = scope.getUserRepository();
+
+        Mockito.when(userRepository.getUserIdFromHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException("Database Error"))));
     }
 
-    fun mockLoadingEmptyListOfNotes() {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotes(any()) } returns Result.Success(listOf())
+    public void mockLoadingListOfNotesEmpty() {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(new ArrayList<>())));
     }
 
-    fun mockErrorDuringLoadingNotes() {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotes(any()) } returns Result.Error(RuntimeException())
+    public void mockLoadingListOfNotesError() {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
     }
 
-    fun mockLoadingEmptyListOfNotesByNoteText() {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Error(RuntimeException())
+    public void mockLoadingListOfNotesByTextEmpty() {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotesByNoteText(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
     }
 
-    fun mockLoadingListOfNotes(notes: List<Note>) {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotes(any()) } returns Result.Success(notes)
+    public void mockLoadingListOfNotes(List<Note> list) {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotes())
+                .thenReturn(Single.just(new Result.Success<>(list)));
     }
 
-    fun mockSearchNoteByAnyText(notes: List<Note>) {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotesByNoteText(any(), any()) } returns Result.Success(notes)
+    public void mockSearchByAnyText(List<Note> list) {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotesByNoteText(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Success<>(list)));
     }
 
-    fun mockSearchNoteByAnyUser(notes: List<Note>) {
-        val notesRepository = scope.notesRepository
-        coEvery { notesRepository.getNotesByUser(any(), any()) } returns Result.Success(notes)
+    public void mockSearchByAnyUser(List<Note> list) {
+        NotesRepository notesRepository = scope.getNotesRepository();
+
+        Mockito.when(notesRepository.getNotesByUser(Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Success<>(list)));
     }
+
 
 }
