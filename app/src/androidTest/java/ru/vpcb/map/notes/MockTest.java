@@ -28,10 +28,10 @@ public class MockTest {
     protected MapFragment mapFragment;
 
     protected GrantPermissionRule permissionRule;
-
+    protected MockTest testScope;
 
     protected MockTest() {
-        permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
     }
 
 
@@ -40,6 +40,9 @@ public class MockTest {
         TestAppComponent component = DaggerTestAppComponent.builder().build();
         component.inject(this);
         Intents.init();     // espresso intents
+
+        permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+        testScope = this;
     }
 
 

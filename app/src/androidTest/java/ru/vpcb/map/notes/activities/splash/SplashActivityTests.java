@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import ru.vpcb.map.notes.MockTest;
 import ru.vpcb.map.notes.activity.splash.SplashActivity;
-import ru.vpcb.map.notes.robots.PreparationRobot;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
+import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashActivityMockTestRule;
 import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
@@ -20,7 +20,7 @@ import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
 public class SplashActivityTests extends MockTest {
 
     @Rule
-    ActivityTestRule<SplashActivity> activityRule = splashActivityMockTestRule;
+    public ActivityTestRule<SplashActivity> activityRule = splashActivityMockTestRule;
 
     @Override
     @Before
@@ -30,15 +30,20 @@ public class SplashActivityTests extends MockTest {
 
     @Test
     public void whenUserIsAuthenticatedShouldOpenHomeActivity() {
+// TODO Mock Dagger Component with MainApp or Activity Component
 
-        PreparationRobot prepare = prepare(this);
-        prepare.mockLocationProvider();
-        prepare.mockAuthorizedUser();
+        prepare(testScope)
+                .mockLocationProvider()
+                .mockAuthorizedUser();
 
-        splashScreen().displayMockAsEntryPoint();
+        splashScreen()
+                .displayMockAsEntryPoint();
 
-        homeScreen().isSuccessfullyLoaded();
+        homeScreen()
+                .isSuccessfullyLoaded();
 
+        loginScreen()
+                .isSuccessfullyLoaded();
 
     }
 

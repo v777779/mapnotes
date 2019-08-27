@@ -27,7 +27,7 @@ public class PreparationRobot {
         this.authUser = new AuthUser("111111");
     }
 
-    public void mockLocationProvider(boolean isLocationAvailable) {
+    public PreparationRobot mockLocationProvider(boolean isLocationAvailable) {
         LocationProvider locationProvider = scope.getLocationProvider();
         Mockito.doAnswer(invocation -> null).when(locationProvider).startLocationUpdates();
         Mockito.doAnswer(invocation -> null).when(locationProvider).stopLocationUpdates();
@@ -35,10 +35,13 @@ public class PreparationRobot {
                 .addUpdatableLocationListener(Mockito.any());
 
         Mockito.when(locationProvider.isLocationAvailable()).thenReturn(isLocationAvailable);
+
+        return this;
     }
 
-    public void mockLocationProvider() {
+    public PreparationRobot mockLocationProvider() {
         mockLocationProvider(false);
+        return this;
     }
 
     public void mockSignUpError() {
@@ -48,11 +51,12 @@ public class PreparationRobot {
                 .thenReturn(Single.just(new Result.Error<>(new RuntimeException("SignUp error"))));
     }
 
-    public void mockSignUpSuccess(String name, String email, String password) {
+    public PreparationRobot mockSignUpSuccess(String name, String email, String password) {
         UserRepository userRepository = scope.getUserRepository();
         Mockito.doAnswer(invocation -> null).when(userRepository).changeUserName(authUser, name);
         Mockito.when(userRepository.signUp(email, password))
                 .thenReturn(Single.just(new Result.Success<>(authUser)));
+        return this;
     }
 
     public void mockNoAuthorizedUser() {
