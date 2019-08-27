@@ -74,8 +74,10 @@
     <string name="loading_notes_error">An error during loading notes.</string>
     <string name="unknown_user_error">You are looking for unknown user.</string>
     <string name="unknown_note_error">You are looking for unknown notes.</string>
+    <string name="note_data_error">Note data error.</string>
     <string name="remove_note_error">An error during removing note.</string>
     <string name="no_internet_error">No Internet connection.</string>
+    <string name="default_user_name_error">Wrong default user name.</string>
 
     <string name="update_services_message">Check Google Play Services</string>
     <string name="remove_note_message">Remove \"%1$s \" note?</string>
