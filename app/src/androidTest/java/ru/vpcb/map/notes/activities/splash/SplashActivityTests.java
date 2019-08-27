@@ -41,12 +41,22 @@ public class SplashActivityTests extends MockTest {
 
         homeScreen()
                 .isSuccessfullyLoaded();
+   }
+
+    @Test
+    public void whenUserIsNotAuthenticatedShouldOpenHomeActivity() {
+// TODO Mock Dagger Component with MainApp or Activity Component
+
+        prepare(testScope)
+                .mockNoAuthorizedUser();
+
+        splashScreen()
+                .displayMockAsEntryPoint();
 
         loginScreen()
                 .isSuccessfullyLoaded();
 
     }
-
     @Override
     @After
     public void tearDown() throws Exception {
