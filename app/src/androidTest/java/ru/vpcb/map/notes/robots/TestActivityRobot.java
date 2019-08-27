@@ -6,7 +6,7 @@ import androidx.test.rule.ActivityTestRule;
 import ru.vpcb.map.notes.FragmentTestActivity;
 
 public class TestActivityRobot extends BaseTestRobot {
-    public static final ActivityTestRule<FragmentTestActivity> testFragmentActivity =
+    public static ActivityTestRule<FragmentTestActivity> testFragmentActivity =
             new ActivityTestRule<>(FragmentTestActivity.class);
 
     public static TestActivityRobot testScreen() {

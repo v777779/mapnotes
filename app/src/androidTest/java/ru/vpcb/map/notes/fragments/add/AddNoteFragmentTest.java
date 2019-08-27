@@ -22,7 +22,8 @@ import static ru.vpcb.map.notes.robots.TestActivityRobot.testScreen;
 public class AddNoteFragmentTest extends MockTest {
 
     @Rule
-    public ActivityTestRule<FragmentTestActivity> activityRule = TestActivityRobot.testFragmentActivity;
+    public ActivityTestRule<FragmentTestActivity> activityRule =  // assign here to auto launch
+            TestActivityRobot.testFragmentActivity;
 
     private String testNoteText;
 
@@ -30,11 +31,11 @@ public class AddNoteFragmentTest extends MockTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+
         testNoteText = "test note";
         prepare(testScope)
                 .mockLocationProvider(true)
                 .mockAuthorizedUser();
-
         testScreen()
                 .attachFragment(new AddNoteFragment());
     }
@@ -42,15 +43,15 @@ public class AddNoteFragmentTest extends MockTest {
     @Test
     public void shouldDisplayNoteHintForANewNote() {
         addNoteFragment()
-            .isNoteHintDisplayed(R.string.add_note_hint);
+                .isNoteHintDisplayed(R.string.add_note_hint);
     }
 
     @Test
     public void shouldChangeAddButtonEnableAfterChangingNoteText() {
         addNoteFragment()
-            .isAddButtonDisabled()
-            .enterNoteText(testNoteText)
-            .isAddButtonEnabled();
+                .isAddButtonDisabled()
+                .enterNoteText(testNoteText)
+                .isAddButtonEnabled();
     }
 
     @Override

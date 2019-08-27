@@ -95,11 +95,12 @@ public class PreparationRobot {
     }
 
 
-    public void mockSearchUserId( String userId) {
+    public PreparationRobot mockSearchUserId( String userId) {
         UserRepository userRepository = scope.getUserRepository();
 
         Mockito.when(userRepository.getUserIdFromHumanReadableName(Mockito.anyString()))
                 .thenReturn(Single.just(new Result.Success<>(userId)));
+        return this;
     }
 
     public void mockErrorDuringLoadingUserNames() {
@@ -109,11 +110,12 @@ public class PreparationRobot {
                 .thenReturn(Single.just(new Result.Error<>(new RuntimeException("Database Error"))));
     }
 
-    public void mockLoadingListOfNotesEmpty() {
+    public PreparationRobot mockLoadingListOfNotesEmpty() {
         NotesRepository notesRepository = scope.getNotesRepository();
 
         Mockito.when(notesRepository.getNotes())
                 .thenReturn(Single.just(new Result.Success<>(new ArrayList<>())));
+        return this;
     }
 
     public void mockLoadingListOfNotesError() {
@@ -123,33 +125,33 @@ public class PreparationRobot {
                 .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
     }
 
-    public void mockLoadingListOfNotesByTextEmpty() {
+    public PreparationRobot mockLoadingListOfNotesByNoteTextEmpty() {
         NotesRepository notesRepository = scope.getNotesRepository();
 
         Mockito.when(notesRepository.getNotesByNoteText(Mockito.anyString()))
                 .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
+        return this;
     }
 
-    public void mockLoadingListOfNotes(List<Note> list) {
+    public PreparationRobot mockLoadingListOfNotes(List<Note> list) {
         NotesRepository notesRepository = scope.getNotesRepository();
 
         Mockito.when(notesRepository.getNotes())
                 .thenReturn(Single.just(new Result.Success<>(list)));
+        return this;
     }
 
-    public void mockSearchByAnyText(List<Note> list) {
+    public void mockSearchNoteByAnyText(List<Note> list) {
         NotesRepository notesRepository = scope.getNotesRepository();
 
         Mockito.when(notesRepository.getNotesByNoteText(Mockito.anyString()))
                 .thenReturn(Single.just(new Result.Success<>(list)));
     }
 
-    public void mockSearchByAnyUser(List<Note> list) {
+    public void mockSearchNoteByAnyUser(List<Note> list) {
         NotesRepository notesRepository = scope.getNotesRepository();
 
         Mockito.when(notesRepository.getNotesByUser(Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(Single.just(new Result.Success<>(list)));
     }
-
-
 }

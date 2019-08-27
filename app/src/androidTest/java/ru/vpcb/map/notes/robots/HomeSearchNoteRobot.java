@@ -15,7 +15,6 @@ import ru.vpcb.map.notes.model.Note;
 public class HomeSearchNoteRobot extends BaseTestRobot {
     private int searchUserCategoryPosition;
 
-
     private HomeSearchNoteRobot() {
         this.searchUserCategoryPosition = 1;
     }
@@ -24,16 +23,19 @@ public class HomeSearchNoteRobot extends BaseTestRobot {
         return new HomeSearchNoteRobot();
     }
 
-    public void searchNoteByText(String text) {
+    public HomeSearchNoteRobot searchNoteByText(String text) {
         enterText(R.id.searchText, text);
         clickOnView(R.id.searchButton);
+        return this;
     }
 
-    public void searchNoteByUser(String text) {
+    public HomeSearchNoteRobot searchNoteByUser(String text) {
         enterText(R.id.searchText, text);
         clickOnView(R.id.searchOptions);
         changeSelectedSpinnerItemPosition(searchUserCategoryPosition);
         clickOnView(R.id.searchButton);
+
+        return this;
     }
 
     // TODO Check this
@@ -69,8 +71,9 @@ public class HomeSearchNoteRobot extends BaseTestRobot {
         isTextDisplayed(R.string.unknown_user_error);
     }
 
-    public void isSearchResultHasNumberItems(int itemCount) {
+    public HomeSearchNoteRobot isSearchResultHasNumberItems(int itemCount) {
         isRecyclerViewItemCount(R.id.recyclerView, itemCount);
+        return this;
     }
 
     public void isSuccessfullyDisplayedSearchScreen() {
