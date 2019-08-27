@@ -14,35 +14,31 @@ import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.idlingresources.ViewVisibilityIdlingResource;
 
 public class HomeScreenRobot extends BaseTestRobot {
-    public static ActivityTestRule<HomeActivity> homeScreenMockActivityRule;
+    public static final ActivityTestRule<HomeActivity> homeScreenMockActivityRule =
+            new ActivityTestRule<>(HomeActivity.class, true, false);
 
-
-    static {
-        homeScreenMockActivityRule = new ActivityTestRule<HomeActivity>(HomeActivity.class,
-                true, false);
-    }
-
-    public  static HomeScreenRobot homeScreen(){
+    public static HomeScreenRobot homeScreen() {
         return new HomeScreenRobot();
     }
 
-    public  static HomeAddNoteRobot addNoteFragment(){
+    public static HomeAddNoteRobot addNoteFragment() {
         return HomeAddNoteRobot.addNoteFragment();
     }
 
-    public  static HomeSearchNoteRobot searchNoteFragment(){
+    public static HomeSearchNoteRobot searchNoteFragment() {
         return HomeSearchNoteRobot.searchNoteFragment();
     }
 
 
-
-    public void displayAsEntryPoint() {
+    public HomeScreenRobot displayAsEntryPoint() {
         homeScreenMockActivityRule.launchActivity(null);
+        return this;
     }
 
-    public void openAddNote() {
+    public HomeScreenRobot openAddNote() {
         clickOnView(R.id.navigation_add_note);
         isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_add_note);
+        return this;
     }
 
     public void openMap() {
@@ -50,9 +46,10 @@ public class HomeScreenRobot extends BaseTestRobot {
         isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map);
     }
 
-    public void openSearch() {
+    public HomeScreenRobot openSearch() {
         clickOnView(R.id.navigation_search_notes);
         isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_search_notes);
+        return this;
     }
 
     public void signOut() {
@@ -70,7 +67,7 @@ public class HomeScreenRobot extends BaseTestRobot {
 
     }
 
-    public void isSuccessfullyDisplayed() {
+    public HomeScreenRobot isSuccessfullyDisplayed() {
         isBottomNavigationItemCount(R.id.navigation, 3);
         isBottomNavigationHasItemTitle(R.id.navigation,
                 CurrentActivity.getActivityInstance().getString(R.string.nav_add_note_title));
@@ -79,6 +76,7 @@ public class HomeScreenRobot extends BaseTestRobot {
         isBottomNavigationHasItemTitle(R.id.navigation,
                 CurrentActivity.getActivityInstance().getString(R.string.nav_search_notes_title));
         isBottomNavigationHasCheckedItemId(R.id.navigation, R.id.navigation_map);
+        return this;
     }
 
 

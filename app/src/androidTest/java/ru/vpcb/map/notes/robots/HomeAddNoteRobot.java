@@ -1,7 +1,5 @@
 package ru.vpcb.map.notes.robots;
 
-import androidx.test.espresso.ViewInteraction;
-
 import ru.vpcb.map.notes.R;
 
 public class HomeAddNoteRobot extends BaseTestRobot{
@@ -13,8 +11,9 @@ public class HomeAddNoteRobot extends BaseTestRobot{
     private HomeAddNoteRobot() {
     }
 
-    public void enterNoteText(String text) {
+    public HomeAddNoteRobot enterNoteText(String text) {
         enterText(R.id.note,text);
+        return this;
     }
 
     public void pressAddButton() {
@@ -26,26 +25,27 @@ public class HomeAddNoteRobot extends BaseTestRobot{
         clickOnView(R.id.add);
     }
 
-    public ViewInteraction isNoteHintDisplayed (int textId){
-        return isViewHintDisplayed(R.id.note,textId);
+    public void isNoteHintDisplayed (int textId){
+        isViewHintDisplayed(R.id.note,textId);
     }
 
 
-    public ViewInteraction isAddButtonEnabled (){
-        return isViewEnabled(R.id.add);
+    public void isAddButtonEnabled (){
+        isViewEnabled(R.id.add);
     }
 
-    public ViewInteraction isAddButtonDisabled (){
-        return isViewDisabled(R.id.add);
+    public HomeAddNoteRobot isAddButtonDisabled (){
+        isViewDisabled(R.id.add);
+        return this;
     }
 
-    public ViewInteraction isNoteTextDisplayed (String text){
-        return isViewWithTextDisplayed(R.id.note,text);
+    public void isNoteTextDisplayed (String text){
+         isViewWithTextDisplayed(R.id.note,text);
     }
 
-    public ViewInteraction isSuccessfullyDisplayedAddNote (){
+    public void isSuccessfullyDisplayedAddNote (){
         isViewHintDisplayed(R.id.note, R.string.add_note_hint);
-        return isViewDisabled(R.id.add);
+         isViewDisabled(R.id.add);
     }
 
 
