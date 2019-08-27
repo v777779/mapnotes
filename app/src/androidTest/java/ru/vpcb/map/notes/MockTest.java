@@ -3,6 +3,8 @@ package ru.vpcb.map.notes;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.GrantPermissionRule;
 
+import org.junit.Rule;
+
 import javax.inject.Inject;
 
 import ru.vpcb.map.notes.data.provider.LocationProvider;
@@ -18,6 +20,10 @@ public class MockTest {
         return new MockTest();
     }
 
+    @Rule
+    public GrantPermissionRule permissionRule =
+            GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);            ;
+
     @Inject
     protected LocationProvider locationProvider;
     @Inject
@@ -27,7 +33,6 @@ public class MockTest {
     @Inject
     protected MapFragment mapFragment;
 
-    protected GrantPermissionRule permissionRule;
     protected MockTest testScope;
 
     protected MockTest() {
@@ -41,7 +46,7 @@ public class MockTest {
         component.inject(this);
         Intents.init();     // espresso intents
 
-        permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
         testScope = this;
     }
 

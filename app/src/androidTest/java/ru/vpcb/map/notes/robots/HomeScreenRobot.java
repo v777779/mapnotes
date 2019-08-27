@@ -57,7 +57,7 @@ public class HomeScreenRobot extends BaseTestRobot {
         clickOnViewWithText(R.string.nav_sign_out_title);
     }
 
-    public void isMapDisplayed() {
+    public HomeScreenRobot isMapDisplayed() {
         ViewVisibilityIdlingResource mapVisibilityIdlingResource =
                 new ViewVisibilityIdlingResource(R.id.mapContainer, View.VISIBLE);
         IdlingRegistry.getInstance().register(mapVisibilityIdlingResource);
@@ -65,6 +65,7 @@ public class HomeScreenRobot extends BaseTestRobot {
         isViewDisplayed(R.id.mapContainer);
         IdlingRegistry.getInstance().unregister(mapVisibilityIdlingResource);
 
+        return this;
     }
 
     public HomeScreenRobot isSuccessfullyDisplayed() {

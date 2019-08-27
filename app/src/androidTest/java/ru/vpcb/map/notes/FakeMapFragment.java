@@ -1,10 +1,10 @@
-package ru.vpcb.map.notes.fragments;
+package ru.vpcb.map.notes;
 
 import androidx.fragment.app.Fragment;
 
 import ru.vpcb.map.notes.fragments.map.MapFragment;
 
-public class MockMapFragment implements MapFragment {
+public class FakeMapFragment implements MapFragment {
 
     @Override
     public Fragment fragment() {

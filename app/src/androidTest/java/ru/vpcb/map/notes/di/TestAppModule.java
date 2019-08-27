@@ -12,7 +12,7 @@ import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.fragments.MockMapFragment;
+import ru.vpcb.map.notes.FakeMapFragment;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
 
 @Module
@@ -54,7 +54,7 @@ public class TestAppModule {
     @Provides
     @Singleton
     MapFragment provideMockMapFragment() {
-        return new MockMapFragment();
+        return new FakeMapFragment();
     }
 
 
