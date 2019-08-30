@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.multidex.MultiDex;
 
@@ -55,7 +56,7 @@ public class MainApp extends Application {
         initComponent();
     }
 
-    private void initComponent() {
+    public void initComponent() {
         component = DaggerAppComponent.builder()
                 .build();
 
@@ -66,7 +67,7 @@ public class MainApp extends Application {
         return component;
     }
 
-    private HomeComponent getHomeComponent(Activity activity) {
+    public HomeComponent getHomeComponent(Activity activity) {
         if (homeComponent == null)
             homeComponent = component.getHomeComponent(new HomeModule(activity));
         return homeComponent;
@@ -77,5 +78,9 @@ public class MainApp extends Application {
 
     }
 
+    @VisibleForTesting(otherwise =  VisibleForTesting.NONE)
+    public void setComponent(AppComponent component){
+        this.component = component;
+    }
 
 }

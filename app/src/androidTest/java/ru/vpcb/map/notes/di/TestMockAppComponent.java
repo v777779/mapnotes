@@ -7,8 +7,8 @@ import dagger.Component;
 import ru.vpcb.map.notes.MockTest;
 
 @Singleton
-@Component(modules = TestAppModule.class)
-public interface TestAppComponent {
+@Component(modules = TestMockAppModule.class)
+public interface TestMockAppComponent {
 
     void inject(MockTest mockTest);
 

@@ -7,57 +7,37 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import ru.vpcb.map.notes.data.formatter.LocationFormatter;
-import ru.vpcb.map.notes.data.provider.LocationProvider;
+import ru.vpcb.map.notes.data.Result;
+import ru.vpcb.map.notes.data.repository.FirebaseNotesRepository;
+import ru.vpcb.map.notes.data.repository.FirebaseUserRepository;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
+import ru.vpcb.map.notes.executors.AppExecutors;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.FakeMapFragment;
-import ru.vpcb.map.notes.fragments.map.MapFragment;
+import ru.vpcb.map.notes.model.AuthUser;
 
-@Module
-public class TestAppModule {
+public class TestAppModule extends AppModule {
 
-    @Provides
-    @Singleton
-    IAppExecutors provideMockAppExecutors() {
+    @Override
+    IAppExecutors provideAppExecutors() {
         IAppExecutors appExecutors = Mockito.mock(IAppExecutors.class);
         Mockito.when(appExecutors.ui()).thenReturn(AndroidSchedulers.mainThread());
         Mockito.when(appExecutors.net()).thenReturn(AndroidSchedulers.mainThread());
         return appExecutors;
     }
 
-    @Provides
-    @Singleton
-    UserRepository provideMockUserRepository() {
-        return Mockito.mock(UserRepository.class);
+    @Override
+    UserRepository provideFirebaseUserRepository(IAppExecutors appExecutors) {
+        UserRepository userRepository = Mockito.mock(UserRepository.class);
+        Mockito.when(userRepository.getCurrentUser())
+                .thenReturn(new Result.Success<>(new AuthUser("111111")));
+        return userRepository;
     }
 
-    @Provides
-    @Singleton
-    NotesRepository provideMockNotesRepository() {
+    @Override
+    NotesRepository provideFirebaseNotesRepository(IAppExecutors appExecutors) {
         return Mockito.mock(NotesRepository.class);
     }
-
-    @Provides
-    @Singleton
-    LocationProvider provideMockLocationProvider() {
-        return Mockito.mock(LocationProvider.class);
-    }
-
-    @Provides
-    @Singleton
-    LocationFormatter provideMockLocationFormatter() {
-        return Mockito.mock(LocationFormatter.class);
-    }
-
-    @Provides
-    @Singleton
-    MapFragment provideMockMapFragment() {
-        return new FakeMapFragment();
-    }
-
-
 
 
 

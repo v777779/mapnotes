@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.activities.login.signup;
+package ru.vpcb.map.notes.activity.login.signup;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

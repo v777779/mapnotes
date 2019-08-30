@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.activities.home;
+package ru.vpcb.map.notes.activity.home;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

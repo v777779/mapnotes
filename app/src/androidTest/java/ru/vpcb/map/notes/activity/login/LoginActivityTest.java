@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.activities.login;
+package ru.vpcb.map.notes.activity.login;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ru.vpcb.map.notes.MockTest;
-import ru.vpcb.map.notes.activity.login.LoginActivity;
 
 import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.SignInScreenRobot.signInScreen;

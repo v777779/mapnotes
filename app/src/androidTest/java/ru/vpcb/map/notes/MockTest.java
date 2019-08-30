@@ -10,8 +10,9 @@ import javax.inject.Inject;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.di.DaggerTestAppComponent;
-import ru.vpcb.map.notes.di.TestAppComponent;
+import ru.vpcb.map.notes.di.DaggerTestMockAppComponent;
+import ru.vpcb.map.notes.di.TestMockAppComponent;
+import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
 
 public class MockTest {
@@ -32,6 +33,8 @@ public class MockTest {
     protected NotesRepository notesRepository;
     @Inject
     protected MapFragment mapFragment;
+    @Inject
+    protected IAppExecutors appExecutors;
 
     protected MockTest testScope;
 
@@ -42,7 +45,7 @@ public class MockTest {
 
     public void setUp() throws Exception {
 // open injects
-        TestAppComponent component = DaggerTestAppComponent.builder().build();
+        TestMockAppComponent component = DaggerTestMockAppComponent.builder().build();
         component.inject(this);
         Intents.init();     // espresso intents
 

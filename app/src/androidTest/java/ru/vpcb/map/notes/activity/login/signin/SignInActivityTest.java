@@ -1,4 +1,4 @@
-package ru.vpcb.map.notes.activities.login.signin;
+package ru.vpcb.map.notes.activity.login.signin;
 
 import android.content.Intent;
 
@@ -14,7 +14,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
 import ru.vpcb.map.notes.MockTest;
-import ru.vpcb.map.notes.activity.login.signin.SignInActivity;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
