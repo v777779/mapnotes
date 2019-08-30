@@ -18,6 +18,14 @@ import ru.vpcb.map.notes.model.AuthUser;
 
 public class TestAppModule extends AppModule {
 
+    private UserRepository userRepository;
+    private NotesRepository notesRepository;
+
+    public TestAppModule(UserRepository userRepository, NotesRepository notesRepository) {
+        this.userRepository = userRepository;
+        this.notesRepository = notesRepository;
+    }
+
     @Override
     IAppExecutors provideAppExecutors() {
         IAppExecutors appExecutors = Mockito.mock(IAppExecutors.class);
@@ -28,15 +36,12 @@ public class TestAppModule extends AppModule {
 
     @Override
     UserRepository provideFirebaseUserRepository(IAppExecutors appExecutors) {
-        UserRepository userRepository = Mockito.mock(UserRepository.class);
-        Mockito.when(userRepository.getCurrentUser())
-                .thenReturn(new Result.Success<>(new AuthUser("111111")));
         return userRepository;
     }
 
     @Override
     NotesRepository provideFirebaseNotesRepository(IAppExecutors appExecutors) {
-        return Mockito.mock(NotesRepository.class);
+        return notesRepository;
     }
 
 

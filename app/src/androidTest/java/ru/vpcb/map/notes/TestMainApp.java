@@ -16,9 +16,7 @@ public class TestMainApp extends MainApp {
 
     @Override
     public void initComponent() {
-        component = DaggerAppComponent.builder()
-                .appModule(new TestAppModule())
-                .build();
+
     }
 
     @Override
@@ -37,5 +35,9 @@ public class TestMainApp extends MainApp {
     @Override
     public void clearHomeComponent() {
         homeComponent = null;
+    }
+
+    public void setComponent(AppComponent component){
+        this.component =  component;
     }
 }
