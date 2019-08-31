@@ -9,24 +9,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import javax.inject.Inject;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.di.DaggerTestMockAppComponent;
-import ru.vpcb.map.notes.di.TestMockAppComponent;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
 import ru.vpcb.map.notes.manager.FAManager;
 
 public class MockTest {
-
-    public static MockTest testScope() {
-        return new MockTest();
-    }
 
     @Rule
     public GrantPermissionRule permissionRule =
@@ -60,7 +52,6 @@ public class MockTest {
 
         Intents.init();                     // espresso intents
     }
-
 
     public void tearDown() throws Exception {
         TestMainApp app = ApplicationProvider.getApplicationContext();
