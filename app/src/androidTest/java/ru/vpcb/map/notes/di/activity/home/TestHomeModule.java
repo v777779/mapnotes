@@ -1,41 +1,33 @@
 package ru.vpcb.map.notes.di.activity.home;
 
 import android.app.Activity;
-import android.location.Geocoder;
 
-import org.mockito.Mockito;
-
-import dagger.Module;
-import dagger.Provides;
-import ru.vpcb.map.notes.FakeMapFragment;
 import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
-import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
 import ru.vpcb.map.notes.data.formatter.LocationFormatter;
-import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
-import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.di.activity.ActivityScope;
-import ru.vpcb.map.notes.di.activity.home.HomeModule;
 import ru.vpcb.map.notes.executors.IAppExecutors;
-import ru.vpcb.map.notes.fragments.add.AddNoteMvpPresenter;
-import ru.vpcb.map.notes.fragments.add.AddNotePresenter;
-import ru.vpcb.map.notes.fragments.map.GeneralMapFragment;
-import ru.vpcb.map.notes.fragments.map.GoogleMapPresenter;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
-import ru.vpcb.map.notes.fragments.map.MapMvpPresenter;
-import ru.vpcb.map.notes.fragments.search.SearchNotesMvpPresenter;
-import ru.vpcb.map.notes.fragments.search.SearchNotesPresenter;
 import ru.vpcb.map.notes.manager.FAManager;
 
 
 public class TestHomeModule extends HomeModule {
     private Activity activity;
+    private LocationProvider locationProvider;
+    private LocationFormatter locationFormatter;
+    private MapFragment mapFragment;
+    private FAManager analyticsManager;
 
-    public TestHomeModule(Activity activity) {
+    public TestHomeModule(Activity activity, LocationProvider locationProvider,
+                          LocationFormatter locationFormatter, MapFragment mapFragment,
+                          FAManager analyticsManager) {
         super(activity);
         this.activity = activity;
+        this.locationProvider = locationProvider;
+        this.locationFormatter = locationFormatter;
+        this.mapFragment = mapFragment;
+        this.analyticsManager = analyticsManager;
     }
 
     @Override
@@ -43,25 +35,24 @@ public class TestHomeModule extends HomeModule {
         return new HomePresenter(appExecutors, userRepository);
     }
 
-
     @Override
     MapFragment provideMapFragment() {
-        return new FakeMapFragment();
+        return mapFragment;
     }
 
 
     @Override
     LocationProvider provideAddressLocationProvider() {
-        return Mockito.mock(LocationProvider.class);
+        return locationProvider;
     }
 
     @Override
     LocationFormatter provideLocationFormatter(Activity activity) {
-        return Mockito.mock(LocationFormatter.class);
+        return locationFormatter;
     }
 
     @Override
     FAManager provideFAManager() {
-        return new FAManager(activity);
+        return analyticsManager;
     }
 }

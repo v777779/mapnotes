@@ -14,6 +14,7 @@ import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
+import ru.vpcb.map.notes.manager.FAManager;
 
 @Module
 public class TestMockAppModule {
@@ -57,6 +58,11 @@ public class TestMockAppModule {
         return new FakeMapFragment();
     }
 
+    @Provides
+    @Singleton
+    FAManager provideMockFAManager() {
+        return Mockito.mock(FAManager.class);
+    }
 
 
 

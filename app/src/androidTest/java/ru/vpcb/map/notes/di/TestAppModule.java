@@ -20,17 +20,17 @@ public class TestAppModule extends AppModule {
 
     private UserRepository userRepository;
     private NotesRepository notesRepository;
+    private IAppExecutors appExecutors;
 
-    public TestAppModule(UserRepository userRepository, NotesRepository notesRepository) {
+    public TestAppModule(IAppExecutors appExecutors, UserRepository userRepository,
+                         NotesRepository notesRepository) {
+        this.appExecutors = appExecutors;
         this.userRepository = userRepository;
         this.notesRepository = notesRepository;
     }
 
     @Override
     IAppExecutors provideAppExecutors() {
-        IAppExecutors appExecutors = Mockito.mock(IAppExecutors.class);
-        Mockito.when(appExecutors.ui()).thenReturn(AndroidSchedulers.mainThread());
-        Mockito.when(appExecutors.net()).thenReturn(AndroidSchedulers.mainThread());
         return appExecutors;
     }
 
@@ -43,7 +43,6 @@ public class TestAppModule extends AppModule {
     NotesRepository provideFirebaseNotesRepository(IAppExecutors appExecutors) {
         return notesRepository;
     }
-
 
 
 }

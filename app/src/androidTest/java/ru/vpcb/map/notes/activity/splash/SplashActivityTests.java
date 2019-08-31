@@ -1,28 +1,22 @@
 package ru.vpcb.map.notes.activity.splash;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.rule.ActivityTestRule;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
+import ru.vpcb.map.notes.IModuleSupplier;
 import ru.vpcb.map.notes.MockTest;
 import ru.vpcb.map.notes.TestMainApp;
-import ru.vpcb.map.notes.data.Result;
-import ru.vpcb.map.notes.data.repository.UserRepository;
-import ru.vpcb.map.notes.di.AppComponent;
-import ru.vpcb.map.notes.di.DaggerAppComponent;
+import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.di.TestAppModule;
-import ru.vpcb.map.notes.model.AuthUser;
+import ru.vpcb.map.notes.di.activity.home.HomeModule;
+import ru.vpcb.map.notes.di.activity.home.TestHomeModule;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
-import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashActivityMockTestRule;
 import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
 
 
@@ -33,11 +27,21 @@ public class SplashActivityTests extends MockTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        AppComponent component = DaggerAppComponent.builder()
-                .appModule(new TestAppModule(userRepository, notesRepository))
-                .build();
+        IModuleSupplier supplier = new IModuleSupplier() {
+            @Override
+            public HomeModule apply(HomeActivity activity) {
+                return new TestHomeModule(activity, locationProvider, locationFormatter,
+                        mapFragment, analyticsManager);
+            }
+
+            @Override
+            public TestAppModule apply() {
+                return new TestAppModule(appExecutors, userRepository, notesRepository);
+            }
+        };
+
         TestMainApp app = ApplicationProvider.getApplicationContext();
-        app.setComponent(component);
+        app.setSupplier(supplier);
 
     }
 
@@ -46,26 +50,22 @@ public class SplashActivityTests extends MockTest {
         prepare(testScope)
                 .mockLocationProvider()
                 .mockAuthorizedUser();
-
         splashScreen()
                 .displayMockAsEntryPoint();
-
         homeScreen()
                 .isSuccessfullyLoaded();
-   }
+    }
 
     @Test
     public void whenUserIsNotAuthenticatedShouldOpenHomeActivity() {
         prepare(testScope)
                 .mockNoAuthorizedUser();
-
         splashScreen()
                 .displayMockAsEntryPoint();
-
         loginScreen()
                 .isSuccessfullyLoaded();
-
     }
+
     @Override
     @After
     public void tearDown() throws Exception {
