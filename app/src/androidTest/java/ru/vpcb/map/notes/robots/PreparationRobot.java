@@ -60,16 +60,29 @@ public class PreparationRobot {
         return this;
     }
 
+    public void mockNoHumanReadableName() {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
+    }
+
+    public void mockHumanReadableName(String name) {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Success<>(name)));
+    }
+
     public void mockNoAuthorizedUser() {
         UserRepository userRepository = scope.getUserRepository();
         Mockito.when(userRepository.getCurrentUser())
                 .thenReturn(new Result.Error<>(new RuntimeException()));
     }
 
-    public void mockAuthorizedUser() {
+    public PreparationRobot mockAuthorizedUser() {
         UserRepository userRepository = scope.getUserRepository();
         Mockito.when(userRepository.getCurrentUser())
                 .thenReturn(new Result.Success<>(authUser));
+        return this;
     }
 
 

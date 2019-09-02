@@ -26,8 +26,8 @@ public class SignUpActivityTest extends MockTest {
     @Rule
     public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
 
-    private String username;
-    private String emptyUsername;
+    private String userName;
+    private String emptyUserName;
     private String incorrectEmail;
     private String correctEmail;
     private String emptyEmail;
@@ -40,8 +40,8 @@ public class SignUpActivityTest extends MockTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        username = "testUserName";
-        emptyUsername = "";
+        userName = "testUserName";
+        emptyUserName = "";
         incorrectEmail = "test";
         correctEmail = "test@test.com";
         emptyEmail = "";
@@ -53,7 +53,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenEmailIsEmptyShouldDisplayEmailError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, emptyEmail, emptyPassword)
+                .signUp(emptyUserName, emptyEmail, emptyPassword)
                 .isEmailShouldBeValidErrorDisplayed();
 
     }
@@ -62,7 +62,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenEmailIsNotCorrectShouldDisplayEmailError() {
         signUpScreen().
                 displayAsEntryPoint()
-                .signUp(emptyUsername, incorrectEmail, emptyPassword)
+                .signUp(emptyUserName, incorrectEmail, emptyPassword)
                 .isEmailShouldBeValidErrorDisplayed();
     }
 
@@ -70,7 +70,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenPasswordIsEmptyShouldDisplayPasswordError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, correctEmail, emptyPassword)
+                .signUp(emptyUserName, correctEmail, emptyPassword)
                 .isPasswordShouldNotBeEmptyErrorDisplayed();
     }
 
@@ -78,7 +78,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenNameIsEmptyShouldDisplayNameError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, correctEmail, password)
+                .signUp(emptyUserName, correctEmail, password)
                 .isNameShouldNotBeEmptyErrorDisplayed();
     }
 
@@ -89,7 +89,7 @@ public class SignUpActivityTest extends MockTest {
 
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(username, correctEmail, password)
+                .signUp(userName, correctEmail, password)
                 .isAccountCannotBeCreatedErrorDisplayed();
     }
 
@@ -97,7 +97,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenSignUpSuccessShouldOpenMapScreen() {
         prepare(testScope)
                 .mockLocationProvider(false)
-                .mockSignUpSuccess(username, correctEmail, password)
+                .mockSignUpSuccess(userName, correctEmail, password)
                 .mockAuthorizedUser();
 
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -106,7 +106,7 @@ public class SignUpActivityTest extends MockTest {
 
         signUpScreen()
                 .displayAsEntryPoint(intent)
-                .signUp(username, correctEmail, password);
+                .signUp(userName, correctEmail, password);
 
         homeScreen()
                 .isSuccessfullyLoaded();

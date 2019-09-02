@@ -25,6 +25,8 @@ import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 @RunWith(AndroidJUnit4.class)
 public class HomeActivityTest extends MockTest {
 
+    private String userName;
+
     @Rule
     public RuleChain chain = RuleChain
             .outerRule(permissionRule)
@@ -34,9 +36,13 @@ public class HomeActivityTest extends MockTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
+
+        userName = "testUserName";
+
         prepare(testScope)
                 .mockLocationProvider(true)
-                .mockAuthorizedUser();
+                .mockAuthorizedUser()
+                .mockHumanReadableName(userName);
     }
 
     @Test
@@ -56,7 +62,6 @@ public class HomeActivityTest extends MockTest {
     }
 
     @Test
-//    @Ignore  // TODO check for what
     public void shouldVerifySearchNoteFragment() {
         List<Note> notes = Collections.singletonList(new Note(0, 0,
                 "test note", "test user"));
@@ -67,6 +72,7 @@ public class HomeActivityTest extends MockTest {
                 .displayAsEntryPoint()
                 .isSuccessfullyDisplayed()
                 .openSearch();
+
         searchNoteFragment()
                 .isSuccessfullyDisplayedSearch();
     }

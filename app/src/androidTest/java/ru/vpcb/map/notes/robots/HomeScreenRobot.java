@@ -2,7 +2,6 @@ package ru.vpcb.map.notes.robots;
 
 import android.view.View;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
@@ -52,8 +51,9 @@ public class HomeScreenRobot extends BaseTestRobot {
     }
 
     public void signOut() {
-        Espresso.openActionBarOverflowOrOptionsMenu(CurrentActivity.getActivityInstance());
-        clickOnViewWithText(R.string.nav_sign_out_title);
+//        Espresso.openActionBarOverflowOrOptionsMenu(CurrentActivity.getActivityInstance());
+//        clickOnViewWithText(R.string.nav_sign_out_title);
+        clickOnView(R.id.navigation_sign_out);
     }
 
     public HomeScreenRobot isMapDisplayed() {
