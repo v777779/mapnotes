@@ -1,6 +1,10 @@
 package ru.vpcb.map.notes.activity.login.signup;
 
+import android.content.Context;
+import android.content.Intent;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,8 +22,9 @@ import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpScreen;
 
 @RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest extends MockTest {
+
     @Rule
-    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity);
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
 
     private String username;
     private String emptyUsername;
@@ -42,7 +47,6 @@ public class SignUpActivityTest extends MockTest {
         emptyEmail = "";
         password = "password";
         emptyPassword = "";
-
     }
 
     @Test
@@ -96,8 +100,12 @@ public class SignUpActivityTest extends MockTest {
                 .mockSignUpSuccess(username, correctEmail, password)
                 .mockAuthorizedUser();
 
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Intent intent = new Intent(context, SignUpActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         signUpScreen()
-                .displayAsEntryPoint()
+                .displayAsEntryPoint(intent)
                 .signUp(username, correctEmail, password);
 
         homeScreen()

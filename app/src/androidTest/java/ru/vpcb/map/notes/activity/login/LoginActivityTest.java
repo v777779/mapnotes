@@ -20,11 +20,13 @@ public class LoginActivityTest extends MockTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> activityRule =
-            new ActivityTestRule<LoginActivity>(LoginActivity.class);
+            new ActivityTestRule<LoginActivity>(LoginActivity.class, true,false);
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
+
+        activityRule.launchActivity(null);
     }
 
     @Test

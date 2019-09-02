@@ -53,7 +53,8 @@ public class PreparationRobot {
 
     public PreparationRobot mockSignUpSuccess(String name, String email, String password) {
         UserRepository userRepository = scope.getUserRepository();
-        Mockito.doAnswer(invocation -> null).when(userRepository).changeUserName(authUser, name);
+        Mockito.when(userRepository.changeUserName(authUser, name))
+                .thenReturn(Single.just(new Result.Success<>(null)));
         Mockito.when(userRepository.signUp(email, password))
                 .thenReturn(Single.just(new Result.Success<>(authUser)));
         return this;

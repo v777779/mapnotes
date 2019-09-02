@@ -1,8 +1,11 @@
 package ru.vpcb.map.notes.robots;
 
+import android.content.Intent;
+
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
+import androidx.test.rule.ActivityTestRule;
 
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.login.signin.SignInActivity;
@@ -10,10 +13,23 @@ import ru.vpcb.map.notes.idlingresources.ViewTextIdlingResource;
 
 public class SignInScreenRobot extends BaseTestRobot {
 
+    public static final ActivityTestRule<SignInActivity> signInActivity =
+            new ActivityTestRule<>(SignInActivity.class,
+                    true, false);
+
     public static SignInScreenRobot signInScreen(){
         return new SignInScreenRobot();
     }
 
+
+    public SignInScreenRobot displayAsEntryPoint(Intent intent) {
+        signInActivity.launchActivity(intent);
+        return this;
+    }
+    public SignInScreenRobot displayAsEntryPoint() {
+        signInActivity.launchActivity(null);
+        return this;
+    }
 
     public SignInScreenRobot signIn(String email, String password) {
         if (!email.isEmpty()) {
