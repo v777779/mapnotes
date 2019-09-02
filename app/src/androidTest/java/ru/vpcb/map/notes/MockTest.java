@@ -1,5 +1,7 @@
 package ru.vpcb.map.notes;
 
+import android.app.Activity;
+
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.GrantPermissionRule;
@@ -10,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
@@ -56,7 +57,7 @@ public class MockTest {
 
         IModuleSupplier supplier = new IModuleSupplier() {
             @Override
-            public HomeModule apply(HomeActivity activity) {
+            public HomeModule apply(Activity activity) {
                 return new TestHomeModule(activity, locationProvider, locationFormatter,
                         mapFragment, analyticsManager);
             }

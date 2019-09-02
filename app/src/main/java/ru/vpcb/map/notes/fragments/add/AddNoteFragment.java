@@ -87,7 +87,6 @@ public class AddNoteFragment extends Fragment implements AddNoteView, IComponent
     @Override
     public void onStart() {
         super.onStart();
-//        setProperty(Properties.FRAGMENT_CONTEXT, this.context!!)
         presenter.onAttach(this);
     }
 

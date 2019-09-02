@@ -22,8 +22,8 @@ import static ru.vpcb.map.notes.robots.TestActivityRobot.testScreen;
 public class AddNoteFragmentTest extends MockTest {
 
     @Rule
-    public ActivityTestRule<FragmentTestActivity> activityRule =  // assign here to auto launch
-            TestActivityRobot.testFragmentActivity;
+    public ActivityTestRule<FragmentTestActivity> activityRule =
+            TestActivityRobot.testFragmentActivity;             // auto launch
 
     private String testNoteText;
 
