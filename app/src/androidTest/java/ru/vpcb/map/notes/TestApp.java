@@ -32,7 +32,7 @@ public class TestApp extends MainApp {
     @Override
     public HomeComponent getHomeComponent(Activity activity) {
         if(homeComponent == null) {
-            homeComponent = component.getHomeComponent(supplier.apply((HomeActivity)activity));
+            homeComponent = getComponent().getHomeComponent(supplier.apply((HomeActivity)activity));
         }
         return homeComponent;
     }

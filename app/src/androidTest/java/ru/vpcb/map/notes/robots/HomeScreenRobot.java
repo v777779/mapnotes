@@ -29,7 +29,6 @@ public class HomeScreenRobot extends BaseTestRobot {
         return HomeSearchNoteRobot.searchNoteFragment();
     }
 
-
     public HomeScreenRobot displayAsEntryPoint() {
         homeScreenMockActivityRule.launchActivity(null);
         return this;

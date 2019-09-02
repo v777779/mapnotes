@@ -25,7 +25,6 @@ import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 @RunWith(AndroidJUnit4.class)
 public class HomeActivityTest extends MockTest {
 
-    // TODO check for what ???
     @Rule
     public RuleChain chain = RuleChain
             .outerRule(permissionRule)
