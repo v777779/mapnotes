@@ -25,6 +25,8 @@ import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 @RunWith(AndroidJUnit4.class)
 public class HomeActivityTest extends MockTest {
 
+    private String textNote;
+    private String userUID;
     private String userName;
 
     @Rule
@@ -37,12 +39,13 @@ public class HomeActivityTest extends MockTest {
     public void setUp() throws Exception {
         super.setUp();
 
+        textNote = "test note";
+        userUID = "111111";
         userName = "testUserName";
 
         prepare(testScope)
                 .mockLocationProvider(true)
-                .mockAuthorizedUser()
-                .mockHumanReadableName(userName);
+                .mockAuthorizedUser();
     }
 
     @Test
@@ -64,9 +67,10 @@ public class HomeActivityTest extends MockTest {
     @Test
     public void shouldVerifySearchNoteFragment() {
         List<Note> notes = Collections.singletonList(new Note(0, 0,
-                "test note", "test user"));
+                textNote, userUID));
         prepare(testScope)
-                .mockLoadingListOfNotes(notes);
+                .mockLoadingListOfNotes(notes)
+                .mockHumanReadableName(userName);
 
         homeScreen()
                 .displayAsEntryPoint()

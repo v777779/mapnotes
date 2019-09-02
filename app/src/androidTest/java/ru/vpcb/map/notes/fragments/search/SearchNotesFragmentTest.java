@@ -31,7 +31,9 @@ public class SearchNotesFragmentTest extends MockTest {
     private List<Note> testNotes;
     private String searchInput;
     private String emptySearchInput;
-    private String testUID;
+    private String userUID;
+    private String userName;
+
 
     @Override
     @Before
@@ -39,7 +41,8 @@ public class SearchNotesFragmentTest extends MockTest {
         super.setUp();
         searchInput = "text";
         emptySearchInput = "";
-        testUID = "1111111";
+        userUID = "11111111";
+        userName = "testUserName";
 
         testNotes = Arrays.asList(
                 new Note(0, 0, "test note 1_1", "11111111"),
@@ -47,6 +50,10 @@ public class SearchNotesFragmentTest extends MockTest {
                 new Note(0, 0, "test note 1_2", "22222222"),
                 new Note(0, 0, "test note 2_2", "22222222"),
                 new Note(0, 0, "test note 3_2", "22222222"));
+
+        prepare(testScope)
+                .mockHumanReadableName(userName);
+
     }
 
     @Test
@@ -56,6 +63,7 @@ public class SearchNotesFragmentTest extends MockTest {
 
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .isSuccessfullyDisplayedSearchScreen();
     }
@@ -69,6 +77,7 @@ public class SearchNotesFragmentTest extends MockTest {
 
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .isSearchResultHasNumberItems(expectedItemCount)
                 .isSearchResultsHaveNotes(testNotes);
@@ -77,10 +86,12 @@ public class SearchNotesFragmentTest extends MockTest {
     @Test
     public void shouldDisplayUnknownUserUser() {
         prepare(testScope)
-                .mockLoadingListOfNotesEmpty()
+                .mockLoadingListOfNotes(testNotes)
                 .mockErrorDuringLoadingUserNames();
+
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .searchNoteByUser(searchInput)
                 .isUnknownUserErrorDisplayed();
@@ -90,11 +101,13 @@ public class SearchNotesFragmentTest extends MockTest {
     public void shouldSearchByUserAndDisplayResults() {
         int expectedItemCount = testNotes.size();
         prepare(testScope)
-                .mockLoadingListOfNotesEmpty()
-                .mockSearchUserId(testUID)
+                .mockLoadingListOfNotes(testNotes)
+                .mockSearchUserId(userUID)
                 .mockSearchNoteByAnyUser(testNotes);
+
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .searchNoteByUser(searchInput)
                 .isSearchResultHasNumberItems(expectedItemCount)
@@ -106,10 +119,12 @@ public class SearchNotesFragmentTest extends MockTest {
     public void shouldSearchByNotesAndDisplayResult() {
         int expectedItemCount = testNotes.size();
         prepare(testScope)
-                .mockLoadingListOfNotesEmpty()
+                .mockLoadingListOfNotes(testNotes)
                 .mockSearchNoteByAnyText(testNotes);
+
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .searchNoteByText(searchInput)
                 .isSearchResultHasNumberItems(expectedItemCount)
@@ -122,10 +137,12 @@ public class SearchNotesFragmentTest extends MockTest {
 
         prepare(testScope)
                 .mockLoadingListOfNotes(testNotes)
-                .mockLoadingListOfNotesByNoteTextEmpty()
-                .mockLoadingListOfNotes(testNotes);
+                .mockSearchNoteByAnyText(testNotes);
+//                .mockLoadingListOfNotesByNoteTextEmpty();
+
         testScreen()
                 .attachFragment(new SearchNotesFragment());
+
         searchNoteFragment()
                 .searchNoteByText(searchInput)
                 .searchNoteByText(emptySearchInput)

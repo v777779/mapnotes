@@ -66,10 +66,11 @@ public class PreparationRobot {
                 .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
     }
 
-    public void mockHumanReadableName(String name) {
+    public PreparationRobot mockHumanReadableName(String name) {
         UserRepository userRepository = scope.getUserRepository();
         Mockito.when(userRepository.getHumanReadableName(Mockito.anyString()))
                 .thenReturn(Single.just(new Result.Success<>(name)));
+        return this;
     }
 
     public void mockNoAuthorizedUser() {
