@@ -1,5 +1,8 @@
 package ru.vpcb.map.notes;
 
+import android.app.Activity;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
@@ -13,6 +16,8 @@ import org.junit.runner.RunWith;
 
 import java.util.Calendar;
 
+import ru.vpcb.map.notes.di.AppModule;
+import ru.vpcb.map.notes.di.activity.home.HomeModule;
 import ru.vpcb.map.notes.robots.SplashScreenRobot;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.addNoteFragment;
@@ -44,6 +49,23 @@ public class SmokeTests {
         correctEmail = "test@test.com";
         correctPassword = "test123";
         incorrectPassword = "test-password";
+
+        IModuleSupplier supplier = new IModuleSupplier() {
+            @Override
+            public HomeModule apply(Activity activity) {
+                return new HomeModule(activity);
+            }
+
+            @Override
+            public AppModule apply() {
+                return new AppModule();
+            }
+        };
+
+        TestApp app = ApplicationProvider.getApplicationContext();
+        app.setSupplier(supplier);
+
+
         Intents.init();     // espresso intents
     }
 
