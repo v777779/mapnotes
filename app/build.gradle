@@ -13,7 +13,7 @@ android {
         versionCode 1
         versionName "1.0"
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "ru.vpcb.map.notes.TestRunner"
+        testInstrumentationRunner "ru.vpcb.map.notes.TestAppRunner"
 
         multiDexEnabled = true
         lintOptions {

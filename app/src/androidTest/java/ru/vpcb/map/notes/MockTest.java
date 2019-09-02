@@ -10,10 +10,14 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.data.formatter.LocationFormatter;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
+import ru.vpcb.map.notes.di.TestAppModule;
+import ru.vpcb.map.notes.di.activity.home.HomeModule;
+import ru.vpcb.map.notes.di.activity.home.TestHomeModule;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.fragments.map.MapFragment;
 import ru.vpcb.map.notes.manager.FAManager;
@@ -50,11 +54,27 @@ public class MockTest {
         mapFragment = new FakeMapFragment();
         testScope = this;
 
+        IModuleSupplier supplier = new IModuleSupplier() {
+            @Override
+            public HomeModule apply(HomeActivity activity) {
+                return new TestHomeModule(activity, locationProvider, locationFormatter,
+                        mapFragment, analyticsManager);
+            }
+
+            @Override
+            public TestAppModule apply() {
+                return new TestAppModule(appExecutors, userRepository, notesRepository);
+            }
+        };
+
+        TestApp app = ApplicationProvider.getApplicationContext();
+        app.setSupplier(supplier);
+
         Intents.init();                     // espresso intents
     }
 
     public void tearDown() throws Exception {
-        TestMainApp app = ApplicationProvider.getApplicationContext();
+        TestApp app = ApplicationProvider.getApplicationContext();
         app.clearAll();
 
         Intents.release();                  // espresso intents

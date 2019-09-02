@@ -26,7 +26,7 @@ public class SearchNotesFragmentTest extends MockTest {
 
 
     @Rule
-    ActivityTestRule<FragmentTestActivity> activityRule = TestActivityRobot.testFragmentActivity;
+    public ActivityTestRule<FragmentTestActivity> activityRule = TestActivityRobot.testFragmentActivity;
 
     private List<Note> testNotes;
     private String searchInput;

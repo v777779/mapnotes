@@ -7,7 +7,7 @@ import ru.vpcb.map.notes.di.AppComponent;
 import ru.vpcb.map.notes.di.DaggerAppComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 
-public class TestMainApp extends MainApp {
+public class TestApp extends MainApp {
 
     private AppComponent component;
     private HomeComponent homeComponent;

@@ -27,7 +27,7 @@ public class HomeActivityTest extends MockTest {
 
     // TODO check for what ???
     @Rule
-    RuleChain chain = RuleChain
+    public RuleChain chain = RuleChain
             .outerRule(permissionRule)
             .around(HomeScreenRobot.homeScreenMockActivityRule);
 
