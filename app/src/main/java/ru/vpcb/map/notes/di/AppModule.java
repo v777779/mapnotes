@@ -32,6 +32,4 @@ public class AppModule {
         return new FirebaseNotesRepository(appExecutors);
     }
 
-
-
 }

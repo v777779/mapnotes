@@ -5,6 +5,7 @@ import android.location.Geocoder;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
 import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
@@ -13,6 +14,7 @@ import ru.vpcb.map.notes.data.provider.AddressLocationProvider;
 import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.data.repository.NotesRepository;
 import ru.vpcb.map.notes.data.repository.UserRepository;
+import ru.vpcb.map.notes.di.ActivityModule;
 import ru.vpcb.map.notes.di.activity.ActivityScope;
 import ru.vpcb.map.notes.executors.IAppExecutors;
 import ru.vpcb.map.notes.fragments.add.AddNoteMvpPresenter;
@@ -26,11 +28,10 @@ import ru.vpcb.map.notes.fragments.search.SearchNotesPresenter;
 import ru.vpcb.map.notes.manager.FAManager;
 
 @Module
-public class HomeModule {
-    private Activity activity;
+public class HomeModule extends ActivityModule<HomeActivity> {
 
-    public HomeModule(Activity activity) {
-        this.activity = activity;
+    public HomeModule(HomeActivity activity) {
+        super(activity);
     }
 
     @Provides

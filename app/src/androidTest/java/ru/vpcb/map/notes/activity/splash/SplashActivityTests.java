@@ -5,15 +5,24 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
-import ru.vpcb.map.notes.IModuleSupplier;
+import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.MockTest;
-import ru.vpcb.map.notes.TestMainApp;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
-import ru.vpcb.map.notes.di.TestAppModule;
+import ru.vpcb.map.notes.activity.home.HomeActivityAccess;
+import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
+import ru.vpcb.map.notes.activity.home.HomePresenter;
+import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeModule;
-import ru.vpcb.map.notes.di.activity.home.TestHomeModule;
+import ru.vpcb.map.notes.di.activity.splash.SplashComponent;
+import ru.vpcb.map.notes.di.activity.splash.SplashModule;
+import ru.vpcb.map.notes.fragments.add.AddNoteFragment;
+import ru.vpcb.map.notes.fragments.map.GoogleMapFragment;
+import ru.vpcb.map.notes.fragments.search.SearchNotesFragment;
 
+import static org.mockito.Mockito.when;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
@@ -22,26 +31,73 @@ import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
 
 public class SplashActivityTests extends MockTest {
 
+    private SplashComponent splashComponent;
+    private HomeComponent homeComponent;
+
+    @Mock
+    private SplashComponent.Builder splashBuilder;
+    @Mock
+    private HomeComponent.Builder homeBuilder;
+
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
-        IModuleSupplier supplier = new IModuleSupplier() {
+// component
+        splashComponent= new SplashComponent() {
             @Override
-            public HomeModule apply(HomeActivity activity) {
-                return new TestHomeModule(activity, locationProvider, locationFormatter,
-                        mapFragment, analyticsManager);
-            }
-
-            @Override
-            public TestAppModule apply() {
-                return new TestAppModule(appExecutors, userRepository, notesRepository);
+            public void inject(SplashActivity activity) {
+                activity.presenter = new SplashPresenter(appExecutors,userRepository);
             }
         };
+        when(splashBuilder.module(Mockito.any(SplashModule.class))).thenReturn(splashBuilder);
+        when(splashBuilder.build()).thenReturn(splashComponent);
+        MainApp app = ApplicationProvider.getApplicationContext();
+        app.put(SplashActivity.class, splashBuilder);
 
-        TestMainApp app = ApplicationProvider.getApplicationContext();
-        app.setSupplier(supplier);
+// component
+        homeComponent= new HomeComponent(){
+            @Override
+            public void inject(HomeActivity activity) {
+            HomeMvpPresenter presenter = new HomePresenter(appExecutors,userRepository);
+                HomeActivityAccess.set(activity, presenter,mapFragment,analyticsManager);
+            }
+
+            @Override
+            public void inject(GoogleMapFragment fragment) {
+//                @Inject
+//                MapMvpPresenter presenter;
+//                @Inject
+//                LocationProvider locationProvider;
+//                @Inject
+//                FAManager analyticsManager;
+//                @Inject
+//                Activity activity;
+
+            }
+
+            @Override
+            public void inject(SearchNotesFragment fragment) {
+//                @Inject
+//                SearchNotesMvpPresenter presenter;
+//                @Inject
+//                Activity activity;
+            }
+
+            @Override
+            public void inject(AddNoteFragment fragment) {
+
+//                @Inject
+//                AddNoteMvpPresenter presenter;
+//                @Inject
+//                Activity activity;
+            }
+
+        };
+        when(homeBuilder.module(Mockito.any(HomeModule.class))).thenReturn(homeBuilder);
+        when(homeBuilder.build()).thenReturn(homeComponent);
+        app.put(HomeActivity.class, homeBuilder);
 
     }
 

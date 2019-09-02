@@ -1,6 +1,5 @@
 package ru.vpcb.map.notes;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -54,8 +53,6 @@ public class MockTest {
     }
 
     public void tearDown() throws Exception {
-        TestMainApp app = ApplicationProvider.getApplicationContext();
-        app.clearAll();
 
         Intents.release();                  // espresso intents
     }

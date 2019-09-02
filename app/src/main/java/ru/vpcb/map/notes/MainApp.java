@@ -6,13 +6,22 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.multidex.MultiDex;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.di.ActivityComponentBuilder;
 import ru.vpcb.map.notes.di.AppComponent;
 import ru.vpcb.map.notes.di.DaggerAppComponent;
+import ru.vpcb.map.notes.di.IBuilderProvider;
 import ru.vpcb.map.notes.di.activity.home.HomeComponent;
 import ru.vpcb.map.notes.di.activity.home.HomeModule;
+
 /*
     MultiDex Support fro API17
     extends MultiDexApplication or
@@ -21,27 +30,27 @@ import ru.vpcb.map.notes.di.activity.home.HomeModule;
     Crashlytics init is not necessary
     it initialized automatically by hook in Manifest
  */
-public class MainApp extends Application {
+public class MainApp extends Application implements IBuilderProvider {
     private AppComponent component;
     private HomeComponent homeComponent;
 
-    private static MainApp getApplication(Activity activity) {
-        if (activity == null) throw new NullPointerException();
-        return (MainApp) activity.getApplication();
+    @Inject
+    Map<Class<? extends Activity>, Provider<ActivityComponentBuilder>> map;
+
+    public static IBuilderProvider provider(@NonNull Context context) {
+        return (IBuilderProvider) context.getApplicationContext();
     }
 
-    public static AppComponent get(Activity activity) {
-        return getApplication(activity).getComponent();
+    public static AppComponent get(@NonNull Activity activity) {
+        return ((MainApp)activity.getApplication()).getComponent();
     }
 
     public static HomeComponent plus(@NonNull Activity activity) {
-        MainApp app = getApplication(activity);
-        return app.getHomeComponent(activity);
+        return ((MainApp)activity.getApplication()).getHomeComponent(activity);
     }
 
-    public static void clear(AppCompatActivity activity) {
-        MainApp app = getApplication(activity);
-        app.clearHomeComponent();
+    public static void clear(@NonNull Activity activity) {
+        ((MainApp)activity.getApplication()).clearHomeComponent();
     }
 
     @Override
@@ -53,13 +62,8 @@ public class MainApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        initComponent();
-    }
-
-    public void initComponent() {
-        component = DaggerAppComponent.builder()
-                .build();
-
+        component = DaggerAppComponent.create();
+        component.inject(this);
     }
 
     public AppComponent getComponent() {
@@ -68,8 +72,13 @@ public class MainApp extends Application {
     }
 
     public HomeComponent getHomeComponent(Activity activity) {
-        if (homeComponent == null)
-            homeComponent = component.getHomeComponent(new HomeModule(activity));
+        if (homeComponent == null) {
+            HomeComponent.Builder builder = (HomeComponent.Builder) provide(HomeActivity.class);
+            if(builder == null)return null;
+            homeComponent = builder
+                    .module(new HomeModule((HomeActivity)activity))
+                    .build();
+        }
         return homeComponent;
     }
 
@@ -78,9 +87,26 @@ public class MainApp extends Application {
 
     }
 
-    @VisibleForTesting(otherwise =  VisibleForTesting.NONE)
-    public void setComponent(AppComponent component){
-        this.component = component;
+    @Override
+    public ActivityComponentBuilder provide(Class<? extends  Activity> activityClass) {
+        Provider<ActivityComponentBuilder> provider = map.get(activityClass);
+        if(provider == null)return null;
+        return provider.get();
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    public void put(Class<? extends Activity> c, ActivityComponentBuilder builder) {
+        Map<Class<? extends Activity>, Provider<ActivityComponentBuilder>> map = new HashMap<>(this.map);
+        map.put(c, () -> builder);
+        this.map = map;
+    }
 }
+
+// alternative
+//    public void initComponent() {
+//        component = DaggerAppComponent.builder()
+//                .appModule(new AppModule()) //can be skip
+//                .build();
+//        component.inject(this);
+//    }
+

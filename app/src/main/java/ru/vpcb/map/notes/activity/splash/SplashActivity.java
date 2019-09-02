@@ -24,6 +24,8 @@ import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.activity.login.LoginActivity;
+import ru.vpcb.map.notes.di.activity.splash.SplashComponent;
+import ru.vpcb.map.notes.di.activity.splash.SplashModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FCManager;
 
@@ -79,8 +81,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void setupComponent() {
         try {
-            MainApp.get(this)
-                    .getSplashComponent()
+            SplashComponent.Builder builder =
+                    (SplashComponent.Builder) MainApp
+                            .provider(this)
+                            .provide(SplashActivity.class);
+            builder.module(new SplashModule(this))
+                    .build()
                     .inject(this);
         } catch (Exception e) {
             FCManager.log(e);
