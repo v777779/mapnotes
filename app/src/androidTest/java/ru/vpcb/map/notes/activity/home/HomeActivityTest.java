@@ -29,11 +29,11 @@ import ru.vpcb.map.notes.fragments.search.SearchNotesFragmentAccess;
 import ru.vpcb.map.notes.fragments.search.SearchNotesMvpPresenter;
 import ru.vpcb.map.notes.fragments.search.SearchNotesPresenter;
 import ru.vpcb.map.notes.model.Note;
-import ru.vpcb.map.notes.robots.HomeScreenRobot;
 
 import static org.mockito.Mockito.when;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.addNoteFragment;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
+import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreenMockActivityRule;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.searchNoteFragment;
 import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
@@ -48,12 +48,8 @@ public class HomeActivityTest extends MockTest {
     private String userUID;
     private String userName;
 
-    private HomeComponent homeComponent;
-
     @Rule
-    public RuleChain chain = RuleChain
-            .outerRule(permissionRule)
-            .around(HomeScreenRobot.homeScreenMockActivityRule);
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(homeScreenMockActivityRule);
 
     @Override
     @Before
@@ -65,7 +61,7 @@ public class HomeActivityTest extends MockTest {
         userName = "testUserName";
 
 // home
-        homeComponent = new HomeAdapter() {
+        HomeComponent homeComponent = new HomeAdapter() {
             @Override
             public void inject(HomeActivity activity) {
                 HomeMvpPresenter presenter = new HomePresenter(appExecutors, userRepository);
@@ -76,7 +72,7 @@ public class HomeActivityTest extends MockTest {
             public void inject(AddNoteFragment fragment) {
                 AddNoteMvpPresenter presenter = new AddNotePresenter(userRepository,
                         notesRepository, locationProvider, locationFormatter);
-                AddNoteFragmentAccess.set(fragment,presenter);
+                AddNoteFragmentAccess.set(fragment, presenter);
 
             }
 

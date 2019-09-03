@@ -13,6 +13,7 @@ import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.di.activity.login.signin.SignInComponent;
 import ru.vpcb.map.notes.di.activity.login.signin.SignInModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FAManager;
@@ -62,8 +63,12 @@ public class SignInActivity extends BaseActivity implements SignInView {
     @Override
     public void setupComponent() {
         try {
-            MainApp.get(this)
-                    .getSignInComponent(new SignInModule(this))
+            SignInComponent.Builder builder =
+                    (SignInComponent.Builder) MainApp
+                            .provider(this)
+                            .provide(SignInActivity.class);
+            builder.module(new SignInModule(this))
+                    .build()
                     .inject(this);
         } catch (Exception e) {
             FCManager.log(e);

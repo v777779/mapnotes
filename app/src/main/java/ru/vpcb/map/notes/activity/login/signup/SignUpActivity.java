@@ -13,6 +13,7 @@ import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.R;
 import ru.vpcb.map.notes.activity.BaseActivity;
 import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.di.activity.login.signup.SignUpComponent;
 import ru.vpcb.map.notes.di.activity.login.signup.SignUpModule;
 import ru.vpcb.map.notes.ext.NavigationExt;
 import ru.vpcb.map.notes.manager.FAManager;
@@ -64,8 +65,12 @@ public class SignUpActivity extends BaseActivity implements SignUpView {
     @Override
     public void setupComponent() {
         try {
-            MainApp.get(this)
-                    .getSignUpComponent(new SignUpModule(this))
+            SignUpComponent.Builder builder =
+                    (SignUpComponent.Builder) MainApp
+                            .provider(this)
+                            .provide(SignUpActivity.class);
+            builder.module(new SignUpModule(this))
+                    .build()
                     .inject(this);
         } catch (Exception e) {
             FCManager.log(e);

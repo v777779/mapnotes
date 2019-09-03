@@ -49,31 +49,11 @@ public class MockTest {
         mapFragment = new FakeMapFragment();
         testScope = this;
 
-// TODO check
-
-//        IModuleSupplier supplier = new IModuleSupplier() {
-//            @Override
-//            public HomeModule apply(Activity activity) {
-//                return new TestHomeModule(activity, locationProvider, locationFormatter,
-//                        mapFragment, analyticsManager);
-//            }
-//
-//            @Override
-//            public TestAppModule apply() {
-//                return new TestAppModule(appExecutors, userRepository, notesRepository);
-//            }
-//        };
-//
-//        TestApp app = ApplicationProvider.getApplicationContext();
-//        app.setSupplier(supplier);
 
         Intents.init();                     // espresso intents
     }
 
     public void tearDown() throws Exception {
-//        TestApp app = ApplicationProvider.getApplicationContext();
-//        app.clearAll();
-
         Intents.release();                  // espresso intents
     }
 
@@ -100,4 +80,5 @@ public class MockTest {
     public GrantPermissionRule getPermissionRule() {
         return permissionRule;
     }
+
 }

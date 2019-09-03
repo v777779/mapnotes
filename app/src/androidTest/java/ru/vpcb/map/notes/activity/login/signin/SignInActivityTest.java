@@ -1,10 +1,7 @@
 package ru.vpcb.map.notes.activity.login.signin;
 
-import android.content.Context;
-import android.content.Intent;
-
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,9 +9,22 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
+import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.MockTest;
+import ru.vpcb.map.notes.activity.home.HomeActivity;
+import ru.vpcb.map.notes.activity.home.HomeActivityAccess;
+import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
+import ru.vpcb.map.notes.activity.home.HomePresenter;
+import ru.vpcb.map.notes.di.HomeAdapter;
+import ru.vpcb.map.notes.di.activity.home.HomeComponent;
+import ru.vpcb.map.notes.di.activity.home.HomeModule;
+import ru.vpcb.map.notes.di.activity.login.signin.SignInComponent;
+import ru.vpcb.map.notes.di.activity.login.signin.SignInModule;
 
+import static org.mockito.Mockito.when;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 import static ru.vpcb.map.notes.robots.SignInScreenRobot.signInActivity;
@@ -23,12 +33,13 @@ import static ru.vpcb.map.notes.robots.SignInScreenRobot.signInScreen;
 @RunWith(AndroidJUnit4.class)
 public class SignInActivityTest extends MockTest {
 
-//    @Rule
-//    public ActivityTestRule<SignInActivity> activityRule =
-//            new ActivityTestRule<>(SignInActivity.class, true, false);
-
     @Rule
-    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signInActivity);            // activityRule
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signInActivity);  // runs in test method
+
+    @Mock
+    private SignInComponent.Builder signInBuilder;
+    @Mock
+    private HomeComponent.Builder homeBuilder;
 
     private String emptyEmail;
     private String correctEmail;
@@ -47,9 +58,33 @@ public class SignInActivityTest extends MockTest {
         incorrectEmail = "test";
         password = "password";
         emptyPassword = "";
+// sign in
+        SignInComponent signInComponent = new SignInComponent() {
+            @Override
+            public void inject(SignInActivity activity) {
+                activity.presenter = new SignInPresenter(appExecutors, userRepository);
+                activity.analyticsManager = analyticsManager;
+            }
+        };
 
-//        activityRule.launchActivity(new Intent(InstrumentationRegistry.getInstrumentation()
-//                .getTargetContext(), SignInActivity.class));
+        when(signInBuilder.module(Mockito.any(SignInModule.class))).thenReturn(signInBuilder);
+        when(signInBuilder.build()).thenReturn(signInComponent);
+
+// home
+        HomeComponent homeComponent = new HomeAdapter() {
+            @Override
+            public void inject(HomeActivity activity) {
+                HomeMvpPresenter presenter = new HomePresenter(appExecutors, userRepository);
+                HomeActivityAccess.set(activity, presenter, mapFragment, analyticsManager);
+            }
+        };
+        when(homeBuilder.module(Mockito.any(HomeModule.class))).thenReturn(homeBuilder);
+        when(homeBuilder.build()).thenReturn(homeComponent);
+
+        MainApp app = ApplicationProvider.getApplicationContext();
+        app.put(SignInActivity.class, signInBuilder);
+        app.put(HomeActivity.class, homeBuilder);
+
     }
 
     @Test
@@ -96,12 +131,8 @@ public class SignInActivityTest extends MockTest {
                 .mockLocationProvider()
                 .mockSignInSuccess(correctEmail, password);
 
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Intent intent = new Intent(context, SignInActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         signInScreen()
-                .displayAsEntryPoint(intent)   // clearAndNavigateTo() use FLAG_ACTIVITY_CLEAR_TASK
+                .displayAsEntryPoint()
                 .signIn(correctEmail, password);
 
         homeScreen().
@@ -113,6 +144,8 @@ public class SignInActivityTest extends MockTest {
     @After
     public void tearDown() throws Exception {
         super.tearDown();
+
+
     }
 
 

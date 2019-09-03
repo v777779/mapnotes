@@ -1,10 +1,14 @@
 package ru.vpcb.map.notes.activity.splash;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -24,13 +28,14 @@ import static org.mockito.Mockito.when;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.LoginScreenRobot.loginScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
+import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashActivityMockTestRule;
 import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
 
+@RunWith(AndroidJUnit4.class)
+public class SplashActivityTest extends MockTest {
 
-public class SplashActivityTests extends MockTest {
-
-    private SplashComponent splashComponent;
-    private HomeComponent homeComponent;
+    @Rule
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(splashActivityMockTestRule);
 
     @Mock
     private SplashComponent.Builder splashBuilder;
@@ -42,29 +47,29 @@ public class SplashActivityTests extends MockTest {
     public void setUp() throws Exception {
         super.setUp();
 
-// component
-        splashComponent= new SplashComponent() {
+// splash
+        SplashComponent splashComponent = new SplashComponent() {
             @Override
             public void inject(SplashActivity activity) {
-                activity.presenter = new SplashPresenter(appExecutors,userRepository);
+                activity.presenter = new SplashPresenter(appExecutors, userRepository);
             }
         };
         when(splashBuilder.module(Mockito.any(SplashModule.class))).thenReturn(splashBuilder);
         when(splashBuilder.build()).thenReturn(splashComponent);
-        MainApp app = ApplicationProvider.getApplicationContext();
-        app.put(SplashActivity.class, splashBuilder);
 
-// component
-        homeComponent= new HomeAdapter(){
+// home
+        HomeComponent homeComponent = new HomeAdapter() {
             @Override
             public void inject(HomeActivity activity) {
-            HomeMvpPresenter presenter = new HomePresenter(appExecutors,userRepository);
-                HomeActivityAccess.set(activity, presenter,mapFragment,analyticsManager);
+                HomeMvpPresenter presenter = new HomePresenter(appExecutors, userRepository);
+                HomeActivityAccess.set(activity, presenter, mapFragment, analyticsManager);
             }
         };
-
         when(homeBuilder.module(Mockito.any(HomeModule.class))).thenReturn(homeBuilder);
         when(homeBuilder.build()).thenReturn(homeComponent);
+
+        MainApp app = ApplicationProvider.getApplicationContext();
+        app.put(SplashActivity.class, splashBuilder);
         app.put(HomeActivity.class, homeBuilder);
 
     }
@@ -74,6 +79,7 @@ public class SplashActivityTests extends MockTest {
         prepare(testScope)
                 .mockLocationProvider()
                 .mockAuthorizedUser();
+
         splashScreen()
                 .displayMockAsEntryPoint();
         homeScreen()
@@ -82,12 +88,12 @@ public class SplashActivityTests extends MockTest {
 
     @Test
     public void whenUserIsNotAuthenticatedShouldOpenHomeActivity() {
-        prepare(testScope)
-                .mockNoAuthorizedUser();
-        splashScreen()
-                .displayMockAsEntryPoint();
-        loginScreen()
-                .isSuccessfullyLoaded();
+            prepare(testScope)
+                    .mockNoAuthorizedUser();
+            splashScreen()
+                    .displayMockAsEntryPoint();
+            loginScreen()
+                    .isSuccessfullyLoaded();
     }
 
     @Override

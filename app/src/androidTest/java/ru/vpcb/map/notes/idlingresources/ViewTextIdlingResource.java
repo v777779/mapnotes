@@ -14,7 +14,7 @@ public class ViewTextIdlingResource implements IdlingResource {
     private int expectedViewId;
     private int expectedViewText;
 
-    public ViewTextIdlingResource(@IdRes int expectedViewId, @StringRes int expectedViewText) {         // @IdRes for Lint
+    public ViewTextIdlingResource(@IdRes int expectedViewId, @StringRes int expectedViewText) {     // @IdRes resource id  for Lint
         this.expectedViewId = expectedViewId;
         this.expectedViewText = expectedViewText;
         this.resourceCallback = null;

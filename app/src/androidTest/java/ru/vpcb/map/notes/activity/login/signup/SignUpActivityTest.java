@@ -8,23 +8,20 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
 import ru.vpcb.map.notes.MockTest;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
-import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpActivity;
 import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpScreen;
 
 @RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest extends MockTest {
 
-    @Rule
-    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
+//    @Rule
+//    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
 
     private String userName;
     private String emptyUserName;
