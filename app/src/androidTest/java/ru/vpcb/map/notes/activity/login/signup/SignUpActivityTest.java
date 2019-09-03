@@ -1,6 +1,10 @@
 package ru.vpcb.map.notes.activity.login.signup;
 
+import android.content.Context;
+import android.content.Intent;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,11 +22,12 @@ import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpScreen;
 
 @RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest extends MockTest {
-    @Rule
-    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity);
 
-    private String username;
-    private String emptyUsername;
+    @Rule
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
+
+    private String userName;
+    private String emptyUserName;
     private String incorrectEmail;
     private String correctEmail;
     private String emptyEmail;
@@ -35,21 +40,20 @@ public class SignUpActivityTest extends MockTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        username = "testUserName";
-        emptyUsername = "";
+        userName = "testUserName";
+        emptyUserName = "";
         incorrectEmail = "test";
         correctEmail = "test@test.com";
         emptyEmail = "";
         password = "password";
         emptyPassword = "";
-
     }
 
     @Test
     public void whenEmailIsEmptyShouldDisplayEmailError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, emptyEmail, emptyPassword)
+                .signUp(emptyUserName, emptyEmail, emptyPassword)
                 .isEmailShouldBeValidErrorDisplayed();
 
     }
@@ -58,7 +62,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenEmailIsNotCorrectShouldDisplayEmailError() {
         signUpScreen().
                 displayAsEntryPoint()
-                .signUp(emptyUsername, incorrectEmail, emptyPassword)
+                .signUp(emptyUserName, incorrectEmail, emptyPassword)
                 .isEmailShouldBeValidErrorDisplayed();
     }
 
@@ -66,7 +70,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenPasswordIsEmptyShouldDisplayPasswordError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, correctEmail, emptyPassword)
+                .signUp(emptyUserName, correctEmail, emptyPassword)
                 .isPasswordShouldNotBeEmptyErrorDisplayed();
     }
 
@@ -74,7 +78,7 @@ public class SignUpActivityTest extends MockTest {
     public void whenNameIsEmptyShouldDisplayNameError() {
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(emptyUsername, correctEmail, password)
+                .signUp(emptyUserName, correctEmail, password)
                 .isNameShouldNotBeEmptyErrorDisplayed();
     }
 
@@ -85,7 +89,7 @@ public class SignUpActivityTest extends MockTest {
 
         signUpScreen()
                 .displayAsEntryPoint()
-                .signUp(username, correctEmail, password)
+                .signUp(userName, correctEmail, password)
                 .isAccountCannotBeCreatedErrorDisplayed();
     }
 
@@ -93,12 +97,16 @@ public class SignUpActivityTest extends MockTest {
     public void whenSignUpSuccessShouldOpenMapScreen() {
         prepare(testScope)
                 .mockLocationProvider(false)
-                .mockSignUpSuccess(username, correctEmail, password)
+                .mockSignUpSuccess(userName, correctEmail, password)
                 .mockAuthorizedUser();
 
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Intent intent = new Intent(context, SignUpActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
         signUpScreen()
-                .displayAsEntryPoint()
-                .signUp(username, correctEmail, password);
+                .displayAsEntryPoint(intent)
+                .signUp(userName, correctEmail, password);
 
         homeScreen()
                 .isSuccessfullyLoaded();

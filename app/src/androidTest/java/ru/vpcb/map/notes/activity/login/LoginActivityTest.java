@@ -19,12 +19,14 @@ import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpScreen;
 public class LoginActivityTest extends MockTest {
 
     @Rule
-    ActivityTestRule<LoginActivity> activityRule =
-            new ActivityTestRule<LoginActivity>(LoginActivity.class);
+    public ActivityTestRule<LoginActivity> activityRule =
+            new ActivityTestRule<LoginActivity>(LoginActivity.class, true,false);
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
+
+        activityRule.launchActivity(null);
     }
 
     @Test
@@ -32,16 +34,8 @@ public class LoginActivityTest extends MockTest {
         loginScreen()
                 .openSignIn();
 
-    }
-
-    @Test
-    public void shouldLaunchSignInActivityAfterClickToSignInButton() {
-        loginScreen()
-                .openSignIn();
-
         signInScreen()
                 .isSuccessfullyLoaded();
-
     }
 
     @Test
@@ -51,7 +45,6 @@ public class LoginActivityTest extends MockTest {
 
         signUpScreen()
                 .isSuccessfullyLoaded();
-
     }
 
 

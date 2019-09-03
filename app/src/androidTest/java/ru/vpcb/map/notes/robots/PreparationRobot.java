@@ -53,9 +53,23 @@ public class PreparationRobot {
 
     public PreparationRobot mockSignUpSuccess(String name, String email, String password) {
         UserRepository userRepository = scope.getUserRepository();
-        Mockito.doAnswer(invocation -> null).when(userRepository).changeUserName(authUser, name);
+        Mockito.when(userRepository.changeUserName(authUser, name))
+                .thenReturn(Single.just(new Result.Success<>(null)));
         Mockito.when(userRepository.signUp(email, password))
                 .thenReturn(Single.just(new Result.Success<>(authUser)));
+        return this;
+    }
+
+    public void mockNoHumanReadableName() {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Error<>(new RuntimeException())));
+    }
+
+    public PreparationRobot mockHumanReadableName(String name) {
+        UserRepository userRepository = scope.getUserRepository();
+        Mockito.when(userRepository.getHumanReadableName(Mockito.anyString()))
+                .thenReturn(Single.just(new Result.Success<>(name)));
         return this;
     }
 
@@ -65,10 +79,11 @@ public class PreparationRobot {
                 .thenReturn(new Result.Error<>(new RuntimeException()));
     }
 
-    public void mockAuthorizedUser() {
+    public PreparationRobot mockAuthorizedUser() {
         UserRepository userRepository = scope.getUserRepository();
         Mockito.when(userRepository.getCurrentUser())
                 .thenReturn(new Result.Success<>(authUser));
+        return this;
     }
 
 

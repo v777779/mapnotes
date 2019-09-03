@@ -43,7 +43,6 @@ public class NoLocationPermissionFragmentTest extends MockTest {
     }
 
     @Test
-//    @Ignore
     public void shouldVerifyOpeningAppPreferences() {
         String appName = activityRule.getActivity().getString(R.string.app_name);
         noLocationPermissionScreen()
