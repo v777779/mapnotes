@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import ru.vpcb.map.notes.robots.SplashScreenRobot;
@@ -38,7 +39,6 @@ public class SmokeTests {
     private String correctPassword;
     private String incorrectPassword;
 
-
     @Before
     public void setUp() throws Exception {
         correctEmail = "test@test.com";
@@ -52,7 +52,9 @@ public class SmokeTests {
     public void shouldVerifySuccessfulLogin() {
         splashScreen()
                 .displayAsEntryPoint();
-        loginScreen()
+        homeScreen()
+                .safeSignOut();
+       loginScreen()
                 .openSignIn();
         signInScreen()
                 .signIn(correctEmail, correctPassword);
@@ -65,6 +67,8 @@ public class SmokeTests {
     public void shouldVerifyFailureLogin() {
         splashScreen()
                 .displayAsEntryPoint();
+        homeScreen()
+                .safeSignOut();
         loginScreen()
                 .openSignIn();
         signInScreen()
@@ -74,9 +78,12 @@ public class SmokeTests {
 
     @Test
     public void shouldVerifyAddingAndSearchNote() {
-        String noteText = String.format("test note %s", Calendar.getInstance().getTime());
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+        String noteText = format.format( Calendar.getInstance().getTime());
         splashScreen()
                 .displayAsEntryPoint();
+        homeScreen()
+                .safeSignOut();
         loginScreen()
                 .openSignIn();
         signInScreen()

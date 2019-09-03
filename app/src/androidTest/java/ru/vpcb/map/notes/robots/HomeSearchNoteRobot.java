@@ -38,7 +38,7 @@ public class HomeSearchNoteRobot extends BaseTestRobot {
         return this;
     }
 
-    // TODO Check this
+
     public void isSearchResultsHaveNoteWithTitle(String noteText) {
         RecyclerViewSizeIdlingResources recyclerViewIdlingResource =
                 new RecyclerViewSizeIdlingResources(R.id.recyclerView);

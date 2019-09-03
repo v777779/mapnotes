@@ -24,7 +24,6 @@ import static ru.vpcb.map.notes.robots.TestActivityRobot.testScreen;
 @RunWith(AndroidJUnit4.class)
 public class SearchNotesFragmentTest extends MockTest {
 
-
     @Rule
     public ActivityTestRule<FragmentTestActivity> activityRule = testFragmentActivity; // auto run
 
@@ -33,7 +32,6 @@ public class SearchNotesFragmentTest extends MockTest {
     private String emptySearchInput;
     private String userUID;
     private String userName;
-
 
     @Override
     @Before

@@ -12,6 +12,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import ru.vpcb.map.notes.MainApp;
+import ru.vpcb.map.notes.data.provider.LocationProvider;
 import ru.vpcb.map.notes.model.Location;
 import ru.vpcb.map.notes.model.Note;
 
@@ -29,6 +30,8 @@ public class GoogleMapPresenterTests {
 
     @Mock
     private MapView view;
+    @Mock
+    private LocationProvider locationProvider;
 
     private MapMvpPresenter presenter;
 
@@ -44,7 +47,7 @@ public class GoogleMapPresenterTests {
         testNote = new Note(currentLocation.getLatitude(), currentLocation.getLongitude(),
                 testNoteText, authUserUID);
 
-        presenter = new GoogleMapPresenter();
+        presenter = new GoogleMapPresenter(locationProvider);
 
         Mockito.doAnswer(invocation -> null).when(view).animateCamera(currentLocation);
         Mockito.doAnswer(invocation -> null).when(view).displayNoteOnMap(testNote);
@@ -54,7 +57,7 @@ public class GoogleMapPresenterTests {
         Mockito.doAnswer(invocation -> null).when(view).sendAnalytics(currentLocation);
         Mockito.doAnswer(invocation -> null).when(view).sendAnalytics(testNote);
 
-        Mockito.when(view.isLocationAvailable()).thenReturn(true);
+        Mockito.when(locationProvider.isLocationAvailable()).thenReturn(true);
 
     }
 
@@ -330,7 +333,7 @@ public class GoogleMapPresenterTests {
 
     @Test
     public void checkEnableGpsLocationLocationNotAvailableWithNonNullViewShowLocationAlertDialogCalled() {
-        Mockito.when(view.isLocationAvailable()).thenReturn(false);
+        Mockito.when(locationProvider.isLocationAvailable()).thenReturn(false);
         presenter.onAttach(view);
         presenter.checkEnableGpsLocation();
 
@@ -339,7 +342,7 @@ public class GoogleMapPresenterTests {
 
     @Test
     public void checkEnableGpsLocationLocationNotAvailableWithNullViewShowLocationAlertDialogNotCalled() {
-        Mockito.when(view.isLocationAvailable()).thenReturn(false);
+        Mockito.when(locationProvider.isLocationAvailable()).thenReturn(false);
         presenter.onAttach(null);
         presenter.checkEnableGpsLocation();
 
@@ -348,7 +351,7 @@ public class GoogleMapPresenterTests {
 
     @Test
     public void checkEnableGpsLocationLocationNotAvailableWithViewDetachedShowLocationAlertDialogNotCalled() {
-        Mockito.when(view.isLocationAvailable()).thenReturn(false);
+        Mockito.when(locationProvider.isLocationAvailable()).thenReturn(false);
         presenter.onAttach(view);
         presenter.onDetach();
         presenter.checkEnableGpsLocation();
