@@ -1,6 +1,5 @@
 package ru.vpcb.map.notes.activity.splash;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
@@ -12,15 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.MockTest;
-import ru.vpcb.map.notes.activity.home.HomeActivity;
-import ru.vpcb.map.notes.activity.home.HomeActivityAccess;
-import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
-import ru.vpcb.map.notes.activity.home.HomePresenter;
-import ru.vpcb.map.notes.di.HomeAdapter;
-import ru.vpcb.map.notes.di.activity.home.HomeComponent;
-import ru.vpcb.map.notes.di.activity.home.HomeModule;
 import ru.vpcb.map.notes.di.activity.splash.SplashComponent;
 import ru.vpcb.map.notes.di.activity.splash.SplashModule;
 
@@ -39,8 +30,6 @@ public class SplashActivityTest extends MockTest {
 
     @Mock
     private SplashComponent.Builder splashBuilder;
-    @Mock
-    private HomeComponent.Builder homeBuilder;
 
     @Override
     @Before
@@ -57,20 +46,7 @@ public class SplashActivityTest extends MockTest {
         when(splashBuilder.module(Mockito.any(SplashModule.class))).thenReturn(splashBuilder);
         when(splashBuilder.build()).thenReturn(splashComponent);
 
-// home
-        HomeComponent homeComponent = new HomeAdapter() {
-            @Override
-            public void inject(HomeActivity activity) {
-                HomeMvpPresenter presenter = new HomePresenter(appExecutors, userRepository);
-                HomeActivityAccess.set(activity, presenter, mapFragment, analyticsManager);
-            }
-        };
-        when(homeBuilder.module(Mockito.any(HomeModule.class))).thenReturn(homeBuilder);
-        when(homeBuilder.build()).thenReturn(homeComponent);
-
-        MainApp app = ApplicationProvider.getApplicationContext();
         app.put(SplashActivity.class, splashBuilder);
-        app.put(HomeActivity.class, homeBuilder);
 
     }
 

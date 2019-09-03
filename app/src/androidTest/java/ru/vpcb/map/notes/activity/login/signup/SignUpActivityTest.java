@@ -1,27 +1,34 @@
 package ru.vpcb.map.notes.activity.login.signup;
 
-import android.content.Context;
-import android.content.Intent;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import ru.vpcb.map.notes.MockTest;
+import ru.vpcb.map.notes.di.activity.login.signup.SignUpComponent;
+import ru.vpcb.map.notes.di.activity.login.signup.SignUpModule;
 
+import static org.mockito.Mockito.when;
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.homeScreen;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
+import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpActivity;
 import static ru.vpcb.map.notes.robots.SignUpScreenRobot.signUpScreen;
 
 @RunWith(AndroidJUnit4.class)
 public class SignUpActivityTest extends MockTest {
 
-//    @Rule
-//    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity); // activityRule
+    @Rule
+    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signUpActivity);
+
+    @Mock
+    SignUpComponent.Builder signUpBuilder;
 
     private String userName;
     private String emptyUserName;
@@ -44,6 +51,20 @@ public class SignUpActivityTest extends MockTest {
         emptyEmail = "";
         password = "password";
         emptyPassword = "";
+
+// sign up
+        SignUpComponent signUpComponent = new SignUpComponent() {
+            @Override
+            public void inject(SignUpActivity activity) {
+                activity.presenter = new SignUpPresenter(appExecutors, userRepository);
+                activity.analyticsManager = analyticsManager;
+            }
+        };
+        when(signUpBuilder.module(Mockito.any(SignUpModule.class))).thenReturn(signUpBuilder);
+        when(signUpBuilder.build()).thenReturn(signUpComponent);
+
+        app.put(SignUpActivity.class, signUpBuilder);
+
     }
 
     @Test
@@ -97,12 +118,8 @@ public class SignUpActivityTest extends MockTest {
                 .mockSignUpSuccess(userName, correctEmail, password)
                 .mockAuthorizedUser();
 
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        Intent intent = new Intent(context, SignUpActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         signUpScreen()
-                .displayAsEntryPoint(intent)
+                .displayAsEntryPoint()
                 .signUp(userName, correctEmail, password);
 
         homeScreen()

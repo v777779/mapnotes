@@ -15,10 +15,10 @@ import java.util.List;
 import ru.vpcb.map.notes.FragmentTestActivity;
 import ru.vpcb.map.notes.MockTest;
 import ru.vpcb.map.notes.model.Note;
-import ru.vpcb.map.notes.robots.TestActivityRobot;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.searchNoteFragment;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
+import static ru.vpcb.map.notes.robots.TestActivityRobot.testFragmentActivity;
 import static ru.vpcb.map.notes.robots.TestActivityRobot.testScreen;
 
 @RunWith(AndroidJUnit4.class)
@@ -26,7 +26,7 @@ public class SearchNotesFragmentTest extends MockTest {
 
 
     @Rule
-    public ActivityTestRule<FragmentTestActivity> activityRule = TestActivityRobot.testFragmentActivity;
+    public ActivityTestRule<FragmentTestActivity> activityRule = testFragmentActivity; // auto run
 
     private List<Note> testNotes;
     private String searchInput;

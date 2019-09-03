@@ -1,7 +1,5 @@
 package ru.vpcb.map.notes.robots;
 
-import android.content.Intent;
-
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.rule.ActivityTestRule;
@@ -17,11 +15,6 @@ public class SignUpScreenRobot extends BaseTestRobot {
 
     public static SignUpScreenRobot signUpScreen() {
         return new SignUpScreenRobot();
-    }
-
-    public SignUpScreenRobot displayAsEntryPoint(Intent intent) {
-        signUpActivity.launchActivity(intent);
-        return this;
     }
 
     public SignUpScreenRobot displayAsEntryPoint() {

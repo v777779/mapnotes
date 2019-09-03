@@ -12,18 +12,18 @@ import org.junit.runner.RunWith;
 import ru.vpcb.map.notes.FragmentTestActivity;
 import ru.vpcb.map.notes.MockTest;
 import ru.vpcb.map.notes.R;
-import ru.vpcb.map.notes.robots.TestActivityRobot;
 
 import static ru.vpcb.map.notes.robots.HomeScreenRobot.addNoteFragment;
 import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
+import static ru.vpcb.map.notes.robots.TestActivityRobot.testFragmentActivity;
 import static ru.vpcb.map.notes.robots.TestActivityRobot.testScreen;
 
 @RunWith(AndroidJUnit4.class)
 public class AddNoteFragmentTest extends MockTest {
 
+
     @Rule
-    public ActivityTestRule<FragmentTestActivity> activityRule =
-            TestActivityRobot.testFragmentActivity;             // auto launch
+    public ActivityTestRule<FragmentTestActivity> activityRule = testFragmentActivity; // auto run
 
     private String testNoteText;
 
@@ -31,8 +31,10 @@ public class AddNoteFragmentTest extends MockTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
         testNoteText = "test note";
+
+        app.put(FragmentTestActivity.class, homeBuilder);
+
         prepare(testScope)
                 .mockLocationProvider(true)
                 .mockAuthorizedUser();

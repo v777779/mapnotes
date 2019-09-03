@@ -5,7 +5,6 @@ import android.location.Geocoder;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.vpcb.map.notes.activity.home.HomeActivity;
 import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
 import ru.vpcb.map.notes.activity.home.HomePresenter;
 import ru.vpcb.map.notes.data.formatter.FullAddressFormatter;
@@ -28,9 +27,9 @@ import ru.vpcb.map.notes.fragments.search.SearchNotesPresenter;
 import ru.vpcb.map.notes.manager.FAManager;
 
 @Module
-public class HomeModule extends ActivityModule<HomeActivity> {
+public class HomeModule extends ActivityModule<Activity> {
 
-    public HomeModule(HomeActivity activity) {
+    public HomeModule(Activity activity) {
         super(activity);
     }
 

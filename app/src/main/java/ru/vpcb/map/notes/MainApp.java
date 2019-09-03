@@ -76,7 +76,7 @@ public class MainApp extends Application implements IBuilderProvider {
             HomeComponent.Builder builder = (HomeComponent.Builder) provide(HomeActivity.class);
             if(builder == null)return null;
             homeComponent = builder
-                    .module(new HomeModule((HomeActivity)activity))
+                    .module(new HomeModule(activity))
                     .build();
         }
         return homeComponent;

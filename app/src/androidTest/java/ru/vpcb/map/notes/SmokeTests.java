@@ -45,24 +45,6 @@ public class SmokeTests {
         correctPassword = "test123";
         incorrectPassword = "test-password";
 
-// TODO check
-
-//        IModuleSupplier supplier = new IModuleSupplier() {
-//            @Override
-//            public HomeModule apply(Activity activity) {
-//                return new HomeModule(activity);
-//            }
-//
-//            @Override
-//            public AppModule apply() {
-//                return new AppModule();
-//            }
-//        };
-//
-//        TestApp app = ApplicationProvider.getApplicationContext();
-//        app.setSupplier(supplier);
-
-
         Intents.init();     // espresso intents
     }
 

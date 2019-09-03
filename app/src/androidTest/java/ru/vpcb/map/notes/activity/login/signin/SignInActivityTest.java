@@ -1,6 +1,5 @@
 package ru.vpcb.map.notes.activity.login.signin;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
@@ -12,15 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import ru.vpcb.map.notes.MainApp;
 import ru.vpcb.map.notes.MockTest;
-import ru.vpcb.map.notes.activity.home.HomeActivity;
-import ru.vpcb.map.notes.activity.home.HomeActivityAccess;
-import ru.vpcb.map.notes.activity.home.HomeMvpPresenter;
-import ru.vpcb.map.notes.activity.home.HomePresenter;
-import ru.vpcb.map.notes.di.HomeAdapter;
-import ru.vpcb.map.notes.di.activity.home.HomeComponent;
-import ru.vpcb.map.notes.di.activity.home.HomeModule;
 import ru.vpcb.map.notes.di.activity.login.signin.SignInComponent;
 import ru.vpcb.map.notes.di.activity.login.signin.SignInModule;
 
@@ -34,12 +25,12 @@ import static ru.vpcb.map.notes.robots.SignInScreenRobot.signInScreen;
 public class SignInActivityTest extends MockTest {
 
     @Rule
-    public RuleChain chain = RuleChain.outerRule(permissionRule).around(signInActivity);  // runs in test method
+    public RuleChain chain = RuleChain
+            .outerRule(permissionRule)          // works without RuleChain
+            .around(signInActivity);            // runs in test method
 
     @Mock
     private SignInComponent.Builder signInBuilder;
-    @Mock
-    private HomeComponent.Builder homeBuilder;
 
     private String emptyEmail;
     private String correctEmail;
@@ -70,20 +61,8 @@ public class SignInActivityTest extends MockTest {
         when(signInBuilder.module(Mockito.any(SignInModule.class))).thenReturn(signInBuilder);
         when(signInBuilder.build()).thenReturn(signInComponent);
 
-// home
-        HomeComponent homeComponent = new HomeAdapter() {
-            @Override
-            public void inject(HomeActivity activity) {
-                HomeMvpPresenter presenter = new HomePresenter(appExecutors, userRepository);
-                HomeActivityAccess.set(activity, presenter, mapFragment, analyticsManager);
-            }
-        };
-        when(homeBuilder.module(Mockito.any(HomeModule.class))).thenReturn(homeBuilder);
-        when(homeBuilder.build()).thenReturn(homeComponent);
-
-        MainApp app = ApplicationProvider.getApplicationContext();
         app.put(SignInActivity.class, signInBuilder);
-        app.put(HomeActivity.class, homeBuilder);
+
 
     }
 
