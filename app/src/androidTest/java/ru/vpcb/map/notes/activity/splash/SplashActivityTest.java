@@ -15,7 +15,7 @@ import static ru.vpcb.map.notes.robots.PreparationRobot.prepare;
 import static ru.vpcb.map.notes.robots.SplashScreenRobot.splashScreen;
 
 @RunWith(AndroidJUnit4.class)
-public class SplashActivityTests extends MockTest {
+public class SplashActivityTest extends MockTest {
 
     @Override
     @Before

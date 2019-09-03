@@ -50,6 +50,13 @@ public class HomeScreenRobot extends BaseTestRobot {
         return this;
     }
 
+    public void safeSignOut() {
+        try {
+            clickOnView(R.id.navigation_sign_out);
+        }catch (Exception e){
+            //
+        }
+    }
     public void signOut() {
 //        Espresso.openActionBarOverflowOrOptionsMenu(CurrentActivity.getActivityInstance());
 //        clickOnViewWithText(R.string.nav_sign_out_title);
