@@ -113,7 +113,9 @@ Test methods
     public void whenClickToSignUpButtonShouldLaunchSignUpActivity() {
     }
 ```
+
 Test scheme:
+
 ![](instrumentation/images/master_login_activity.png) 
 
 See [source](../app/src/androidTest/java/ru/vpcb/map/notes/activity/login/LoginActivityTest.java) for test source code.
