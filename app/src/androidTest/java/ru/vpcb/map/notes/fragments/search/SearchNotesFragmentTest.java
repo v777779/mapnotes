@@ -132,7 +132,7 @@ public class SearchNotesFragmentTest extends MockTest {
     }
 
     @Test
-    public void shouldSearchIncorrectDataAndDisplayCorrectDataAfterClearRequest() {
+    public void whenClearRequestShouldSearchIncorrectDataAndDisplayCorrectData() {
         int expectedItemCount = testNotes.size();
 
         prepare(testScope)

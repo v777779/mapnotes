@@ -47,7 +47,7 @@ public class AddNoteFragmentTest extends MockTest {
     }
 
     @Test
-    public void shouldChangeAddButtonEnableAfterChangingNoteText() {
+    public void whenChangingNoteTextShouldChangeAddButtonEnable() {
         addNoteFragment()
                 .isAddButtonDisabled()
                 .enterNoteText(testNoteText)
