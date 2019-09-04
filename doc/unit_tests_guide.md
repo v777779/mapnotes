@@ -1,6 +1,6 @@
 # Unit Tests Guide
 
-Unit tests used for local testing on JVM to verify that the login of individual units is correct.
+#### Introduction:
 
 Unit tests  have been written for activity presenters, fragment presenters, and user classes.
 
@@ -42,7 +42,13 @@ startWithPlayServicesAvailableUserNotAuthenticatedNonNullViewNavigateToLoginCall
 
 - ValidationExt, CoordinateFormatter
 
+#### Run Tests with Suite:
 
+There are more than 200+ Unit Tests in  MapNotes application
+
+To run all tests at once select [RunUnitTests](../app/src/test/java/ru/vpcb/map/notes/RunUnitTests.java) file and press Ctrl+Shift+F10 or click RMB Run 'RunUnitTests'
+
+#### 
 
 ## Activity Presenter Tests
 
