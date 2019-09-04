@@ -267,7 +267,7 @@ Test scheme:
 
 ![](instrumentation/images/master_search_notes_fragment.png)
 
-See [source](../app/src/test/java/ru/vpcb/map/notes/fragments/search/SearchNotesFragmentTests.java) for test methods and  [search_notes_fragment_tests](instrumental/search_notes_fragment.md) for the description.
+See [source](../app/src/androidTest/java/ru/vpcb/map/notes/fragments/search/SearchNotesFragmentTest.java) for test source code.
 
 
 
