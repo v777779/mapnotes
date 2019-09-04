@@ -85,9 +85,9 @@ Instrumentation and Smoke tests based on Espresso and Mockito frameworks were de
 
 Component mocking uses Map<Activity,SubComponent.Builder> to replace builder with mocked one.
 
-See Instrumentation tests details [instrumentation tests guide](doc/instrumentation_tests_builders_guide.md)
+See Instrumentation tests details [instrumentation tests builders_guide](doc/instrumentation_tests_builders_guide.md)
 
-See Smoke Tests details [smoke_tests guide](doc/smoke_tests_builders_guide.md) 
+See Smoke Tests details [smoke_tests builders_guide](doc/smoke_tests_builders_guide.md) 
 
 More than 30+ instrumentation  test methods were created. 
 

@@ -27,12 +27,6 @@ shouldVerifyAddingAndSearchNote
 
 Run Smoke Tests with RMB click on 'Run' [SmokeTests](app/src/androidTest/java/ru/vpcb/map/notes/SmokeTests.java) file.  
 
-#### SetUp() method
-
-SetUp() method of SmokeTests creates Real Modules, IModuleSupplier instance and injects it to TestMainApp 
-
-![](instrumentation/images/master_setup_smoke.png)
-
 #### Login Failure Flow Test
 
 Tested activities:	SplashActivity, LoginActivity, SignInActivity
