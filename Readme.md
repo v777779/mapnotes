@@ -90,7 +90,7 @@ Two  different ways of component mocking were implemented in this application.
 
 For the details  look at [instrumentation tests guide](doc/instrumentation_tests_guide.md) for **master** and [instrumentation tests builders guide](doc/instrumentation_tests_builders_guide.md) for **builders** branches.
 
-Run all instrumentation tests with RMB click on 'Run'  [RunInstrumentationTests](app/src/androidTest/java/ru/vpcb/map/notes/RunInstrumentationTests.java). Run Smoke Tests with RMB click on [SmokeTests](app/src/androidTest/java/ru/vpcb/map/notes/SmokeTests.java). 
+Run all instrumentation tests with RMB click on 'Run'  [RunInstrumentationTests](app/src/androidTest/java/ru/vpcb/map/notes/RunInstrumentationTests.java) or [SmokeTests](app/src/androidTest/java/ru/vpcb/map/notes/SmokeTests.java). 
 
 
 
