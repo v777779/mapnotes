@@ -83,19 +83,11 @@ Unit tests based on Robolectric and Mockito frameworks added to application, see
 
 Instrumentation and Smoke tests based on Espresso and Mockito frameworks were designed for application.
 
-Two  different ways of component mocking were implemented in this application. 
+Component mocking uses Map<Activity,SubComponent.Builder> to replace builder with mocked one.
 
-- **master** branch uses IModuleSupplier that provide test module "on the fly" why component creation. 
+See Instrumentation tests details [instrumentation tests guide](doc/instrumentation_tests_builders_guide.md)
 
-  Instrumentation tests details [instrumentation tests guide](doc/instrumentation_tests_guide.md) 
-
-  Smoke Tests details [smoke tests guide](doc/smoke_tests_guide.md) 
-
-- **builders** branch uses Map<Activity,SubComponent.Builder> to replace builder with mocked one.
-
-  Instrumentation tests details [instrumentation tests builders guide](doc/instrumentation_tests_builders_guide.md)
-
-  Smoke Tests details [smoke_tests builders guide](doc/smoke_tests_builders_guide.md) 
+See Smoke Tests details [smoke_tests guide](doc/smoke_tests_builders_guide.md) 
 
 More than 30+ instrumentation  test methods were created. 
 

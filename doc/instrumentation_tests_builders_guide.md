@@ -25,35 +25,34 @@ whenSignOutShouldOpenLoginScreen
 
 #### Mock Dependency Inject Scheme:  
 
-This application uses standard Component/Module dependency injection.
+Main Application uses Multibinding and SubComponent.Builder interface for Component/Module dependency injection.
 
-Test Application and User Test Runner are used in this implementation of instrumentation tests
+Method put() in the MainAp  is used for SubComponent.Builder replacement during tests. @VisibleForTesting annotation makes method put() visible during tests only.
 
-Instrumentation Tests in master branch are based on "on-fly module replacement" scheme:
+Instrumentation Tests are based on the "SubComponent.Builder replacement" scheme:
 
-- SetUp method creates the anonymous class instance of IModuleSupply module supplier interface
-- every method of  IModuleSupply returns Test Module that inherits real Module 
-- methods of TestModule override @Provide methods and provide Mock objects instead of real
-- IModuleSupplier instance is pushed into Application.
-- When components are created, IModuleSupplier instance provides test modules for components
+- SetUp() method creates Mock instance of target SubComponent.Builder. The build() method of this builder returns Mock Component instance
+- Mock Component inject() method is used to assign desired mock objects to target activity or fragment
+- Helper classes, like HomeAccess. SplashAccess and so on provides access to @Inject fields of target Activity or Fragment. These helpers are placed in the same package with activity or fragments. All @Inject fields in application have "default" package visibility.
+- Mock Subcomponent.Builder instance stores to Map<> collection with MainApp method put()
+- When components are created, Map<> provides SubComponent.Builders  for them.
 
 **SplashActivityTest dependency scheme example:**
 
-1. Create Test Module with mock instances 
-2. Create IModuleSupplier instance that provides Test Modules
-3. Put IModuleSupplier instance to Test Application
+1. Create Mock Component and Mock SubComponent.Builder instances. Setup all mocked methods.
+2. Put Mock SubComponent.Builder object to Application Map<Activity,SubComponent.Builder> collection
 
-![](instrumentation/images/master_scheme.png)
+![](instrumentation/images/builders_scheme.png)
 
 #### SetUp() method
 
 Every Instrumentation Test class inherits MockTest class.
 
-SetUp() method of MockTest creates Test Modules , IModuleSupplier instance and injects it to TestMainApp 
+SetUp() method of MockTest creates SubComponent.Builder for HomeComponent and put it to Application Map<> collection.  This builder is used in the most of instrumentation tests.
 
 This is the same for all Instrumentation Test Classes
 
-![](instrumentation/images/master_setup.png)
+![](instrumentation/images/builders_setup.png)
 
 ### Instrumentation Tests for Activities  
 
