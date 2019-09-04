@@ -86,15 +86,20 @@ Instrumentation and Smoke tests based on Espresso and Mockito frameworks were de
 Two  different ways of component mocking were implemented in this application. 
 
 - **master** branch uses IModuleSupplier that provide test module "on the fly" why component creation. 
+
+  Instrumentation tests details [instrumentation tests guide](doc/instrumentation_tests_guide.md) 
+
+  Smoke Tests details [smoke tests guide](doc/smoke_tests_guide.md) 
+
 - **builders** branch uses Map<Activity,SubComponent.Builder> to replace builder with mocked one.
 
-For the details  on instrumentation tests look at [instrumentation tests guide](doc/instrumentation_tests_guide.md) for **master** and [instrumentation tests builders guide](doc/instrumentation_tests_builders_guide.md) for **builders** branches.
+  Instrumentation tests details [instrumentation tests builders guide](doc/instrumentation_tests_builders_guide.md)
 
-For the details  on smoke tests look at [smoke tests guide](doc/smoke_tests_guide.md) for **master** and [ismoke_tests builders guide](doc/smoke_tests_builders_guide.md) for **builders** branches.
+  Smoke Tests details [smoke_tests builders guide](doc/smoke_tests_builders_guide.md) 
 
+More than 30+ instrumentation  test methods were created. 
 
-
-More than 30+ instrumentation  test methods were created. Run all instrumentation tests with RMB click on 'Run'  [RunInstrumentationTests](app/src/androidTest/java/ru/vpcb/map/notes/RunInstrumentationTests.java) or [SmokeTests](app/src/androidTest/java/ru/vpcb/map/notes/SmokeTests.java). 
+Run all instrumentation and smoke tests with RMB click on 'Run'  [RunInstrumentationTests](app/src/androidTest/java/ru/vpcb/map/notes/RunInstrumentationTests.java) or [SmokeTests](app/src/androidTest/java/ru/vpcb/map/notes/SmokeTests.java). 
 
 
 
