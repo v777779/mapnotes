@@ -33,7 +33,17 @@ An Android application which allows you to add/remove notes to the current locat
 ## Configuration
 Configuration requires Firebase Project and Google Maps SDK, see [installation guide](doc/installation_guide.md) for the details.
 
+Short guide:
 
+- place google-services.json file in the ```app/``` folder 
+- replace "YOUR_API_KEY" with Google Map SDK key in values/strings.xml 
+
+```xml
+<!--google_maps_api_key-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        YOUR_API_KEY
+</string>
+```
 
 
 
