@@ -104,7 +104,7 @@ See [source](../app/src/androidTest/java/ru/vpcb/map/notes/activity/home/HomeAct
 #### LoginActivity Tests
 
 Test methods
-````
+```
     @Test
     public void whenClickToSignInButtonShouldLaunchSignInActivity() {
     }
