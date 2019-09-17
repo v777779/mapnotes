@@ -46,7 +46,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     protected void onResume() {
         super.onResume();
         if (presenter != null) {
-//            presenter.start();
+            presenter.start();
 
         }
 
