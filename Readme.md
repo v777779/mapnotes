@@ -3,7 +3,7 @@
 
 # Map Notes
 
-An Android application which allows you to add/remove notes to the current location 
+An Android application which allows you to add/remove notes to the current location   
 
 <img src="doc/images/screen_020.png" alt="drawing" width="800"/> 
 
