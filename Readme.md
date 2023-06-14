@@ -48,13 +48,11 @@ An Android application which allows you to add/remove notes to the current locat
 ## Configuration
 
 Configuration requires Firebase Project, Google Cloud API Keys for:
-
 - Google Maps SDK
 - [Unsplash API](https://unsplash.com/developers) (optional  for downloading images from Unsplash)
 - Google One Tap(optional for singing with Google One Tap)
 
 Short guide:
-
 - setup [Firebase Project](https://firebase.google.com/docs/android/setup), add application to project and download google-services.json file
 - place google-services.json file in the `app/` folder
 - get Google Map API Key  from [Google Cloud Console](https://console.cloud.google.com/) API Keys zone for Google Map API
@@ -65,7 +63,7 @@ Short guide:
 - replace "YOUR_WEB_CLIENT_ID" with Web Client ID n build.gradle
 
 ```
-	buildConfigField("String", "WEB_CLIENT_ID", '"YOUR_WEB_CLIENT_ID"')
+    buildConfigField("String", "WEB_CLIENT_ID", '"YOUR_WEB_CLIENT_ID"')
     buildConfigField("String", "UNSPLASH_API_KEY", '"YOUR_UNSPLASH_API_KEY"')
     manifestPlaceholders.mapsApiKey = "YOUR_MAP_API_KEY"
 ```
