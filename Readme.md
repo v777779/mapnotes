@@ -1,13 +1,17 @@
 ![badge](doc/images/code-kotlin-blueviolet.svg)  ![badge](doc/images/version-1.0.1-blue.svg)
 
-<img src="doc/images/notes_002.jpg" alt="drawing" width="800"/> 
-
+<!-- <img src="doc/images/notes_002.jpg" alt="drawing" width="800"/> -->
+<div align="center"><i><small>This app has been made to support resume</i></div>
 
 # Map Notes
 
 An Android application which allows you to add/remove notes to the current location   
 
 <img src="doc/images/screenshots_002.png" alt="drawing" width="800"/> 
+
+## App Variants
+* [<b>master</b>](https://github.com/v777779/mapnotes) &emsp;&emsp;&emsp;Kotlin, Kotlin, MVVM, Coroutines, StateFlow/SharedFlow, Hilt,  API 33</div>
+* [<b>java</b>](https://github.com/v777779/mapnotes/tree/java) &nbsp;&nbsp;&nbsp;&emsp;&emsp;&emsp; Java, MVP, RxJava2, Dagger2, API 29
 
 ## Frameworks and Tools
 
