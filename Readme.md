@@ -1,6 +1,6 @@
 ![badge](doc/images/code-kotlin-blueviolet.svg)  ![badge](doc/images/version-1.0.1-blue.svg)
 
-![Map Notes](doc/images/notes_002.jpg "Map Notes")
+<img src="doc/images/notes_002.jpg" alt="drawing" width="800"/> 
 
 
 # Map Notes
