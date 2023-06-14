@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--custom colors-->
+    <!--dynamic-->
+
+    <color name="surface_color">@color/black</color>
+    <color name="on_surface_color">@color/white</color>
+
+    <color name="surface_ripple">#40FFFFFF</color>
+    <color name="inverse_ripple">#40A0A0A0</color>
+
+    <color name="impact">#FFFF00</color>
+    <color name="heavy_impact">#80FFFF</color>
+    <color name="light_impact">#D0D0D0</color>
+
+    <color name="ripple_impact">#80FFFFFF</color>
+
+    <color name="indeterminate_tint_color">#E2E6EB</color>
+
+</resources>

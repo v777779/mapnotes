@@ -1,3 +1,6 @@
 *.iml
-*.json
+*apk
+*aab
 /build
+#build.gradle
+google-services.json

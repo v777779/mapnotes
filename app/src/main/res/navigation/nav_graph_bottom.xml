@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_bottom"
+    app:startDestination="@id/fragment_empty">
+
+    <fragment
+        android:id="@+id/fragment_empty"
+        android:name="ru.vpcb.map.notes.ui.bottom.EmptyFragment"
+        android:label="@string/empty_fragment"
+        tools:layout="@layout/fragment_empty">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_add"
+        android:name="ru.vpcb.map.notes.ui.bottom.AddFragment"
+        android:label="Add note"
+        tools:layout="@layout/fragment_add">
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_search"
+        android:name="ru.vpcb.map.notes.ui.bottom.SearchFragment"
+        android:label="@string/search_notes"
+        tools:layout="@layout/fragment_search">
+    </fragment>
+</navigation>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="ru.vpcb.map.notes.R" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/linear_title"
+            layout="@layout/linear_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="32dp"
+            app:arrow="@{true}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/show_fragment}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="256dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/notes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_title"
+            app:shapeAppearanceOverlay="@style/Round.Image" />
+
+        <ImageView
+            android:id="@+id/image_screen"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_white_w_ripple"
+            android:clickable="true"
+            android:contentDescription="@string/full_screen"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/baseline_fullscreen_24"
+            app:layout_constraintEnd_toEndOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image" />
+
+        <TextView
+            android:id="@+id/text_coord_label"
+            style="@style/Large.Subtitle.Card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/coordinates"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_coord" />
+
+        <TextView
+            android:id="@+id/text_coord"
+            style="@style/Large.Subtitle.Card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="45.032764, 32.756817"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/text_coord_label"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
+        <TextView
+            android:id="@+id/text_title"
+            style="@style/Large.Title.Card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:text="Moscow City"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_coord" />
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/title_divider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/text_title"
+            app:layout_constraintStart_toStartOf="@+id/text_title"
+            app:layout_constraintTop_toBottomOf="@+id/text_title" />
+
+
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/text_title"
+            app:layout_constraintTop_toBottomOf="@+id/text_title">
+
+            <TextView
+                android:id="@+id/text_body"
+                style="@style/Large.Body.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Place for excellent vacations where we were in 2018, Summer on July 27. Multiline long text created to test card with coordinates and city address for space requirements in card layout with limited horizontal and vertical dimensions"
+                android:visibility="visible"
+                app:fontFamily="@font/inter" />
+        </ScrollView>
+
+        <include
+            android:id="@+id/linear_play"
+            layout="@layout/linear_divider"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_video"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:title="@{@string/play}" />
+
+        <include
+            android:id="@+id/button_video"
+            layout="@layout/layout_button_play"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:icon="@{R.drawable.baseline_videocam_off_24}"
+            app:layout_constraintEnd_toStartOf="@+id/button_audio"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scroll_view"
+            app:title="@{@string/video}" />
+
+        <include
+            android:id="@+id/button_audio"
+            layout="@layout/layout_button_play"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:icon="@{R.drawable.baseline_music_off_24}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_video"
+            app:layout_constraintTop_toTopOf="@+id/button_video"
+            app:title="@{@string/audio}" />
+
+
+        <include
+            android:id="@+id/button_close"
+            layout="@layout/layout_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/button_audio"
+            app:title="@{@string/close}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

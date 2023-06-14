@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/surface_color">
+
+        <View
+            android:id="@+id/view_dummy"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/button_logout"
+            app:layout_constraintEnd_toEndOf="@+id/button_logout"
+            app:layout_constraintStart_toStartOf="@+id/button_logout"
+            app:layout_constraintTop_toTopOf="@+id/button_logout" />
+
+        <include
+            android:id="@+id/linear_title"
+            layout="@layout/linear_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/profile}" />
+
+
+        <LinearLayout
+            android:id="@+id/linear_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_title">
+
+            <TextView
+                android:id="@+id/text_title"
+                style="@style/Title.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user" />
+
+            <include
+                android:id="@+id/input_name"
+                layout="@layout/input_disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hint="@{@string/user_name}"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/text_email"
+                style="@style/Title.Text"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
+                android:text="@string/email" />
+
+            <include
+                android:id="@+id/input_email"
+                layout="@layout/input_disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hint="@{@string/email_address}"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button_logout"
+            style="@style/Logout.Button.Body.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/logout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barrier_vert" />
+
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_vert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="guideline_horz, linear_email" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_horz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent="0.5"
+            android:orientation="horizontal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

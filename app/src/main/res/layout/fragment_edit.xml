@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="ru.vpcb.map.notes.R" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/linear_title"
+            layout="@layout/linear_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="32dp"
+            app:arrow="@{true}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@{@string/add_fragment}" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="256dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/notes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_title"
+            app:shapeAppearanceOverlay="@style/Round.Image" />
+
+        <ImageView
+            android:id="@+id/image_screen"
+            style="@style/Medium.Icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/full_screen"
+            android:src="@drawable/baseline_fullscreen_24"
+            app:layout_constraintEnd_toEndOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_title"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/place_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_lat">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_title"
+                style="@style/Single.Input.Edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_body"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/place_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_body"
+                style="@style/Multi.Input.Edit"
+                android:layout_width="match_parent"
+                android:layout_height="96dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/text_label_coord"
+            style="@style/Text.Edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/coordinates_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_lat" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_lat"
+            style="@style/Single.Text.Edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/lattitude"
+            app:layout_constraintEnd_toStartOf="@+id/edit_lon"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/text_label_coord"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_lon"
+            style="@style/Single.Text.Edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/longitude"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/edit_lat"
+            app:layout_constraintTop_toTopOf="@+id/edit_lat" />
+
+        <include
+            android:id="@+id/linear_load"
+            layout="@layout/linear_divider"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/linear_tools"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:title="@{@string/load}" />
+
+        <LinearLayout
+            android:id="@+id/linear_tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_body">
+
+            <include
+                android:id="@+id/photo"
+                layout="@layout/linear_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@{R.drawable.camera}"
+                app:title="@{@string/camera}" />
+
+            <include
+                android:id="@+id/drive"
+                layout="@layout/linear_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@{R.drawable.google_drive}"
+                app:title="@{@string/drive}" />
+
+            <include
+                android:id="@+id/unsplash"
+                layout="@layout/linear_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@{R.drawable.unsplash}"
+                app:title="@{@string/unsplash}" />
+
+            <include
+                android:id="@+id/video"
+                layout="@layout/linear_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@{R.drawable.video}"
+                app:title="@{@string/video}" />
+
+            <include
+                android:id="@+id/audio"
+                layout="@layout/linear_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:icon="@{R.drawable.sound}"
+                app:title="@{@string/audio}" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/linear_play"
+            layout="@layout/linear_divider"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/chip_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:title="@{@string/play}" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_tools">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_video"
+                style="@style/Body.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Text.Chip"
+                app:chipIcon="@drawable/baseline_videocam_off_24" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_audio"
+                style="@style/Body.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Text.Chip"
+                app:chipIcon="@drawable/baseline_music_off_24"
+                app:chipStrokeColor="@android:color/transparent" />
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <include
+            android:id="@+id/button"
+            layout="@layout/layout_button_red"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/button_close"
+            app:title="@{@string/add}" />
+
+        <include
+            android:id="@+id/button_close"
+            layout="@layout/layout_button"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button"
+            app:title="@{@string/close}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

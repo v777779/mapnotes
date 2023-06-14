@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/fragment_home"
+        android:icon="@drawable/baseline_map_24"
+        android:title="@string/map"/>
+
+    <item
+        android:id="@+id/action_add"
+        android:icon="@drawable/sel_note_add"
+        android:title="@string/note"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/search"/>
+
+    <item
+        android:id="@+id/fragment_profile"
+        android:icon="@drawable/sel_account"
+        android:title="@string/profile"/>
+
+</menu>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="ru.vpcb.map.notes.ui.home.HomeFragment"
+        android:label="@string/home_fragment"
+        tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/fragment_login"
+        android:name="ru.vpcb.map.notes.ui.auth.LoginFragment"
+        android:label="@string/login_fragment"
+        tools:layout="@layout/fragment_login"/>
+    <fragment
+        android:id="@+id/fragment_register"
+        android:name="ru.vpcb.map.notes.ui.auth.RegisterFragment"
+        android:label="@string/register_fragment"
+        tools:layout="@layout/fragment_register"/>
+    <fragment
+        android:id="@+id/fragment_profile"
+        android:name="ru.vpcb.map.notes.ui.auth.ProfileFragment"
+        android:label="@string/profile_fragment"
+        tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/fragment_pass"
+        android:name="ru.vpcb.map.notes.ui.auth.PassFragment"
+        android:label="@string/pass_fragment"
+        tools:layout="@layout/fragment_pass"/>
+    <fragment
+        android:id="@+id/fragment_edit"
+        android:name="ru.vpcb.map.notes.ui.note.EditFragment"
+        android:label="@string/add_fragment"
+        tools:layout="@layout/fragment_edit"/>
+    <fragment
+        android:id="@+id/fragment_show"
+        android:name="ru.vpcb.map.notes.ui.note.ShowFragment"
+        android:label="@string/show_fragment"
+        tools:layout="@layout/fragment_show"/>
+</navigation>

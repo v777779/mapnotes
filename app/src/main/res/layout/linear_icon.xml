@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="icon"
+            type="Integer" />
+
+        <variable
+            name="title"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/camera"
+                app:icon="@{icon}"
+                tools:src="@drawable/camera" />
+
+            <ImageView
+                android:id="@+id/front"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_transp_w_ripple"
+                android:contentDescription="@string/clickable"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/text"
+            style="@style/Text.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{title}"
+            tools:text="@string/camera" />
+
+
+    </LinearLayout>
+</layout>
