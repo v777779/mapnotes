@@ -72,7 +72,7 @@ Short guide:
 
 ## Get Started
 
-Setup Firebase Project and Google Maps SDK for Android according to [installation guide](doc/installation_guide)
+Setup Firebase Project and Google Maps SDK for Android
 
 Build and run application. 
 
