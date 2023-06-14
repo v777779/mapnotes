@@ -1,7 +1,7 @@
 ![badge](doc/images/code-kotlin-blueviolet.svg)  ![badge](doc/images/version-1.0.1-blue.svg)
 
 <!-- <img src="doc/images/notes_002.jpg" alt="drawing" width="800"/> -->
-<div align="center"><i><small>This app has been made to support resume</i></div>
+<div align="right"><i><small>This app has been made to support resume</i></div>
 
 # Map Notes
 
