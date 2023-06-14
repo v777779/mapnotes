@@ -37,11 +37,40 @@ An Android application which allows you to add/remove notes to the current locat
 * ListAdapter with DiffUtils implement optimized RecyclerView Adapter
 * [Predictive back gesture navigation](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture) for Android 13 implemented for custom back navigation
 * Fused Location Client uses static Broadcast Receiver for location updates
-* Automatic detection with [Connectivity Manager](https://developer.android.com/training/basics/network-ops/reading-network-state)  active and metered network connection 
+* Automatic detection active and metered network connection  with [Connectivity Manager](https://developer.android.com/training/basics/network-ops/reading-network-state)  
 * [State machine pattern](https://en.wikipedia.org/wiki/Finite-state_machine) used for requesting Runtime Permissions and Location Settings
 * SplashScreen API used for splash screen implementation
 * Hilt dependency injection used all around app in Activity, Fragments, Broadcast Receiver, ViewModels
 * Design follows Material Design 3 [recommendations](https://m3.material.io/), support light, dark themes and [dynamic colors](https://m3.material.io/styles/color/dynamic-color/overview)
+
+
+
+## Configuration
+
+Configuration requires Firebase Project, Google Cloud API Keys for:
+
+- Google Maps SDK
+- [Unsplash API](https://unsplash.com/developers) (optional  for downloading images from Unsplash)
+- Google One Tap(optional for singing with Google One Tap)
+
+Short guide:
+
+- setup [Firebase Project](https://firebase.google.com/docs/android/setup), add application to project and download google-services.json file
+- place google-services.json file in the `app/` folder
+- get Google Map API Key  from [Google Cloud Console](https://console.cloud.google.com/) API Keys zone for Google Map API
+- get Unsplash API Key for your application from  [Unsplash developer zone](https://unsplash.com/developers) 
+- get Web Client ID from [Google Cloud Console](https://console.cloud.google.com/)  OAuth 2.0 Client IDs zone for Web Client
+- replace "YOUR_MAP_API_KEY" with Google Map API Key in build.gradle
+- replace "YOUR_UNSPLASH_API_KEY" with Unsplash API Key n build.gradle
+- replace "YOUR_WEB_CLIENT_ID" with Web Client ID n build.gradle
+
+```
+	buildConfigField("String", "WEB_CLIENT_ID", '"YOUR_WEB_CLIENT_ID"')
+    buildConfigField("String", "UNSPLASH_API_KEY", '"YOUR_UNSPLASH_API_KEY"')
+    manifestPlaceholders.mapsApiKey = "YOUR_MAP_API_KEY"
+```
+
+
 
 ## Get Started
 
