@@ -35,6 +35,7 @@ class SearchFragment : Fragment(), NoteAdapter.Listener {
     private val networkViewModel by activityViewModels<NetworkViewModel>()
     private val searchViewModel by viewModels<SearchViewModel>()
 
+
     private val noteAdapter by lazy {
         NoteAdapter(this)
     }
@@ -93,7 +94,7 @@ class SearchFragment : Fragment(), NoteAdapter.Listener {
     }
 
     override fun onClick(note: Note) {
-        Toast.makeText(context, "Note: ${note.title}", Toast.LENGTH_SHORT).show()
+        mainViewModel.moveCamera(note.lat, note.lon)
     }
 
 

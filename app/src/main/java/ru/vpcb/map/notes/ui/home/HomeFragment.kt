@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val authViewModel by activityViewModels<AuthViewModel>()
-    private val mapViewModel by activityViewModels<MapViewModel>()
+    private val mapViewModel by viewModels<MapViewModel>()
     private val locationViewModel by activityViewModels<LocationViewModel>()
     private val homeViewModel by viewModels<HomeViewModel>()
 
@@ -86,6 +86,9 @@ class HomeFragment : Fragment() {
                 mapViewModel.markers(it.data)
                 mainViewModel.badge(it.data.size)
             }
+        }
+        mainViewModel.camera.collects(viewLifecycleOwner){
+            mapViewModel.moveCamera(it.latitude,it.longitude)
         }
 
         mapViewModel.note.collects(viewLifecycleOwner) {

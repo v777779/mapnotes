@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -39,12 +40,27 @@ class MainViewModel @Inject constructor(
     private val _badge = MutableSharedFlow<Int>()
     val badge = _badge.asSharedFlow()
 
+    private val _camera = MutableSharedFlow<LatLng>()
+    val camera = _camera.asSharedFlow()
+
+
     override var currentNote: Note? = null
 
     init {
         bottom(BottomSheetBehavior.STATE_HIDDEN)
     }
 
+    // map
+
+    fun moveCamera(lat:Double?, lon:Double?){
+        lat?:return
+        lon?:return
+        viewModelScope.launch {
+            _camera.emit(LatLng(lat,lon))
+        }
+    }
+
+    // navigate
     fun navigateBottom(state: Int, navBottom: NavController) {
         when (state) {
             BottomSheetBehavior.STATE_HIDDEN -> {

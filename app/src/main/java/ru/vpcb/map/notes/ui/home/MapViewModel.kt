@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import ru.vpcb.map.notes.location.Located
 import ru.vpcb.map.notes.model.Note
-import ru.vpcb.map.notes.utils.MAP_CITY_DEFAULT
 import ru.vpcb.map.notes.utils.MAP_LAT_DEFAULT
 import ru.vpcb.map.notes.utils.MAP_LON_DEFAULT
 import ru.vpcb.map.notes.utils.MAP_ZOOM_DEFAULT
@@ -41,17 +40,9 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
     // methods
-    fun setup(
-        lat: Double = MAP_LAT_DEFAULT,
-        lon: Double = MAP_LON_DEFAULT,
-        title: String = MAP_CITY_DEFAULT,
-        zoom: Float = MAP_ZOOM_DEFAULT
-    ) {
-        val city = LatLng(lat, lon)
-//        map?.addMarker(MarkerOptions().position(city).title(title))
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(city, zoom))
+    fun moveCamera(lat: Double = MAP_LAT_DEFAULT, lon: Double = MAP_LON_DEFAULT, zoom: Float = MAP_ZOOM_DEFAULT) {
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lon), zoom))
     }
-
 
     fun delete(pos: LatLng?): Boolean {
         pos ?: return false
@@ -73,7 +64,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
         val map = map ?: return
         map.clear()
         markers.clear()
-        if(!markers.isEmpty())return
+        if (!markers.isEmpty()) return
         notes.filter { it.lat != null && it.lon != null }.map { note ->
             val options = MarkerOptions().apply {
                 title("Note: ${note.title}")
@@ -152,7 +143,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
             }
         }
 
-        setup()
+        moveCamera()
     }.also {
         callback = it
     }
