@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import ru.vpcb.map.notes.R
 import ru.vpcb.map.notes.data.local.LocalRepo
 import ru.vpcb.map.notes.data.remote.FirebaseRepo
+import ru.vpcb.map.notes.model.Location
 import ru.vpcb.map.notes.model.Note
 import ru.vpcb.map.notes.ui.auth.Signed
 import ru.vpcb.map.notes.utils.navigated
@@ -40,11 +41,13 @@ class MainViewModel @Inject constructor(
     private val _badge = MutableSharedFlow<Int>()
     val badge = _badge.asSharedFlow()
 
-    private val _camera = MutableSharedFlow<LatLng>()
+    private val _camera = MutableSharedFlow<LatLng?>()
     val camera = _camera.asSharedFlow()
 
 
     override var currentNote: Note? = null
+
+    var initialized = false
 
     init {
         bottom(BottomSheetBehavior.STATE_HIDDEN)
@@ -52,11 +55,20 @@ class MainViewModel @Inject constructor(
 
     // map
 
-    fun moveCamera(lat:Double?, lon:Double?){
-        lat?:return
-        lon?:return
+    fun moveCamera(lat:Double?, lon:Double?) {
         viewModelScope.launch {
-            _camera.emit(LatLng(lat,lon))
+            val pos = if (lat == null || lon == null) null else LatLng(lat, lon)
+            _camera.emit(pos)
+            bottom()
+        }
+    }
+
+    fun moveCamera(location: Location?) {
+        if(!initialized) {
+            val lat = location?.lat?:return
+            val lon = location.lon?:return
+            moveCamera(lat,lon)
+            initialized = true
         }
     }
 

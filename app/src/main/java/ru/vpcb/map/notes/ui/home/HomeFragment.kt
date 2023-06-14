@@ -88,12 +88,19 @@ class HomeFragment : Fragment() {
             }
         }
         mainViewModel.camera.collects(viewLifecycleOwner){
-            mapViewModel.moveCamera(it.latitude,it.longitude)
+            mapViewModel.moveCamera(it)
         }
 
         mapViewModel.note.collects(viewLifecycleOwner) {
-            if (it.show == true) homeViewModel.showCard(binding.card, it)
-            else homeViewModel.hideCard(binding.card)
+            if (it.show == true) {
+                homeViewModel.showCard(binding.card, it)
+                mainViewModel.currentNote = it
+            }
+            else {
+                homeViewModel.hideCard(binding.card)
+                mainViewModel.currentNote = null
+            }
+            mainViewModel.bottom()
         }
 
         mapViewModel.message.collects(viewLifecycleOwner) {
@@ -111,11 +118,11 @@ class HomeFragment : Fragment() {
                     String.format(Locale.getDefault(), "%.6f, %.6f", loc.lat, loc.lon)
                 }".toToast(context)
             }
-
+            mainViewModel.moveCamera(it) // first fly
         }
 
         binding.card.chipScreen.setOnClickListener {
-            locationViewModel.startLocationUpdates(locationViewModel.permissions)
+            navigated(R.id.fragment_show)
         }
         binding.card.chipEdit.setOnClickListener {
             locationViewModel.stopLocationUpdates()

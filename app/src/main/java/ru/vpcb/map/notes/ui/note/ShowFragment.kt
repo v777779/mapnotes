@@ -13,6 +13,10 @@ import ru.vpcb.map.notes.R
 import ru.vpcb.map.notes.databinding.FragmentShowBinding
 
 import ru.vpcb.map.notes.ui.MainViewModel
+import ru.vpcb.map.notes.utils.formatCoordinates
+import ru.vpcb.map.notes.utils.loadImage
+import ru.vpcb.map.notes.utils.popBackStacked
+
 @AndroidEntryPoint
 class ShowFragment : Fragment() {
 
@@ -39,11 +43,26 @@ class ShowFragment : Fragment() {
             findNavController().popBackStack(R.id.fragment_home,false)
         }
 
+        setupViews()
         mainViewModel.bottom(BottomSheetBehavior.STATE_HIDDEN)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupViews(){
+        mainViewModel.currentNote = null
+        mainViewModel.currentNote?.let {note ->
+            binding.textTitle.text = note.title
+            binding.textBody.text = note.body
+            binding.textCoord.text =  note.formatCoordinates(binding.root)
+            binding.image.loadImage(note.image)
+
+        }?:popBackStacked(R.id.fragment_home,false)
+
+
+
     }
 }

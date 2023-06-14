@@ -94,7 +94,7 @@ class SearchFragment : Fragment(), NoteAdapter.Listener {
     }
 
     override fun onClick(note: Note) {
-        mainViewModel.moveCamera(note.lat, note.lon)
+        mainViewModel.moveCamera(note.lat,note.lon)
     }
 
 

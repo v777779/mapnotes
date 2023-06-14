@@ -61,12 +61,10 @@ class HomeViewModel @Inject constructor(
 
     fun hideCard(binding: LayoutCardMapBinding) = CardAnimator.hideCard(binding.root)
     fun showCard(binding: LayoutCardMapBinding, note:Note) = CardAnimator.showCard(binding.root, note).also {
-
         binding.textTitle.text = note.title
         binding.textBody.text = note.body
         binding.textCoord.text =  note.formatCoordinates(binding.root)
         binding.image.loadImage(note.image)
-
     }
 
 

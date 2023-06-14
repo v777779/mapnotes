@@ -28,7 +28,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
     private val _message = MutableSharedFlow<String>()
     val message = _message.asSharedFlow()
 
-    private val markers = mutableListOf<Marker>()
+    private val markers = mutableMapOf<Marker, Note>()
 
     var map: GoogleMap? = null
 
@@ -40,14 +40,15 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
     // methods
-    fun moveCamera(lat: Double = MAP_LAT_DEFAULT, lon: Double = MAP_LON_DEFAULT, zoom: Float = MAP_ZOOM_DEFAULT) {
-        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat, lon), zoom))
+    fun moveCamera(latLng: LatLng? = null, zoom: Float = MAP_ZOOM_DEFAULT) {
+        val pos = latLng ?: LatLng(MAP_LAT_DEFAULT, MAP_LON_DEFAULT)
+        map?.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, zoom))
     }
 
     fun delete(pos: LatLng?): Boolean {
         pos ?: return false
         position(pos)?.let { screen ->
-            markers.forEach { marker ->
+            markers.keys.forEach { marker ->
                 position(marker.position)?.let { point ->
                     if (point.x == screen.x && point.y == screen.y) {
                         marker.remove()
@@ -64,7 +65,6 @@ class MapViewModel @Inject constructor() : ViewModel() {
         val map = map ?: return
         map.clear()
         markers.clear()
-        if (!markers.isEmpty()) return
         notes.filter { it.lat != null && it.lon != null }.map { note ->
             val options = MarkerOptions().apply {
                 title("Note: ${note.title}")
@@ -73,7 +73,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
             }
 
             val marker = map.addMarker(options) ?: return
-            markers.add(marker)
+            markers[marker] = note
         }
     }
 
@@ -95,23 +95,17 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
 
         map.setOnMarkerClickListener {
-            if (it.snippet == null) {
+            val note = markers[it]
+            if (note == null) false
+            else {
                 viewModelScope.launch {
-                    _message.emit("Maps: location $it")
+                    _note.emit(note.apply {
+                        screen = position(it.position)
+                        show = true
+                    })
                 }
-            } else {
-                viewModelScope.launch {
-                    _note.emit(
-                        Note().apply {
-                            lat = it.position.latitude
-                            lon = it.position.longitude
-                            screen = position(it.position)
-                            show = true
-                        }
-                    )
-                }
+                true
             }
-            true
         }
 
         map.setOnMapLongClickListener {
@@ -144,6 +138,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
         }
 
         moveCamera()
+
     }.also {
         callback = it
     }

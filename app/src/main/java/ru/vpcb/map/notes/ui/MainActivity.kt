@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val networkViewModel by viewModels<NetworkViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
     private val locationViewModel by viewModels<LocationViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         super.onCreate(savedInstanceState)
@@ -77,6 +78,7 @@ class MainActivity : AppCompatActivity() {
             })
 
         setupViews()
+        mainViewModel.initialized = false
     }
 
 
