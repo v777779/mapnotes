@@ -14,4 +14,7 @@
 !/app/src/main/assets
 !/packs
 !/packs/*/build/
+/_service
+clear_debug.cmd
+clear_restore.cmd
 c.cmd
