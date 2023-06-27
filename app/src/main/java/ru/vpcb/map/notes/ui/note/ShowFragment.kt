@@ -53,7 +53,7 @@ class ShowFragment : Fragment() {
     }
 
     private fun setupViews(){
-        mainViewModel.currentNote = null
+        
         mainViewModel.currentNote?.let {note ->
             binding.textTitle.text = note.title
             binding.textBody.text = note.body
